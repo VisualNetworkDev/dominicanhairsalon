@@ -96,6 +96,32 @@
         flex-wrap: wrap;
       }
 
+      .admin-language-switch {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: #fff;
+      }
+
+      .admin-language-switch button {
+        min-height: 32px;
+        border: 0;
+        border-radius: 999px;
+        background: transparent;
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 850;
+        padding: 6px 9px;
+      }
+
+      .admin-language-switch button.active {
+        background: var(--plum);
+        color: #fff;
+      }
+
       .btn {
         min-height: 40px;
         border: 0;
@@ -636,22 +662,29 @@
       .availability-grid,
       .day-checks.wide {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
         gap: 10px;
       }
 
       .availability-day {
+        min-width: 0;
         border: 1px solid var(--line);
         border-radius: var(--radius);
         background: #fffaf7;
         padding: 10px;
+        overflow: hidden;
       }
 
       .availability-day .time-row {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
         gap: 8px;
         margin-top: 8px;
+      }
+
+      .availability-day input[type="time"] {
+        min-width: 0;
+        padding: 9px 8px;
       }
 
       .service-checks {
@@ -698,8 +731,9 @@
 
         .dashboard-grid,
         .history-grid,
+        .availability-grid,
         .help-grid {
-          grid-template-columns: repeat(2, minmax(0, 1fr));
+          grid-template-columns: 1fr;
         }
       }
 
@@ -745,9 +779,13 @@
           <span id="brandName">Dominican Hair Salon Admin</span>
         </div>
         <div class="top-actions">
-          <a id="publicLink" class="btn secondary" href="?" target="_blank" rel="noopener"><i data-lucide="external-link" aria-hidden="true"></i>Vista clientas</a>
-          <button id="refreshBtn" class="btn secondary" type="button"><i data-lucide="refresh-cw" aria-hidden="true"></i>Actualizar</button>
-          <button id="logoutBtn" class="btn secondary" type="button" hidden><i data-lucide="log-out" aria-hidden="true"></i>Cerrar sesion</button>
+          <div class="admin-language-switch" aria-label="Language">
+            <button type="button" data-admin-lang="es" class="active">ES</button>
+            <button type="button" data-admin-lang="en">EN</button>
+          </div>
+          <a id="publicLink" class="btn secondary" href="?" target="_blank" rel="noopener"><i data-lucide="external-link" aria-hidden="true"></i><span data-admin-i18n="publicView">Vista clientas</span></a>
+          <button id="refreshBtn" class="btn secondary" type="button"><i data-lucide="refresh-cw" aria-hidden="true"></i><span data-admin-i18n="refresh">Actualizar</span></button>
+          <button id="logoutBtn" class="btn secondary" type="button" hidden><i data-lucide="log-out" aria-hidden="true"></i><span data-admin-i18n="logout">Cerrar sesion</span></button>
         </div>
       </div>
     </header>
@@ -755,34 +793,34 @@
     <main>
       <section id="login" class="login">
         <form id="loginForm" class="login-card">
-          <h1>Admin</h1>
+          <h1 data-admin-i18n="loginTitle">Admin</h1>
           <p class="muted">Dominican Hair Salon</p>
           <div class="field">
-            <label for="username">Correo o usuario</label>
+            <label for="username" data-admin-i18n="loginUser">Correo o usuario</label>
             <input id="username" autocomplete="username" required>
           </div>
           <div class="field">
-            <label for="secret">Contrasena</label>
+            <label for="secret" data-admin-i18n="loginPassword">Contrasena</label>
             <input id="secret" type="password" autocomplete="current-password" required>
           </div>
-          <button class="btn" type="submit"><i data-lucide="lock-keyhole" aria-hidden="true"></i>Entrar</button>
+          <button class="btn" type="submit"><i data-lucide="lock-keyhole" aria-hidden="true"></i><span data-admin-i18n="loginButton">Entrar</span></button>
         </form>
       </section>
 
       <section id="admin" class="admin shell">
         <nav class="tabs" aria-label="Admin">
-          <button class="tab active" type="button" data-tab="reservations">Reservas</button>
-          <button class="tab" type="button" data-tab="earnings">Ganancias</button>
-          <button class="tab" type="button" data-tab="timeoff">Dias libres</button>
-          <button class="tab" type="button" data-tab="services">Servicios</button>
-          <button class="tab" type="button" data-tab="photos">Fotos</button>
-          <button class="tab" type="button" data-tab="discounts">Descuentos</button>
-          <button class="tab" type="button" data-tab="events">Eventos</button>
-          <button class="tab" type="button" data-tab="qr">Escanear QR</button>
-          <button class="tab" type="button" data-tab="users">Usuarios</button>
-          <button class="tab" type="button" data-tab="settings">Ajustes</button>
-          <button class="tab developer-only" type="button" data-tab="developer">Developer</button>
-          <button class="tab" type="button" data-tab="help">Ayuda</button>
+          <button class="tab active" type="button" data-tab="reservations" data-admin-i18n="tabReservations">Reservas</button>
+          <button class="tab" type="button" data-tab="earnings" data-admin-i18n="tabEarnings">Ganancias</button>
+          <button class="tab" type="button" data-tab="timeoff" data-admin-i18n="tabTimeOff">Dias libres</button>
+          <button class="tab" type="button" data-tab="services" data-admin-i18n="tabServices">Servicios</button>
+          <button class="tab" type="button" data-tab="photos" data-admin-i18n="tabPhotos">Fotos</button>
+          <button class="tab" type="button" data-tab="discounts" data-admin-i18n="tabDiscounts">Descuentos</button>
+          <button class="tab" type="button" data-tab="events" data-admin-i18n="tabEvents">Eventos</button>
+          <button class="tab" type="button" data-tab="qr" data-admin-i18n="tabQr">Escanear QR</button>
+          <button class="tab" type="button" data-tab="users" data-admin-i18n="tabUsers">Usuarios</button>
+          <button class="tab" type="button" data-tab="settings" data-admin-i18n="tabSettings">Ajustes</button>
+          <button class="tab developer-only" type="button" data-tab="developer" data-admin-i18n="tabDeveloper">Developer</button>
+          <button class="tab" type="button" data-tab="help" data-admin-i18n="tabHelp">Ayuda</button>
         </nav>
 
         <section id="reservations" class="tab-panel">
@@ -1013,7 +1051,6 @@
                   <select id="userRole">
                     <option value="staff">Staff</option>
                     <option value="admin">Admin</option>
-                    <option value="developer">Developer</option>
                   </select>
                 </div>
                 <label class="check full">
@@ -1591,59 +1628,7 @@
                 <div class="muted">Pasos cortos para mantener Dominican Hair Salon actualizada desde el telefono.</div>
               </div>
             </div>
-            <div class="help-grid">
-              <article class="help-card">
-                <h3>Reservas</h3>
-                <ol>
-                  <li>Busca por nombre, telefono, email o servicio.</li>
-                  <li>Usa Confirmar, Cancelar o Pendiente para cambiar el estado.</li>
-                  <li>Guarda notas internas si necesitas recordar detalles de la clienta.</li>
-                  <li>Abre PDF para ver o compartir el recibo.</li>
-                </ol>
-              </article>
-              <article class="help-card">
-                <h3>Usuarios</h3>
-                <ol>
-                  <li>Admin y Developer pueden crear usuarios y decidir permisos.</li>
-                  <li>Los usuarios staff solo editan citas asignadas a su usuario.</li>
-                  <li>Las ganancias staff no incluyen propinas ni descuentos.</li>
-                </ol>
-              </article>
-              <article class="help-card">
-                <h3>Dias libres</h3>
-                <ol>
-                  <li>El staff puede pedir dias libres desde su acceso.</li>
-                  <li>Admin revisa la solicitud y la aprueba o deniega.</li>
-                  <li>Cada solicitud se guarda en la hoja Dias Libres.</li>
-                </ol>
-              </article>
-              <article class="help-card">
-                <h3>Servicios</h3>
-                <ol>
-                  <li>Agrega categoria, nombre, descripcion, precio y duracion.</li>
-                  <li>Marca Visible para que aparezca en la pagina de clientas.</li>
-                  <li>Usa Orden para controlar como se muestra cada servicio.</li>
-                </ol>
-              </article>
-              <article class="help-card">
-                <h3>Fotos</h3>
-                <ol>
-                  <li>Selecciona una foto desde la galeria del telefono.</li>
-                  <li>Elige recorte y ajusta la posicion antes de guardar.</li>
-                  <li>Arrastra filas para cambiar el orden.</li>
-                  <li>Borra fotos que ya no quieras mostrar.</li>
-                </ol>
-              </article>
-              <article class="help-card">
-                <h3>Ajustes</h3>
-                <ol>
-                  <li>Cambia telefono, email, Instagram y horario.</li>
-                  <li>Bloquea dias cerrados o vacaciones.</li>
-                  <li>Usa Actualizar pagina clientas despues de editar fotos o servicios.</li>
-                  <li>Usa Cerrar sesion cuando termines.</li>
-                </ol>
-              </article>
-            </div>
+            <div id="helpGrid" class="help-grid"></div>
           </div>
         </section>
       </section>
@@ -1710,6 +1695,7 @@
         secret: storageGet('sessionStorage', 'angels_admin_secret', ''),
         data: null,
         tab: 'reservations',
+        language: storageGet('localStorage', 'dhs_admin_language', 'es'),
         photoFile: null,
         beforeFile: null,
         afterFile: null,
@@ -1718,12 +1704,104 @@
         qrReservation: null
       };
 
+      const ADMIN_I18N = {
+        es: {
+          publicView: 'Vista clientas',
+          refresh: 'Actualizar',
+          logout: 'Cerrar sesion',
+          loginTitle: 'Admin',
+          loginUser: 'Correo o usuario',
+          loginPassword: 'Contrasena',
+          loginButton: 'Entrar',
+          tabReservations: 'Reservas',
+          tabEarnings: 'Ganancias',
+          tabTimeOff: 'Dias libres',
+          tabServices: 'Servicios',
+          tabPhotos: 'Fotos',
+          tabDiscounts: 'Descuentos',
+          tabEvents: 'Eventos',
+          tabQr: 'Escanear QR',
+          tabUsers: 'Usuarios',
+          tabSettings: 'Ajustes',
+          tabDeveloper: 'Developer',
+          tabHelp: 'Ayuda',
+          helpTitle: 'Guia rapida',
+          helpCopy: 'Paso a paso segun tu rol y permisos.',
+          welcome: 'Bienvenido',
+          developerWelcome: 'Developer Settings activo',
+          role: 'Rol',
+          noUsers: 'No hay usuarios.',
+          user: 'Usuario',
+          permissions: 'Permisos',
+          status: 'Estado',
+          active: 'Activo',
+          inactive: 'Inactivo',
+          locked: 'Bloqueado',
+          attempts: 'Intentos',
+          edit: 'Editar',
+          reset: 'Rehabilitar',
+          deactivate: 'Desactivar',
+          basic: 'Basico',
+          page: 'Pagina',
+          appointments: 'Citas',
+          allAppointments: 'Todas las citas',
+          earnings: 'Ganancias',
+          payments: 'Pagos',
+          timeOff: 'Dias libres'
+        },
+        en: {
+          publicView: 'Client view',
+          refresh: 'Refresh',
+          logout: 'Log out',
+          loginTitle: 'Admin',
+          loginUser: 'Email or user',
+          loginPassword: 'Password',
+          loginButton: 'Sign in',
+          tabReservations: 'Bookings',
+          tabEarnings: 'Earnings',
+          tabTimeOff: 'Time off',
+          tabServices: 'Services',
+          tabPhotos: 'Photos',
+          tabDiscounts: 'Discounts',
+          tabEvents: 'Events',
+          tabQr: 'Scan QR',
+          tabUsers: 'Users',
+          tabSettings: 'Settings',
+          tabDeveloper: 'Developer',
+          tabHelp: 'Help',
+          helpTitle: 'Quick guide',
+          helpCopy: 'Step by step based on your role and permissions.',
+          welcome: 'Welcome',
+          developerWelcome: 'Developer Settings active',
+          role: 'Role',
+          noUsers: 'No users found.',
+          user: 'User',
+          permissions: 'Permissions',
+          status: 'Status',
+          active: 'Active',
+          inactive: 'Inactive',
+          locked: 'Locked',
+          attempts: 'Attempts',
+          edit: 'Edit',
+          reset: 'Restore',
+          deactivate: 'Deactivate',
+          basic: 'Basic',
+          page: 'Page',
+          appointments: 'Appointments',
+          allAppointments: 'All appointments',
+          earnings: 'Earnings',
+          payments: 'Payments',
+          timeOff: 'Time off'
+        }
+      };
+
       document.addEventListener('DOMContentLoaded', init);
 
       function init() {
         bindEvents();
         setPublicLink();
         hydrateLoginFields();
+        applyAdminLanguage();
         refreshIcons();
         if (state.secret) loadAdminData();
       }
@@ -1754,6 +1832,9 @@
         $('#refreshBtn').addEventListener('click', loadAdminData);
         $('#logoutBtn').addEventListener('click', logoutAdmin);
         $('#closeWelcomeBtn').addEventListener('click', closeWelcomeModal);
+        $$('[data-admin-lang]').forEach(button => {
+          button.addEventListener('click', () => setAdminLanguage(button.dataset.adminLang));
+        });
         $$('.tab').forEach(tab => tab.addEventListener('click', () => setTab(tab.dataset.tab)));
         $('#reservationSearch').addEventListener('input', renderReservations);
         $('#reservationStatus').addEventListener('change', renderReservations);
@@ -1837,6 +1918,32 @@
         }
       }
 
+      function adminText(key) {
+        const pack = ADMIN_I18N[state.language] || ADMIN_I18N.es;
+        return pack[key] || ADMIN_I18N.es[key] || key;
+      }
+
+      function setAdminLanguage(language) {
+        state.language = language === 'en' ? 'en' : 'es';
+        storageSet('localStorage', 'dhs_admin_language', state.language);
+        applyAdminLanguage();
+        if (state.data) renderAll();
+      }
+
+      function applyAdminLanguage() {
+        document.documentElement.lang = state.language;
+        $$('[data-admin-lang]').forEach(button => {
+          button.classList.toggle('active', button.dataset.adminLang === state.language);
+        });
+        $$('[data-admin-i18n]').forEach(node => {
+          node.textContent = adminText(node.dataset.adminI18n);
+        });
+        const helpTitle = document.querySelector('#help .panel-head h2');
+        const helpCopy = document.querySelector('#help .panel-head .muted');
+        if (helpTitle) helpTitle.textContent = adminText('helpTitle');
+        if (helpCopy) helpCopy.textContent = adminText('helpCopy');
+      }
+
       async function loadAdminData() {
         if (!state.secret) return;
         setBusy(true);
@@ -1883,6 +1990,7 @@
         renderUserServiceChecks();
         renderUserAvailability();
         renderRoleHelp();
+        applyAdminLanguage();
         refreshIcons();
       }
 
@@ -1904,9 +2012,9 @@
         showLoginGreeting.done = true;
         const user = currentUser();
         const role = (state.data.authRole || '').toUpperCase();
-        $('#welcomeTitle').textContent = state.data.authRole === 'developer' ? 'Developer Settings activo' : 'Bienvenido';
+        $('#welcomeTitle').textContent = state.data.authRole === 'developer' ? adminText('developerWelcome') : adminText('welcome');
         $('#welcomeName').textContent = user.displayName || user.email || user.username || 'Usuario';
-        $('#welcomeRole').textContent = `Rol: ${role}`;
+        $('#welcomeRole').textContent = `${adminText('role')}: ${role}`;
         $('#welcomeModal').classList.add('open');
         refreshIcons();
       }
@@ -2593,15 +2701,15 @@
       }
 
       function renderUsers() {
-        const users = (state.data && state.data.users) || [];
+        const users = ((state.data && state.data.users) || []).filter(user => user.role !== 'developer');
         if (!users.length) {
-          $('#userTable').innerHTML = '<div class="empty">No hay usuarios.</div>';
+          $('#userTable').innerHTML = `<div class="empty">${escapeHtml(adminText('noUsers'))}</div>`;
           return;
         }
         $('#userTable').innerHTML = `
           <div class="table-wrap">
             <table>
-              <thead><tr><th>Usuario</th><th>Rol</th><th>Permisos</th><th>Estado</th><th></th></tr></thead>
+              <thead><tr><th>${escapeHtml(adminText('user'))}</th><th>${escapeHtml(adminText('role'))}</th><th>${escapeHtml(adminText('permissions'))}</th><th>${escapeHtml(adminText('status'))}</th><th></th></tr></thead>
               <tbody>
                 ${users.map(user => `
                   <tr>
@@ -2612,12 +2720,12 @@
                     </td>
                     <td>${escapeHtml(user.role)}</td>
                     <td>${permissionSummary(user.permissions || {})}</td>
-                    <td>${user.accountLocked ? 'Bloqueado' : (user.active ? 'Activo' : 'Inactivo')}<br><span class="muted">Intentos ${user.failedAttempts || 0}</span></td>
+                    <td>${user.accountLocked ? adminText('locked') : (user.active ? adminText('active') : adminText('inactive'))}<br><span class="muted">${adminText('attempts')} ${user.failedAttempts || 0}</span></td>
                     <td>
                       <div class="row-actions">
-                        <button class="btn secondary mini" data-edit-user="${user.rowNumber}" type="button">Editar</button>
-                        ${user.accountLocked ? `<button class="btn soft mini" data-reset-lock="${user.rowNumber}" type="button">Rehabilitar</button>` : ''}
-                        <button class="btn danger mini" data-delete-user="${user.rowNumber}" type="button">Desactivar</button>
+                        <button class="btn secondary mini" data-edit-user="${user.rowNumber}" type="button">${escapeHtml(adminText('edit'))}</button>
+                        ${user.accountLocked ? `<button class="btn soft mini" data-reset-lock="${user.rowNumber}" type="button">${escapeHtml(adminText('reset'))}</button>` : ''}
+                        <button class="btn danger mini" data-delete-user="${user.rowNumber}" type="button">${escapeHtml(adminText('deactivate'))}</button>
                       </div>
                     </td>
                   </tr>
@@ -2639,14 +2747,14 @@
 
       function permissionSummary(perms) {
         const labels = [];
-        if (perms.canEditPage) labels.push('Pagina');
-        if (perms.canEditAppointments) labels.push('Citas');
-        if (perms.canEditAllAppointments) labels.push('Todas las citas');
-        if (perms.canViewGeneralEarnings) labels.push('Ganancias');
-        if (perms.canManageUsers) labels.push('Usuarios');
-        if (perms.canManagePayments) labels.push('Pagos');
-        if (perms.canManageTimeOff) labels.push('Dias libres');
-        return labels.length ? labels.join(', ') : 'Basico';
+        if (perms.canEditPage) labels.push(adminText('page'));
+        if (perms.canEditAppointments) labels.push(adminText('appointments'));
+        if (perms.canEditAllAppointments) labels.push(adminText('allAppointments'));
+        if (perms.canViewGeneralEarnings) labels.push(adminText('earnings'));
+        if (perms.canManageUsers) labels.push(adminText('tabUsers'));
+        if (perms.canManagePayments) labels.push(adminText('payments'));
+        if (perms.canManageTimeOff) labels.push(adminText('timeOff'));
+        return labels.length ? labels.join(', ') : adminText('basic');
       }
 
       function renderSettings() {
@@ -2680,12 +2788,243 @@
       }
 
       function renderRoleHelp() {
-        const cards = $$('.help-card');
-        if (!cards.length) return;
-        if (cards[1]) cards[1].hidden = !can('canManageUsers');
-        if (cards[3]) cards[3].hidden = !can('canEditPage');
-        if (cards[4]) cards[4].hidden = !can('canEditPage');
-        if (cards[5]) cards[5].hidden = !can('canEditPage');
+        const lang = state.language === 'en' ? 'en' : 'es';
+        const isAdmin = can('canEditAllAppointments') || can('canManageUsers') || can('canEditPage');
+        const sections = {
+          es: [
+            {
+              title: 'Reservas',
+              show: true,
+              steps: [
+                'Usa filtros de nombre, telefono, email, servicio, estado y fecha.',
+                isAdmin ? 'Admin puede confirmar, cancelar, regresar a pendiente y editar cualquier cita.' : 'Tu usuario solo puede editar citas asignadas a ti; las demas se pueden ver sin cambiar.',
+                'Agrega notas internas cuando necesites recordar detalles de la clienta.',
+                'Abre o comparte el PDF del recibo cuando la cita ya tenga recibo generado.'
+              ]
+            },
+            {
+              title: 'Cita manual',
+              show: can('canEditAppointments'),
+              steps: [
+                'Baja al final de Reservas y abre el formulario Cita manual.',
+                'Selecciona servicio, fecha, hora y trabajadora asignada.',
+                'El sistema valida disponibilidad, servicio permitido y conflictos de horario.',
+                'Usa Cancelar si no quieres guardar cambios incompletos.'
+              ]
+            },
+            {
+              title: 'Ganancias y reportes',
+              show: true,
+              steps: [
+                can('canViewGeneralEarnings') ? 'Admin ve totales generales, descuentos, propinas y cobrado.' : 'Staff ve solo su produccion asignada, sin ganancias generales, propinas ni descuentos globales.',
+                'Selecciona rango diario, semanal, mensual o personalizado.',
+                'Filtra por trabajadora o servicio si tienes permiso.',
+                'Usa Exportar PDF para descargar el reporte disponible para tu rol.'
+              ]
+            },
+            {
+              title: 'Dias libres',
+              show: true,
+              steps: [
+                'El staff solicita fechas libres con motivo opcional.',
+                can('canManageTimeOff') ? 'Admin revisa solicitudes de otros usuarios, no las propias ni Developer.' : 'Espera la respuesta del Admin por correo.',
+                can('canManageTimeOff') ? 'Admin puede aceptar, denegar o pedir mas informacion.' : 'Si se aprueba, tu disponibilidad queda bloqueada durante esas fechas.',
+                'Cuando se aprueba, el usuario no debe quedar disponible para reservas en esas fechas.'
+              ]
+            },
+            {
+              title: 'Servicios',
+              show: can('canEditPage'),
+              steps: [
+                'Escribe categoria, servicio, descripcion, precio y duracion una sola vez.',
+                'El sistema guarda traduccion interna para ingles cuando sea posible.',
+                'Marca Visible para publicarlo y usa Orden para acomodarlo.',
+                'Despues de cambios grandes usa Actualizar pagina clientas.'
+              ]
+            },
+            {
+              title: 'Fotos y Antes/Despues',
+              show: can('canEditPage'),
+              steps: [
+                'Sube foto, selecciona categoria, titulo, visibilidad y orden.',
+                'Ajusta recorte, posicion y proporcion antes de guardar.',
+                'En Antes/Despues sube las dos imagenes y un titulo.',
+                'Usa Cancelar para salir de una edicion sin dejar datos a medias.'
+              ]
+            },
+            {
+              title: 'Descuentos',
+              show: can('canManageDiscounts'),
+              steps: [
+                'Crea cupon, valor, categoria, dias activos y visibilidad.',
+                'Define fecha inicial, fecha final, duracion o sin expiracion.',
+                'Las categorias y servicios se llenan desde los servicios existentes.',
+                'El descuento se valida al reservar por dia y fecha.'
+              ]
+            },
+            {
+              title: 'Eventos',
+              show: can('canEditPage'),
+              steps: [
+                'Crea Holidays, Aniversarios u Otros.',
+                'Elige visibilidad: clientas, usuarios o ambos.',
+                'Marca bloquear reservas si el evento debe cerrar citas.',
+                'Mantener activo controla si aparece o afecta la agenda.'
+              ]
+            },
+            {
+              title: 'Escanear QR',
+              show: can('canEditAppointments'),
+              steps: [
+                'Abre Escanear QR desde el Admin con tu sesion iniciada.',
+                'Usa la camara o pega el token si el navegador no permite escaneo.',
+                'El sistema valida usuario activo, permiso, cita y asignacion.',
+                'Marca Llegó, En proceso o Completada segun avance la cita.'
+              ]
+            },
+            {
+              title: 'Usuarios',
+              show: can('canManageUsers'),
+              steps: [
+                'Crea usuarios con nombre, correo, telefono, contrasena, rol y estado.',
+                'Asigna servicios permitidos y disponibilidad por dia/hora.',
+                'Rehabilita cuentas bloqueadas por intentos fallidos.',
+                'Developer no se muestra ni se administra desde esta seccion.'
+              ]
+            },
+            {
+              title: 'Ajustes',
+              show: can('canEditPage'),
+              steps: [
+                'Actualiza telefono, email, horarios y mensaje de mantenimiento.',
+                'Activa mantenimiento para bloquear reservas publicas mientras editas.',
+                'Configura recordatorios y ejecutalos manualmente cuando necesites probar.',
+                'Los dias bloqueados pueden usarse para cierres especificos.'
+              ]
+            }
+          ],
+          en: [
+            {
+              title: 'Bookings',
+              show: true,
+              steps: [
+                'Use filters for name, phone, email, service, status and date.',
+                isAdmin ? 'Admin can confirm, cancel, return to pending and edit any booking.' : 'Staff can only edit appointments assigned to their own user.',
+                'Add internal notes when you need to remember client details.',
+                'Open or share the receipt PDF when it has been generated.'
+              ]
+            },
+            {
+              title: 'Manual booking',
+              show: can('canEditAppointments'),
+              steps: [
+                'Go to the bottom of Bookings and open Manual booking.',
+                'Select service, date, time and assigned staff member.',
+                'The system validates availability, allowed service and time conflicts.',
+                'Use Cancel to leave without saving incomplete edits.'
+              ]
+            },
+            {
+              title: 'Earnings and reports',
+              show: true,
+              steps: [
+                can('canViewGeneralEarnings') ? 'Admin sees general totals, discounts, tips and collected amounts.' : 'Staff only sees their own assigned production.',
+                'Choose daily, weekly, monthly or custom ranges.',
+                'Filter by staff member or service when your permissions allow it.',
+                'Use Export PDF to download the report available for your role.'
+              ]
+            },
+            {
+              title: 'Time off',
+              show: true,
+              steps: [
+                'Staff requests time off with an optional reason.',
+                can('canManageTimeOff') ? 'Admin reviews requests from other users only, never Developer.' : 'Wait for the Admin response by email.',
+                can('canManageTimeOff') ? 'Admin can approve, deny or request more information.' : 'If approved, your availability is blocked for those dates.',
+                'Approved dates should not be available for public bookings.'
+              ]
+            },
+            {
+              title: 'Services',
+              show: can('canEditPage'),
+              steps: [
+                'Enter category, service, description, price and duration once.',
+                'The system stores internal English translation when possible.',
+                'Mark Visible to publish it and use Order to arrange it.',
+                'After major changes, refresh the client page.'
+              ]
+            },
+            {
+              title: 'Photos and Before/After',
+              show: can('canEditPage'),
+              steps: [
+                'Upload photo, category, title, visibility and order.',
+                'Adjust crop, position and aspect ratio before saving.',
+                'For Before/After, upload both images and a title.',
+                'Use Cancel to exit editing without leaving partial data.'
+              ]
+            },
+            {
+              title: 'Discounts',
+              show: can('canManageDiscounts'),
+              steps: [
+                'Create coupon, value, category, active days and visibility.',
+                'Set start date, end date, duration or no expiration.',
+                'Categories and services come from existing services.',
+                'The coupon is validated by day and date during booking.'
+              ]
+            },
+            {
+              title: 'Events',
+              show: can('canEditPage'),
+              steps: [
+                'Create Holidays, Anniversaries or Other events.',
+                'Choose visibility: clients, users or both.',
+                'Enable booking block if the event should close appointment slots.',
+                'Active controls whether it appears or affects the calendar.'
+              ]
+            },
+            {
+              title: 'Scan QR',
+              show: can('canEditAppointments'),
+              steps: [
+                'Open Scan QR from Admin while signed in.',
+                'Use the camera or paste the token if the browser blocks scanning.',
+                'The system validates active user, permission, appointment and assignment.',
+                'Mark Arrived, In process or Completed as the appointment progresses.'
+              ]
+            },
+            {
+              title: 'Users',
+              show: can('canManageUsers'),
+              steps: [
+                'Create users with name, email, phone, password, role and status.',
+                'Assign allowed services and day/time availability.',
+                'Restore accounts blocked by failed login attempts.',
+                'Developer is private and is not managed from this section.'
+              ]
+            },
+            {
+              title: 'Settings',
+              show: can('canEditPage'),
+              steps: [
+                'Update phone, email, hours and maintenance message.',
+                'Turn maintenance on to block public booking while editing.',
+                'Configure reminders and run them manually when testing.',
+                'Blocked days can be used for specific closures.'
+              ]
+            }
+          ]
+        };
+        const visible = sections[lang].filter(section => section.show);
+        $('#helpGrid').innerHTML = visible.map(section => `
+          <article class="help-card">
+            <h3>${escapeHtml(section.title)}</h3>
+            <ol>
+              ${section.steps.map(step => `<li>${escapeHtml(step)}</li>`).join('')}
+            </ol>
+          </article>
+        `).join('');
       }
 
       function renderOpenDays(openDays) {
