@@ -78,12 +78,15 @@
         align-items: center;
         justify-content: space-between;
         gap: 18px;
+        min-width: 0;
       }
 
       .brand {
         display: inline-flex;
         align-items: center;
+        flex: 0 0 auto;
         gap: 12px;
+        max-width: 100%;
         color: var(--plum);
         text-decoration: none;
         font-weight: 800;
@@ -124,8 +127,13 @@
       .nav {
         display: flex;
         align-items: center;
+        flex: 1 1 auto;
+        flex-wrap: wrap;
         gap: 6px;
-        overflow-x: auto;
+        justify-content: center;
+        min-width: 0;
+        max-width: 100%;
+        overflow-x: visible;
         scrollbar-width: none;
       }
 
@@ -150,6 +158,7 @@
       .language-switch {
         display: inline-flex;
         align-items: center;
+        flex: 0 0 auto;
         gap: 4px;
         padding: 4px;
         border: 1px solid var(--line);
@@ -392,6 +401,86 @@
 
       .discounts {
         padding: 34px 0 0;
+      }
+
+      .story-band,
+      .vip-band,
+      .event-band,
+      .testimonial-band,
+      .tour-band,
+      .faq-band {
+        border-top: 1px solid var(--line);
+      }
+
+      .story-layout,
+      .tour-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+        gap: 26px;
+        align-items: center;
+      }
+
+      .story-image,
+      .tour-frame {
+        border-radius: var(--radius);
+        overflow: hidden;
+        border: 1px solid var(--line);
+        background: #fff;
+        box-shadow: var(--shadow);
+      }
+
+      .story-image img,
+      .tour-frame iframe {
+        width: 100%;
+        min-height: 360px;
+        height: 100%;
+        object-fit: cover;
+        border: 0;
+      }
+
+      .vip-panel {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 18px;
+        align-items: center;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: linear-gradient(135deg, #fff, #fff4f1);
+        padding: 24px;
+        box-shadow: var(--shadow);
+      }
+
+      .event-grid,
+      .testimonial-grid,
+      .faq-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 14px;
+      }
+
+      .event-card,
+      .testimonial-card,
+      .faq-card {
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: #fff;
+        padding: 18px;
+        box-shadow: 0 14px 36px rgba(67, 34, 51, 0.08);
+      }
+
+      .event-card span,
+      .faq-card span {
+        color: var(--rose-dark);
+        font-size: 12px;
+        font-weight: 900;
+        text-transform: uppercase;
+      }
+
+      .testimonial-card p,
+      .faq-card p,
+      .event-card p {
+        color: var(--muted);
+        line-height: 1.65;
       }
 
       .trust-band {
@@ -1259,9 +1348,21 @@
 
       @media (max-width: 860px) {
         .topbar-inner {
-          align-items: flex-start;
+          align-items: stretch;
           flex-direction: column;
           padding: 14px 0;
+        }
+
+        .brand,
+        .language-switch {
+          align-self: flex-start;
+        }
+
+        .nav {
+          flex-wrap: nowrap;
+          justify-content: flex-start;
+          overflow-x: auto;
+          width: 100%;
         }
 
         .hero {
@@ -1269,7 +1370,10 @@
         }
 
         .hero-layout,
-        .category-layout {
+        .category-layout,
+        .story-layout,
+        .tour-layout,
+        .vip-panel {
           grid-template-columns: 1fr;
         }
 
@@ -1421,6 +1525,30 @@
         </div>
       </section>
 
+      <section id="acerca" class="section story-band">
+        <div class="shell story-layout">
+          <div class="story-image reveal">
+            <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1400&q=82" alt="Salon Dominican Hair Salon" loading="lazy" decoding="async">
+          </div>
+          <div class="reveal">
+            <h2 class="section-title" data-i18n="aboutTitle">Acerca</h2>
+            <p id="aboutCopy" class="section-copy"></p>
+          </div>
+        </div>
+      </section>
+
+      <section id="vip" class="section vip-band">
+        <div class="shell">
+          <div class="vip-panel reveal">
+            <div>
+              <h2 class="section-title" data-i18n="vipTitle">Join Our VIP Club!</h2>
+              <p id="vipCopy" class="section-copy"></p>
+            </div>
+            <a id="vipEmailLink" class="btn" href="#"><i data-lucide="mail-plus" aria-hidden="true"></i><span data-i18n="joinVip">Unirme</span></a>
+          </div>
+        </div>
+      </section>
+
       <section id="discountSection" class="discounts shell" hidden>
         <div class="section-head">
           <div>
@@ -1429,6 +1557,18 @@
           </div>
         </div>
         <div id="discountTrack" class="discount-track"></div>
+      </section>
+
+      <section id="eventSection" class="section event-band" hidden>
+        <div class="shell">
+          <div class="section-head reveal">
+            <div>
+              <h2 class="section-title" data-i18n="eventsTitle">Eventos</h2>
+              <p class="section-copy" data-i18n="eventsCopy">Holidays, avisos y fechas especiales del salon.</p>
+            </div>
+          </div>
+          <div id="eventGrid" class="event-grid"></div>
+        </div>
       </section>
 
       <div id="content" class="loading" data-i18n="loadingServices">Cargando servicios...</div>
@@ -1453,6 +1593,40 @@
             </div>
           </div>
           <div id="policyPanel" class="policy-panel reveal"></div>
+        </div>
+      </section>
+
+      <section id="testimonials" class="section testimonial-band">
+        <div class="shell">
+          <div class="section-head reveal">
+            <div>
+              <h2 class="section-title" data-i18n="testimonialsTitle">Testimonials</h2>
+              <p class="section-copy" data-i18n="testimonialsCopy">Experiencias de clientas con nuestros servicios.</p>
+            </div>
+          </div>
+          <div id="testimonialGrid" class="testimonial-grid"></div>
+        </div>
+      </section>
+
+      <section id="tour360" class="section tour-band">
+        <div class="shell tour-layout">
+          <div class="reveal">
+            <h2 class="section-title" data-i18n="tourTitle">360 Tour</h2>
+            <p class="section-copy" data-i18n="tourCopy">Explora el espacio antes de tu cita.</p>
+          </div>
+          <div id="tourFrame" class="tour-frame reveal"></div>
+        </div>
+      </section>
+
+      <section id="faq" class="section faq-band">
+        <div class="shell">
+          <div class="section-head reveal">
+            <div>
+              <h2 class="section-title" data-i18n="faqTitle">FAQ</h2>
+              <p class="section-copy" data-i18n="faqCopy">Respuestas rapidas antes de reservar.</p>
+            </div>
+          </div>
+          <div id="faqGrid" class="faq-grid"></div>
         </div>
       </section>
 
@@ -1488,6 +1662,10 @@
             <div class="field">
               <label for="modalService" data-i18n="service">Servicio</label>
               <select id="modalService" required></select>
+            </div>
+            <div class="field">
+              <label for="preferredWorker" data-i18n="worker">Trabajadora</label>
+              <select id="preferredWorker"></select>
             </div>
             <div class="field">
               <label for="clientName" data-i18n="name">Nombre</label>
@@ -1605,7 +1783,7 @@
       }
 
       const INITIAL_APP_DATA = readJsonElement('initialAppData', null);
-      const APP_VERSION = '20260523-1';
+      const APP_VERSION = '20260525-2';
       const APP_CONFIG = Object.assign({
         apiBaseUrl: 'https://script.google.com/macros/s/AKfycbw7l_IyUV_R70TfyIzOqUC8hk0qySep2apa-zo6Zp5dv2F0LZO7hmSnQcMaCrro11XMzg/exec',
         dataUrl: 'data/site-data.json',
@@ -1627,7 +1805,20 @@
           quickBook: 'Reserva rápida',
           category: 'Categoría',
           service: 'Servicio',
+          worker: 'Trabajadora',
+          anyWorker: 'Cualquiera disponible',
           book: 'Reservar',
+          aboutTitle: 'Acerca',
+          vipTitle: 'Join Our VIP Club!',
+          joinVip: 'Unirme',
+          eventsTitle: 'Eventos',
+          eventsCopy: 'Holidays, avisos y fechas especiales del salon.',
+          testimonialsTitle: 'Testimonials',
+          testimonialsCopy: 'Experiencias de clientas con nuestros servicios.',
+          tourTitle: '360 Tour',
+          tourCopy: 'Explora el espacio antes de tu cita.',
+          faqTitle: 'FAQ',
+          faqCopy: 'Respuestas rapidas antes de reservar.',
           activePromos: 'Promos activas',
           promosCopy: 'Cupones disponibles para reservas elegibles.',
           loadingServices: 'Cargando servicios...',
@@ -1682,6 +1873,7 @@
           missingSignature: 'Falta tu firma.',
           creating: 'Creando...',
           receiptService: 'Servicio',
+          receiptWorker: 'Trabajadora',
           receiptDate: 'Fecha',
           receiptPrice: 'Precio',
           receiptDiscount: 'Descuento',
@@ -1693,9 +1885,12 @@
             todas: 'Todas',
             todos: 'Todos',
             'lavado-y-blower': 'Lavado y blower',
+            'blowouts-y-lavado': 'Blowouts y lavado',
             'color-y-mechas': 'Color y mechas',
             tratamientos: 'Tratamientos',
-            'cortes-y-peinados': 'Cortes y peinados'
+            'cortes-y-peinados': 'Cortes y peinados',
+            'cortes-y-styling': 'Cortes y styling',
+            'belleza-y-spa': 'Belleza y spa'
           },
           statuses: {
             pendiente: 'Pendiente',
@@ -1704,9 +1899,12 @@
           },
           sectionCopy: {
             'lavado-y-blower': 'Lavado, rolos y blower dominicano con brillo y movimiento.',
+            'blowouts-y-lavado': 'Lavado, rolos, blower dominicano y acabado pulido con brillo.',
             'color-y-mechas': 'Color, retoques y luces con acabado suave y personalizado.',
             tratamientos: 'Hidratacion, keratina y cuidado profundo para un cabello manejable.',
-            'cortes-y-peinados': 'Cortes de mantenimiento y estilos elegantes para cada ocasion.'
+            'cortes-y-peinados': 'Cortes de mantenimiento y estilos elegantes para cada ocasion.',
+            'cortes-y-styling': 'Cortes, styling, extensiones y acabados especiales.',
+            'belleza-y-spa': 'Faciales, depilacion y servicios de belleza seleccionados.'
           },
           defaultSectionCopy: 'Servicios personalizados con detalle y acabado elegante.'
         },
@@ -1716,7 +1914,20 @@
           quickBook: 'Quick booking',
           category: 'Category',
           service: 'Service',
+          worker: 'Staff member',
+          anyWorker: 'Anyone available',
           book: 'Book',
+          aboutTitle: 'About',
+          vipTitle: 'Join Our VIP Club!',
+          joinVip: 'Join',
+          eventsTitle: 'Events',
+          eventsCopy: 'Holidays, notices and special salon dates.',
+          testimonialsTitle: 'Testimonials',
+          testimonialsCopy: 'Client experiences with our services.',
+          tourTitle: '360 Tour',
+          tourCopy: 'Explore the space before your appointment.',
+          faqTitle: 'FAQ',
+          faqCopy: 'Quick answers before booking.',
           activePromos: 'Active promos',
           promosCopy: 'Coupons available for eligible bookings.',
           loadingServices: 'Loading services...',
@@ -1771,6 +1982,7 @@
           missingSignature: 'Your signature is missing.',
           creating: 'Creating...',
           receiptService: 'Service',
+          receiptWorker: 'Staff',
           receiptDate: 'Date',
           receiptPrice: 'Price',
           receiptDiscount: 'Discount',
@@ -1782,9 +1994,12 @@
             todas: 'All',
             todos: 'All',
             'lavado-y-blower': 'Dominican blowout',
+            'blowouts-y-lavado': 'Blowouts and wash',
             'color-y-mechas': 'Color and highlights',
             tratamientos: 'Treatments',
-            'cortes-y-peinados': 'Cuts and styling'
+            'cortes-y-peinados': 'Cuts and styling',
+            'cortes-y-styling': 'Cuts and styling',
+            'belleza-y-spa': 'Beauty and spa'
           },
           statuses: {
             pendiente: 'Pending',
@@ -1793,9 +2008,12 @@
           },
           sectionCopy: {
             'lavado-y-blower': 'Wash, roller sets and Dominican blowouts with shine and movement.',
+            'blowouts-y-lavado': 'Wash, roller sets, Dominican blowouts and polished shine.',
             'color-y-mechas': 'Color, touch-ups and highlights with a soft custom finish.',
             tratamientos: 'Hydration, keratin and deep care for manageable hair.',
-            'cortes-y-peinados': 'Maintenance cuts and elegant styles for every occasion.'
+            'cortes-y-peinados': 'Maintenance cuts and elegant styles for every occasion.',
+            'cortes-y-styling': 'Cuts, styling, extensions and special finishes.',
+            'belleza-y-spa': 'Facials, waxing and selected beauty services.'
           },
           defaultSectionCopy: 'Personalized services with detail and an elegant finish.'
         }
@@ -1839,6 +2057,12 @@
         data.services = Array.isArray(data.services) ? data.services : [];
         data.photos = data.photos && typeof data.photos === 'object' ? data.photos : {};
         data.publicDiscounts = Array.isArray(data.publicDiscounts) ? data.publicDiscounts : [];
+        data.staff = Array.isArray(data.staff) ? data.staff : [];
+        data.specialEvents = Array.isArray(data.specialEvents) ? data.specialEvents : [];
+        data.pageSections = data.pageSections && typeof data.pageSections === 'object' ? data.pageSections : {};
+        data.mapLink = data.mapLink || 'https://maps.app.goo.gl/ufwrqkr2N7gmLXUZ6';
+        data.mapIframeSrc = data.mapIframeSrc || '';
+        data.tourIframeSrc = data.tourIframeSrc || '';
         data.today = data.today || toIsoDate(new Date());
         return data;
       }
@@ -1887,9 +2111,14 @@
         $('#quickCategory').addEventListener('change', () => fillServiceSelect($('#quickService'), $('#quickCategory').value));
         $('#modalCategory').addEventListener('change', () => {
           fillServiceSelect($('#modalService'), $('#modalCategory').value);
+          fillWorkerSelect();
           loadSlots();
         });
-        $('#modalService').addEventListener('change', loadSlots);
+        $('#modalService').addEventListener('change', () => {
+          fillWorkerSelect();
+          loadSlots();
+        });
+        $('#preferredWorker').addEventListener('change', loadSlots);
         $('#date').addEventListener('change', () => {
           renderCalendar();
           loadSlots();
@@ -1937,6 +2166,10 @@
         const policySection = document.querySelector('.policy-section');
         if (trustBand) trustBand.hidden = false;
         if (policySection) policySection.hidden = false;
+        ['#acerca', '#vip', '#testimonials', '#tour360', '#faq'].forEach(selector => {
+          const node = document.querySelector(selector);
+          if (node) node.hidden = false;
+        });
         $('#date').min = state.data.today;
 
         renderNav();
@@ -1944,10 +2177,16 @@
         fillServiceSelect($('#quickService'), $('#quickCategory').value);
         fillCategorySelect($('#modalCategory'));
         fillServiceSelect($('#modalService'), $('#modalCategory').value);
+        fillWorkerSelect();
+        renderStorySections();
+        renderEvents();
         renderDiscounts();
         renderSections();
         renderBeforeAfter();
         renderPolicy();
+        renderTestimonials();
+        renderTour();
+        renderFaq();
         renderContact();
         renderCalendar();
         refreshIcons();
@@ -1957,10 +2196,15 @@
         document.body.classList.add('maintenance-mode');
         $('#quickBook').hidden = true;
         $('#discountSection').hidden = true;
+        $('#eventSection').hidden = true;
         $('#beforeAfterSection').hidden = true;
         $('#contactSection').hidden = true;
         const trustBand = document.querySelector('.trust-band');
         const policySection = document.querySelector('.policy-section');
+        ['#acerca', '#vip', '#testimonials', '#tour360', '#faq'].forEach(selector => {
+          const node = document.querySelector(selector);
+          if (node) node.hidden = true;
+        });
         if (trustBand) trustBand.hidden = true;
         if (policySection) policySection.hidden = true;
         const message = state.data.siteStatus.maintenanceMessage || (
@@ -1976,6 +2220,61 @@
           </div>`;
         renderContact();
         refreshIcons();
+      }
+
+      function renderStorySections() {
+        const sections = state.data.pageSections || {};
+        const about = sections.about || {};
+        const vip = sections.vip || {};
+        $('#aboutCopy').textContent = about[state.language] || about.es || '';
+        $('#vipCopy').textContent = vip[state.language] || vip.es || '';
+        const email = state.data.contact && state.data.contact.email ? state.data.contact.email : 'yaleixi20@gmail.com';
+        $('#vipEmailLink').href = `mailto:${email}?subject=${encodeURIComponent('VIP Club - Dominican Hair Salon')}`;
+      }
+
+      function renderEvents() {
+        const events = (state.data.specialEvents || []).filter(event => event.visibility === 'clientes' || event.visibility === 'ambos');
+        $('#eventSection').hidden = !events.length;
+        if (!events.length) return;
+        $('#eventGrid').innerHTML = events.map(event => `
+          <article class="event-card reveal">
+            <span>${escapeHtml(event.type || 'Evento')}</span>
+            <h3>${escapeHtml(state.language === 'en' && event.titleEn ? event.titleEn : event.title)}</h3>
+            <p>${escapeHtml(event.startDate)}${event.endDate && event.endDate !== event.startDate ? ` - ${escapeHtml(event.endDate)}` : ''}</p>
+            <p>${escapeHtml(state.language === 'en' && event.descriptionEn ? event.descriptionEn : event.description || '')}</p>
+          </article>
+        `).join('');
+      }
+
+      function renderTestimonials() {
+        const testimonials = (state.data.pageSections && state.data.pageSections.testimonials) || [];
+        $('#testimonialGrid').innerHTML = testimonials.map(item => `
+          <article class="testimonial-card reveal">
+            <i data-lucide="quote" aria-hidden="true"></i>
+            <p>${escapeHtml(item[state.language] || item.es || '')}</p>
+          </article>
+        `).join('');
+      }
+
+      function renderTour() {
+        const src = state.data.tourIframeSrc || '';
+        $('#tourFrame').innerHTML = src
+          ? `<iframe src="${escapeHtml(src)}" width="600" height="450" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>`
+          : `<div class="empty">${escapeHtml(state.language === 'en' ? 'Tour coming soon.' : 'Tour disponible pronto.')}</div>`;
+      }
+
+      function renderFaq() {
+        const items = (state.data.pageSections && state.data.pageSections.faq) || [];
+        $('#faqGrid').innerHTML = items.map(item => {
+          const question = state.language === 'en' ? item.en : item.es;
+          const answer = state.language === 'en' ? item.answerEn : item.answerEs;
+          return `
+            <article class="faq-card reveal">
+              <span>${escapeHtml(state.language === 'en' ? 'Question' : 'Pregunta')}</span>
+              <h3>${escapeHtml(question || '')}</h3>
+              <p>${escapeHtml(answer || '')}</p>
+            </article>`;
+        }).join('');
       }
 
       function renderContact() {
@@ -2068,6 +2367,10 @@
           `<a href="#${slug(category)}">${escapeHtml(categoryLabel(category))}</a>`
         ));
         links.unshift(`<a href="#inicio">${escapeHtml(t('home'))}</a>`);
+        links.splice(1, 0, `<a href="#acerca">${escapeHtml(t('aboutTitle'))}</a>`);
+        links.push(`<a href="#vip">${escapeHtml(t('vipTitle'))}</a>`);
+        links.push(`<a href="#tour360">${escapeHtml(t('tourTitle'))}</a>`);
+        links.push(`<a href="#faq">${escapeHtml(t('faqTitle'))}</a>`);
         $('#nav').innerHTML = links.join('');
       }
 
@@ -2217,6 +2520,23 @@
         )).join('');
       }
 
+      function fillWorkerSelect() {
+        const service = findService($('#modalCategory').value, $('#modalService').value);
+        const workers = (state.data.staff || []).filter(worker => workerCanDoService(worker, service));
+        $('#preferredWorker').innerHTML = [`<option value="">${escapeHtml(t('anyWorker'))}</option>`]
+          .concat(workers.map(worker => `<option value="${escapeHtml(worker.username)}">${escapeHtml(worker.displayName || worker.username)}</option>`))
+          .join('');
+      }
+
+      function workerCanDoService(worker, service) {
+        if (!worker || !service) return false;
+        const allowed = normalizeText(worker.services || 'Todos');
+        if (!allowed || allowed === 'todos' || allowed === 'all') return true;
+        const parts = allowed.split(',').map(item => item.trim()).filter(Boolean);
+        const serviceKeys = [service.name, service.category, service.nameEn, service.categoryEn].map(normalizeText);
+        return parts.some(part => serviceKeys.indexOf(part) !== -1);
+      }
+
       function getSelectedQuickService() {
         return state.data.services.find(service =>
           service.category === $('#quickCategory').value && service.name === $('#quickService').value
@@ -2242,6 +2562,7 @@
         $('#modalCategory').value = service.category;
         fillServiceSelect($('#modalService'), service.category);
         $('#modalService').value = service.name;
+        fillWorkerSelect();
         $('#date').value = $('#date').value || state.data.today;
         state.calendarDate = makeLocalDate($('#date').value);
         state.selectedTime = '';
@@ -2278,7 +2599,7 @@
 
         slotGrid.innerHTML = `<div class="empty">${escapeHtml(t('searchingSlots'))}</div>`;
         try {
-          const slots = await gas('getAvailableSlots', category, service, date, state.language);
+          const slots = await gas('getAvailableSlots', category, service, date, state.language, $('#preferredWorker').value);
           if (!slots.length) {
             slotGrid.innerHTML = `<div class="empty">${escapeHtml(t('noSlots'))}</div>`;
             return;
@@ -2394,6 +2715,7 @@
           language: state.language,
           category: $('#modalCategory').value,
           service: $('#modalService').value,
+          preferredWorker: $('#preferredWorker').value,
           clientName: $('#clientName').value,
           phone: $('#phone').value,
           email: $('#email').value,
@@ -2438,6 +2760,7 @@
             <div class="receipt-summary">
               <div><span>ID</span><strong>${escapeHtml(reservation.id)}</strong></div>
               <div><span>${escapeHtml(t('receiptService'))}</span><strong>${escapeHtml(categoryLabel(reservation.category))} - ${escapeHtml(displayService)}</strong></div>
+              <div><span>${escapeHtml(t('receiptWorker'))}</span><strong>${escapeHtml(reservation.assignedName || reservation.assignedUser || t('anyWorker'))}</strong></div>
               <div><span>${escapeHtml(t('receiptDate'))}</span><strong>${escapeHtml(reservation.date)} ${escapeHtml(t('at'))} ${escapeHtml(reservation.time)}</strong></div>
               <div><span>${escapeHtml(t('receiptStatus'))}</span><strong>${escapeHtml(statusLabel(reservation.status))}</strong></div>
               <div><span>${escapeHtml(t('receiptPrice'))}</span><strong>${formatMoney(reservation.price)}</strong></div>
@@ -2588,7 +2911,7 @@
         }
 
         if (functionName === 'getAppData') return loadAppData();
-        if (functionName === 'getAvailableSlots') return getAvailableSlotsStatic(args[0], args[1], args[2]);
+        if (functionName === 'getAvailableSlots') return getAvailableSlotsStatic(args[0], args[1], args[2], args[4]);
         if (functionName === 'createReservation') return createReservationStatic(args[0]);
         throw new Error('Esta funcion todavia necesita backend.');
       }
@@ -2661,7 +2984,7 @@
         return 35000;
       }
 
-      function getAvailableSlotsStatic(category, serviceName, dateIso) {
+      function getAvailableSlotsStatic(category, serviceName, dateIso, preferredWorker) {
         if (!state.data || !dateIso) return [];
         const service = findService(category, serviceName);
         if (!service || isDateBlocked(dateIso)) return [];
@@ -2680,7 +3003,11 @@
         for (let minutes = start; minutes + duration <= end; minutes += interval) {
           const time24 = minutesToTime24(minutes);
           if (isPastSlot(dateIso, time24)) continue;
-          slots.push({ value: time24, label: formatAmPm(time24) });
+          const workers = (state.data.staff || [])
+            .filter(worker => !preferredWorker || worker.username === preferredWorker)
+            .filter(worker => workerCanDoService(worker, service))
+            .filter(worker => workerAvailableStatic(worker, dateIso, time24, duration));
+          if (workers.length) slots.push({ value: time24, label: formatAmPm(time24), workers });
         }
         return slots;
       }
@@ -2690,13 +3017,19 @@
         const service = findService(payload.category, payload.service);
         if (!service) throw new Error(t('noServicesInCategory'));
         if (!payload.agreementAccepted) throw new Error(t('acceptAgreement'));
+        const selectedSlot = getAvailableSlotsStatic(service.category, service.name, payload.date, payload.preferredWorker)
+          .find(slot => slot.value === payload.time);
+        const assignedWorker = selectedSlot && selectedSlot.workers && selectedSlot.workers[0];
+        if (!assignedWorker) throw new Error(t('noSlots'));
 
         const price = Number(service.price || 0);
         const coupon = applyStaticCoupon(payload.coupon, service.category, price);
         return {
-          id: `AL-${Date.now()}`,
+          id: `DHS-${Date.now()}`,
           category: service.category,
           service: service.name,
+          assignedUser: assignedWorker.username,
+          assignedName: assignedWorker.displayName || assignedWorker.username,
           date: payload.date,
           time: formatAmPm(payload.time),
           status: 'Pendiente',
@@ -2710,6 +3043,20 @@
 
       function findService(category, serviceName) {
         return (state.data.services || []).find(service => service.category === category && service.name === serviceName);
+      }
+
+      function selectedWorkerName(username) {
+        const worker = (state.data.staff || []).find(item => item.username === username);
+        return worker ? worker.displayName || worker.username : t('anyWorker');
+      }
+
+      function workerAvailableStatic(worker, dateIso, time24, duration) {
+        const availability = worker.availability || {};
+        const day = makeLocalDate(dateIso).getDay();
+        const blocks = availability[String(day)] || [];
+        const start = timeToMinutes(time24);
+        const end = start + duration;
+        return blocks.some(block => start >= timeToMinutes(block.start || '09:00') && end <= timeToMinutes(block.end || '18:00'));
       }
 
       function applyStaticCoupon(code, category, price) {
