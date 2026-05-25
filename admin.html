@@ -592,6 +592,105 @@
         transform: translateX(-50%) translateY(0);
       }
 
+      .welcome-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 90;
+        display: none;
+        place-items: center;
+        padding: 22px;
+        background: rgba(43, 34, 38, 0.34);
+        backdrop-filter: blur(10px);
+      }
+
+      .welcome-modal.open {
+        display: grid;
+      }
+
+      .welcome-card {
+        width: min(430px, 100%);
+        border: 1px solid rgba(255, 255, 255, 0.45);
+        border-radius: 8px;
+        background: #fff;
+        box-shadow: var(--shadow);
+        padding: 26px;
+        text-align: center;
+        animation: welcomeIn 360ms ease both;
+      }
+
+      .welcome-card .brand-mark {
+        margin: 0 auto 14px;
+        width: 48px;
+        height: 48px;
+      }
+
+      .welcome-card p {
+        margin: 8px 0 0;
+      }
+
+      @keyframes welcomeIn {
+        from { opacity: 0; transform: translateY(18px) scale(0.98); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+      }
+
+      .availability-grid,
+      .day-checks.wide {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+        gap: 10px;
+      }
+
+      .availability-day {
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: #fffaf7;
+        padding: 10px;
+      }
+
+      .availability-day .time-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-top: 8px;
+      }
+
+      .service-checks {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 8px;
+        max-height: 220px;
+        overflow: auto;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        padding: 10px;
+        background: #fff;
+      }
+
+      .report-controls,
+      .qr-box {
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: #fff;
+        padding: 14px;
+        margin-bottom: 14px;
+      }
+
+      .qr-video {
+        width: 100%;
+        min-height: 280px;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: #1f171b;
+      }
+
+      .stage-card {
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: #fffaf7;
+        padding: 14px;
+        margin-top: 12px;
+      }
+
       @media (max-width: 980px) {
         .grid {
           grid-template-columns: 1fr;
@@ -659,7 +758,7 @@
           <h1>Admin</h1>
           <p class="muted">Dominican Hair Salon</p>
           <div class="field">
-            <label for="username">Usuario</label>
+            <label for="username">Correo o usuario</label>
             <input id="username" autocomplete="username" required>
           </div>
           <div class="field">
@@ -678,8 +777,11 @@
           <button class="tab" type="button" data-tab="services">Servicios</button>
           <button class="tab" type="button" data-tab="photos">Fotos</button>
           <button class="tab" type="button" data-tab="discounts">Descuentos</button>
+          <button class="tab" type="button" data-tab="events">Eventos</button>
+          <button class="tab" type="button" data-tab="qr">Escanear QR</button>
           <button class="tab" type="button" data-tab="users">Usuarios</button>
           <button class="tab" type="button" data-tab="settings">Ajustes</button>
+          <button class="tab developer-only" type="button" data-tab="developer">Developer</button>
           <button class="tab" type="button" data-tab="help">Ayuda</button>
         </nav>
 
@@ -692,6 +794,19 @@
               </div>
             </div>
             <div id="dashboardGrid" class="dashboard-grid"></div>
+            <div class="filters">
+              <input id="reservationSearch" placeholder="Buscar cliente, servicio, telefono o email">
+              <select id="reservationStatus">
+                <option value="">Todos los estados</option>
+                <option>Pendiente</option>
+                <option>Confirmada</option>
+                <option>Cancelada</option>
+              </select>
+              <input id="reservationFrom" type="date" aria-label="Desde">
+              <input id="reservationTo" type="date" aria-label="Hasta">
+            </div>
+            <div id="reservationTable"></div>
+            <div id="clientHistory"></div>
             <form id="manualReservationForm" class="manual-form">
               <div class="panel-head">
                 <div>
@@ -763,21 +878,11 @@
                   <textarea id="manualNotes"></textarea>
                 </div>
               </div>
-              <button class="btn" type="submit"><i data-lucide="calendar-plus" aria-hidden="true"></i>Guardar cita</button>
+              <div class="row-actions">
+                <button class="btn" type="submit"><i data-lucide="calendar-plus" aria-hidden="true"></i>Guardar cita</button>
+                <button class="btn secondary" type="button" data-reset-form="manual"><i data-lucide="x" aria-hidden="true"></i>Cancelar</button>
+              </div>
             </form>
-            <div class="filters">
-              <input id="reservationSearch" placeholder="Buscar cliente, servicio, telefono o email">
-              <select id="reservationStatus">
-                <option value="">Todos los estados</option>
-                <option>Pendiente</option>
-                <option>Confirmada</option>
-                <option>Cancelada</option>
-              </select>
-              <input id="reservationFrom" type="date" aria-label="Desde">
-              <input id="reservationTo" type="date" aria-label="Hasta">
-            </div>
-            <div id="reservationTable"></div>
-            <div id="clientHistory"></div>
           </div>
         </section>
 
@@ -787,6 +892,33 @@
               <div>
                 <h2>Ganancias</h2>
                 <div class="muted" id="earningsHint"></div>
+              </div>
+            </div>
+            <div class="report-controls">
+              <div class="form-grid">
+                <div class="field">
+                  <label for="reportFrom">Desde</label>
+                  <input id="reportFrom" type="date">
+                </div>
+                <div class="field">
+                  <label for="reportTo">Hasta</label>
+                  <input id="reportTo" type="date">
+                </div>
+                <div class="field">
+                  <label for="reportWorker">Trabajadora</label>
+                  <select id="reportWorker"></select>
+                </div>
+                <div class="field">
+                  <label for="reportService">Servicio</label>
+                  <select id="reportService"></select>
+                </div>
+              </div>
+              <div class="row-actions">
+                <button class="btn secondary mini" type="button" data-report-range="day">Diario</button>
+                <button class="btn secondary mini" type="button" data-report-range="week">Semanal</button>
+                <button class="btn secondary mini" type="button" data-report-range="month">Mensual</button>
+                <button class="btn" type="button" id="exportReportBtn"><i data-lucide="file-down" aria-hidden="true"></i>Exportar PDF</button>
+                <a id="reportPdfLink" class="btn secondary" href="#" target="_blank" rel="noopener" hidden>Ver reporte</a>
               </div>
             </div>
             <div id="earningsGrid" class="dashboard-grid"></div>
@@ -821,6 +953,7 @@
                     <option>Pendiente</option>
                     <option>Aprobada</option>
                     <option>Denegada</option>
+                    <option>Mas informacion</option>
                   </select>
                 </div>
                 <div class="field full">
@@ -832,7 +965,10 @@
                   <textarea id="timeOffResponse"></textarea>
                 </div>
               </div>
-              <button class="btn" type="submit"><i data-lucide="calendar-days" aria-hidden="true"></i>Guardar solicitud</button>
+              <div class="row-actions">
+                <button class="btn" type="submit"><i data-lucide="calendar-days" aria-hidden="true"></i>Guardar solicitud</button>
+                <button class="btn secondary" type="button" data-reset-form="timeoff"><i data-lucide="x" aria-hidden="true"></i>Cancelar</button>
+              </div>
             </form>
             <div class="panel">
               <div class="panel-head">
@@ -853,12 +989,20 @@
               <input type="hidden" id="userRow">
               <div class="form-grid">
                 <div class="field">
-                  <label for="userName">Usuario</label>
+                  <label for="userName">Alias interno</label>
                   <input id="userName" required>
                 </div>
                 <div class="field">
                   <label for="userDisplayName">Nombre visible</label>
                   <input id="userDisplayName">
+                </div>
+                <div class="field">
+                  <label for="userEmail">Correo de login</label>
+                  <input id="userEmail" type="email" required>
+                </div>
+                <div class="field">
+                  <label for="userPhone">Telefono</label>
+                  <input id="userPhone" autocomplete="tel">
                 </div>
                 <div class="field">
                   <label for="userPassword">Contrasena</label>
@@ -876,6 +1020,14 @@
                   <input id="userActive" type="checkbox" checked>
                   Usuario activo
                 </label>
+                <div class="field full">
+                  <label>Servicios permitidos</label>
+                  <div id="userAllowedServices" class="service-checks"></div>
+                </div>
+                <div class="field full">
+                  <label>Disponibilidad por dia</label>
+                  <div id="userAvailability" class="availability-grid"></div>
+                </div>
               </div>
               <div class="permission-grid">
                 <label class="check"><input id="permEditPage" type="checkbox">Editar pagina</label>
@@ -888,7 +1040,10 @@
                 <label class="check"><input id="permManageBlockedDays" type="checkbox">Bloquear dias</label>
                 <label class="check"><input id="permManagePayments" type="checkbox">Gestionar pagos</label>
               </div>
-              <button class="btn" type="submit"><i data-lucide="user-cog" aria-hidden="true"></i>Guardar usuario</button>
+              <div class="row-actions">
+                <button class="btn" type="submit"><i data-lucide="user-cog" aria-hidden="true"></i>Guardar usuario</button>
+                <button class="btn secondary" type="button" data-reset-form="user"><i data-lucide="x" aria-hidden="true"></i>Cancelar</button>
+              </div>
             </form>
             <div class="panel">
               <div class="panel-head">
@@ -912,26 +1067,17 @@
                   <label for="serviceCategory">Categoria</label>
                   <input id="serviceCategory" list="categoryList" required>
                 </div>
-                <div class="field">
-                  <label for="serviceCategoryEn">Categoria EN</label>
-                  <input id="serviceCategoryEn">
-                </div>
+                <input id="serviceCategoryEn" type="hidden">
                 <div class="field">
                   <label for="serviceName">Servicio</label>
                   <input id="serviceName" required>
                 </div>
-                <div class="field">
-                  <label for="serviceNameEn">Servicio EN</label>
-                  <input id="serviceNameEn">
-                </div>
+                <input id="serviceNameEn" type="hidden">
                 <div class="field full">
                   <label for="serviceDescription">Descripcion</label>
                   <textarea id="serviceDescription"></textarea>
                 </div>
-                <div class="field full">
-                  <label for="serviceDescriptionEn">Descripcion EN</label>
-                  <textarea id="serviceDescriptionEn"></textarea>
-                </div>
+                <textarea id="serviceDescriptionEn" hidden></textarea>
                 <div class="field">
                   <label for="servicePrice">Precio</label>
                   <input id="servicePrice" type="number" min="0" step="0.01" required>
@@ -953,7 +1099,10 @@
                   <input id="serviceImage">
                 </div>
               </div>
-              <button class="btn" type="submit"><i data-lucide="save" aria-hidden="true"></i>Guardar servicio</button>
+              <div class="row-actions">
+                <button class="btn" type="submit"><i data-lucide="save" aria-hidden="true"></i>Guardar servicio</button>
+                <button class="btn secondary" type="button" data-reset-form="service"><i data-lucide="x" aria-hidden="true"></i>Cancelar</button>
+              </div>
             </form>
             <div class="panel">
               <div class="panel-head">
@@ -987,10 +1136,7 @@
                   <label for="photoTitle">Titulo</label>
                   <input id="photoTitle">
                 </div>
-                <div class="field">
-                  <label for="photoTitleEn">Titulo EN</label>
-                  <input id="photoTitleEn">
-                </div>
+                <input id="photoTitleEn" type="hidden">
                 <label class="check">
                   <input id="photoVisible" type="checkbox" checked>
                   Visible
@@ -1036,7 +1182,10 @@
                   <input id="photoUrl">
                 </div>
               </div>
-              <button class="btn" type="submit"><i data-lucide="image-up" aria-hidden="true"></i>Guardar foto</button>
+              <div class="row-actions">
+                <button class="btn" type="submit"><i data-lucide="image-up" aria-hidden="true"></i>Guardar foto</button>
+                <button class="btn secondary" type="button" data-reset-form="photo"><i data-lucide="x" aria-hidden="true"></i>Cancelar</button>
+              </div>
             </form>
             <div class="panel">
               <div class="panel-head">
@@ -1060,10 +1209,7 @@
                   <label for="beforeAfterTitle">Titulo</label>
                   <input id="beforeAfterTitle" required>
                 </div>
-                <div class="field">
-                  <label for="beforeAfterTitleEn">Titulo EN</label>
-                  <input id="beforeAfterTitleEn">
-                </div>
+                <input id="beforeAfterTitleEn" type="hidden">
                 <div class="field">
                   <label for="beforeAfterOrder">Orden</label>
                   <input id="beforeAfterOrder" type="number" min="1" step="1" value="1">
@@ -1093,7 +1239,10 @@
                   <input id="afterUrl">
                 </div>
               </div>
-              <button class="btn" type="submit"><i data-lucide="images" aria-hidden="true"></i>Guardar antes/despues</button>
+              <div class="row-actions">
+                <button class="btn" type="submit"><i data-lucide="images" aria-hidden="true"></i>Guardar antes/despues</button>
+                <button class="btn secondary" type="button" data-reset-form="beforeAfter"><i data-lucide="x" aria-hidden="true"></i>Cancelar</button>
+              </div>
             </form>
             <div class="panel">
               <div class="panel-head">
@@ -1123,30 +1272,44 @@
                 </div>
                 <div class="field">
                   <label for="discountCategory">Categoria</label>
-                  <input id="discountCategory" list="categoryList" value="Todas">
+                  <select id="discountCategory"></select>
+                </div>
+                <input id="discountCategoryEn" type="hidden" value="All">
+                <input id="discountDays" type="hidden" value="Todos">
+                <input id="discountDaysEn" type="hidden" value="Every day">
+                <div class="field full">
+                  <label>Dias activos</label>
+                  <div id="discountDaysChecks" class="day-checks wide"></div>
                 </div>
                 <div class="field">
-                  <label for="discountCategoryEn">Categoria EN</label>
-                  <input id="discountCategoryEn" value="All">
+                  <label for="discountStart">Fecha inicio</label>
+                  <input id="discountStart" type="date">
                 </div>
                 <div class="field">
-                  <label for="discountDays">Dias</label>
-                  <input id="discountDays" value="Todos">
+                  <label for="discountEnd">Fecha final</label>
+                  <input id="discountEnd" type="date">
                 </div>
                 <div class="field">
-                  <label for="discountDaysEn">Dias EN</label>
-                  <input id="discountDaysEn" value="Every day">
+                  <label for="discountDurationDays">Cantidad de dias</label>
+                  <input id="discountDurationDays" type="number" min="0" step="1" value="0">
                 </div>
                 <label class="check">
                   <input id="discountAvailable" type="checkbox" checked>
                   Disponible
                 </label>
                 <label class="check">
+                  <input id="discountNoExpiration" type="checkbox" checked>
+                  Sin expiracion
+                </label>
+                <label class="check">
                   <input id="discountVisible" type="checkbox">
                   Publico
                 </label>
               </div>
-              <button class="btn" type="submit"><i data-lucide="ticket-percent" aria-hidden="true"></i>Guardar cupon</button>
+              <div class="row-actions">
+                <button class="btn" type="submit"><i data-lucide="ticket-percent" aria-hidden="true"></i>Guardar cupon</button>
+                <button class="btn secondary" type="button" data-reset-form="discount"><i data-lucide="x" aria-hidden="true"></i>Cancelar</button>
+              </div>
             </form>
             <div class="panel">
               <div class="panel-head">
@@ -1154,6 +1317,99 @@
               </div>
               <div id="discountTable"></div>
             </div>
+          </div>
+        </section>
+
+        <section id="events" class="tab-panel" hidden>
+          <div class="grid">
+            <form id="eventForm" class="panel">
+              <div class="panel-head">
+                <h2>Eventos especiales</h2>
+                <button class="btn secondary mini" type="button" id="newEventBtn"><i data-lucide="plus" aria-hidden="true"></i>Nuevo</button>
+              </div>
+              <input type="hidden" id="eventRow">
+              <input type="hidden" id="eventId">
+              <input type="hidden" id="eventTitleEn">
+              <textarea id="eventDescriptionEn" hidden></textarea>
+              <div class="form-grid">
+                <div class="field">
+                  <label for="eventType">Tipo</label>
+                  <select id="eventType">
+                    <option>Holidays</option>
+                    <option>Aniversarios</option>
+                    <option>Otros</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="eventVisibility">Visibilidad</label>
+                  <select id="eventVisibility">
+                    <option value="clientes">Clientes</option>
+                    <option value="usuarios">Usuarios</option>
+                    <option value="ambos">Ambos</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="eventTitle">Titulo</label>
+                  <input id="eventTitle" required>
+                </div>
+                <div class="field">
+                  <label for="eventStart">Desde</label>
+                  <input id="eventStart" type="date" required>
+                </div>
+                <div class="field">
+                  <label for="eventEnd">Hasta</label>
+                  <input id="eventEnd" type="date" required>
+                </div>
+                <label class="check">
+                  <input id="eventBlocksBooking" type="checkbox">
+                  Bloquear reservas
+                </label>
+                <label class="check">
+                  <input id="eventActive" type="checkbox" checked>
+                  Activo
+                </label>
+                <div class="field full">
+                  <label for="eventDescription">Descripcion</label>
+                  <textarea id="eventDescription"></textarea>
+                </div>
+              </div>
+              <div class="row-actions">
+                <button class="btn" type="submit"><i data-lucide="calendar-heart" aria-hidden="true"></i>Guardar evento</button>
+                <button class="btn secondary" type="button" data-reset-form="event"><i data-lucide="x" aria-hidden="true"></i>Cancelar</button>
+              </div>
+            </form>
+            <div class="panel">
+              <div class="panel-head">
+                <h2>Lista de eventos</h2>
+              </div>
+              <div id="eventTable"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="qr" class="tab-panel" hidden>
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h2>Escanear QR</h2>
+                <div class="muted">Valida QR de citas confirmadas desde el Admin. Si la camara no esta disponible, pega el token.</div>
+              </div>
+            </div>
+            <div class="qr-box">
+              <video id="qrVideo" class="qr-video" playsinline muted hidden></video>
+              <div class="form-grid">
+                <div class="field full">
+                  <label for="qrText">Token o contenido del QR</label>
+                  <input id="qrText" placeholder="DHS|ID|TOKEN">
+                </div>
+              </div>
+              <div class="row-actions">
+                <button class="btn" type="button" id="startQrBtn"><i data-lucide="scan-line" aria-hidden="true"></i>Abrir camara</button>
+                <button class="btn secondary" type="button" id="validateQrBtn"><i data-lucide="badge-check" aria-hidden="true"></i>Validar</button>
+                <button class="btn secondary" type="button" id="stopQrBtn"><i data-lucide="x" aria-hidden="true"></i>Cancelar</button>
+              </div>
+            </div>
+            <div id="qrResult"></div>
           </div>
         </section>
 
@@ -1215,20 +1471,18 @@
                   <label for="maintenanceMessage">Mensaje de mantenimiento</label>
                   <textarea id="maintenanceMessage"></textarea>
                 </div>
-                <div class="developer-only full">
-                  <h3>Developer</h3>
-                  <label class="check">
-                    <input id="publicEnabled" type="checkbox">
-                    Pagina de clientas activa
-                  </label>
-                  <label class="check">
-                    <input id="adminEnabled" type="checkbox">
-                    Acceso admin activo
-                  </label>
-                </div>
+                <label class="check full">
+                  <input id="publicEnabled" type="checkbox">
+                  Pagina de clientas activa
+                </label>
+                <label class="check full developer-only">
+                  <input id="adminEnabled" type="checkbox">
+                  Acceso admin activo
+                </label>
               </div>
               <div class="row-actions">
                 <button class="btn" type="submit"><i data-lucide="settings" aria-hidden="true"></i>Guardar ajustes</button>
+                <button class="btn secondary" type="button" data-reset-form="settings"><i data-lucide="x" aria-hidden="true"></i>Cancelar</button>
                 <button class="btn secondary" type="button" id="sendRemindersBtn"><i data-lucide="bell-ring" aria-hidden="true"></i>Enviar recordatorios ahora</button>
                 <button class="btn secondary developer-only" type="button" id="installReminderTriggerBtn"><i data-lucide="alarm-clock" aria-hidden="true"></i>Activar automaticos</button>
                 <button class="btn secondary" type="button" id="clearPublicCacheBtn"><i data-lucide="rotate-cw" aria-hidden="true"></i>Actualizar pagina clientas</button>
@@ -1282,9 +1536,49 @@
                 <div class="row-actions">
                   <button class="btn" type="submit"><i data-lucide="calendar-x" aria-hidden="true"></i>Guardar bloqueo</button>
                   <button class="btn secondary" id="newBlockedDayBtn" type="button">Nuevo</button>
+                  <button class="btn secondary" type="button" data-reset-form="blocked"><i data-lucide="x" aria-hidden="true"></i>Cancelar</button>
                 </div>
               </form>
               <div id="blockedDaysList" class="compact-list" style="margin-top: 14px;"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="developer" class="tab-panel developer-only" hidden>
+          <div class="grid">
+            <div class="panel">
+              <div class="panel-head">
+                <div>
+                  <h2>Developer Settings</h2>
+                  <div class="muted">Controles privados para acceso, paginas y configuraciones avanzadas.</div>
+                </div>
+              </div>
+              <div class="compact-list">
+                <article class="blocked-card">
+                  <strong>Acceso general</strong>
+                  <p class="muted">Puedes desactivar todos los usuarios staff sin tocar Admin ni Developer.</p>
+                  <button class="btn danger" type="button" id="disableAllStaffBtn"><i data-lucide="user-x" aria-hidden="true"></i>Quitar acceso a staff</button>
+                </article>
+                <article class="blocked-card">
+                  <strong>Paginas</strong>
+                  <p class="muted">Usa Ajustes para activar/desactivar pagina de clientas y acceso admin. Developer puede desactivar ambos.</p>
+                  <div class="row-actions">
+                    <button class="btn secondary" type="button" id="developerDisablePublicBtn">Deshabilitar clientas</button>
+                    <button class="btn secondary" type="button" id="developerDisableAdminBtn">Deshabilitar usuarios</button>
+                  </div>
+                </article>
+                <article class="blocked-card">
+                  <strong>Contrasenas y cuentas</strong>
+                  <p class="muted">Las contrasenas, bloqueos y estados se gestionan desde Usuarios. Las cuentas bloqueadas muestran intentos fallidos.</p>
+                  <button class="btn secondary" type="button" onclick="document.querySelector('[data-tab=users]').click()">Ir a usuarios</button>
+                </article>
+              </div>
+            </div>
+            <div class="panel">
+              <div class="panel-head">
+                <h2>Logs importantes</h2>
+              </div>
+              <p class="muted">Apps Script guarda acciones importantes en la hoja Logs: usuario, fecha, rol, accion y detalle.</p>
             </div>
           </div>
         </section>
@@ -1356,6 +1650,15 @@
     </main>
 
     <datalist id="categoryList"></datalist>
+    <div id="welcomeModal" class="welcome-modal" role="dialog" aria-modal="true" aria-labelledby="welcomeTitle">
+      <div class="welcome-card">
+        <span class="brand-mark"><i data-lucide="sparkles" aria-hidden="true"></i></span>
+        <h2 id="welcomeTitle">Bienvenido</h2>
+        <p id="welcomeName"></p>
+        <p id="welcomeRole" class="muted"></p>
+        <button class="btn" type="button" id="closeWelcomeBtn">Continuar</button>
+      </div>
+    </div>
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
     <script>
@@ -1363,7 +1666,7 @@
       const $$ = selector => Array.prototype.slice.call(document.querySelectorAll(selector));
       const ADMIN_CONFIG = Object.assign({
         apiBaseUrl: 'https://script.google.com/macros/s/AKfycbw7l_IyUV_R70TfyIzOqUC8hk0qySep2apa-zo6Zp5dv2F0LZO7hmSnQcMaCrro11XMzg/exec',
-        publicUrl: 'https://visualnetworkdev.github.io/dominicanhairsalon/'
+        publicUrl: ''
       }, window.ANGELS_ADMIN_CONFIG || {});
       const PUBLIC_APP_URL = ADMIN_CONFIG.publicUrl || './';
 
@@ -1409,7 +1712,10 @@
         tab: 'reservations',
         photoFile: null,
         beforeFile: null,
-        afterFile: null
+        afterFile: null,
+        qrStream: null,
+        qrTimer: null,
+        qrReservation: null
       };
 
       document.addEventListener('DOMContentLoaded', init);
@@ -1447,6 +1753,7 @@
         });
         $('#refreshBtn').addEventListener('click', loadAdminData);
         $('#logoutBtn').addEventListener('click', logoutAdmin);
+        $('#closeWelcomeBtn').addEventListener('click', closeWelcomeModal);
         $$('.tab').forEach(tab => tab.addEventListener('click', () => setTab(tab.dataset.tab)));
         $('#reservationSearch').addEventListener('input', renderReservations);
         $('#reservationStatus').addEventListener('change', renderReservations);
@@ -1457,6 +1764,7 @@
         $('#manualCategory').addEventListener('change', fillManualServiceSelect);
         $('#serviceForm').addEventListener('submit', saveService);
         $('#discountForm').addEventListener('submit', saveDiscount);
+        $('#eventForm').addEventListener('submit', saveEvent);
         $('#photoForm').addEventListener('submit', savePhoto);
         $('#beforeAfterForm').addEventListener('submit', saveBeforeAfter);
         $('#timeOffForm').addEventListener('submit', saveTimeOffRequest);
@@ -1470,12 +1778,22 @@
         $('#developerPinForm').addEventListener('submit', changeDeveloperPin);
         $('#newServiceBtn').addEventListener('click', resetServiceForm);
         $('#newDiscountBtn').addEventListener('click', resetDiscountForm);
+        $('#newEventBtn').addEventListener('click', resetEventForm);
         $('#newPhotoBtn').addEventListener('click', resetPhotoForm);
         $('#newBeforeAfterBtn').addEventListener('click', resetBeforeAfterForm);
         $('#newBlockedDayBtn').addEventListener('click', resetBlockedDayForm);
         $('#sendRemindersBtn').addEventListener('click', runReminders);
         $('#installReminderTriggerBtn').addEventListener('click', installReminderTrigger);
         $('#clearPublicCacheBtn').addEventListener('click', clearPublicPageCache);
+        $('#exportReportBtn').addEventListener('click', exportReport);
+        $('#startQrBtn').addEventListener('click', startQrScanner);
+        $('#stopQrBtn').addEventListener('click', stopQrScanner);
+        $('#validateQrBtn').addEventListener('click', validateQrFromInput);
+        $('#disableAllStaffBtn').addEventListener('click', disableAllStaffUsers);
+        $('#developerDisablePublicBtn').addEventListener('click', () => setDeveloperPageState('public', false));
+        $('#developerDisableAdminBtn').addEventListener('click', () => setDeveloperPageState('admin', false));
+        $$('[data-report-range]').forEach(button => button.addEventListener('click', () => setReportRange(button.dataset.reportRange)));
+        $$('[data-reset-form]').forEach(button => button.addEventListener('click', () => resetNamedForm(button.dataset.resetForm)));
         $('#photoFile').addEventListener('change', handlePhotoFile);
         $('#beforeFile').addEventListener('change', event => handleBeforeAfterFile(event, 'before'));
         $('#afterFile').addEventListener('change', event => handleBeforeAfterFile(event, 'after'));
@@ -1556,10 +1874,15 @@
         renderPhotos();
         renderBeforeAfter();
         renderDiscounts();
+        renderEvents();
         renderTimeOff();
         renderUsers();
         renderSettings();
         renderBlockedDays();
+        renderReportControls();
+        renderUserServiceChecks();
+        renderUserAvailability();
+        renderRoleHelp();
         refreshIcons();
       }
 
@@ -1579,27 +1902,29 @@
       function showLoginGreeting() {
         if (showLoginGreeting.done) return;
         showLoginGreeting.done = true;
-        if (state.data.authRole === 'developer') {
-          showToast('Modo developer activo.');
-          return;
-        }
-        if (state.data.authRole === 'staff') {
-          showToast(`Bienvenida ${currentUser().displayName || currentUser().username || ''}.`);
-          return;
-        }
-        const seen = storageGet('localStorage', 'angels_admin_seen', '');
-        if (seen) {
-          showToast('En serio, Otra vez tu aqui? jajajaja');
-        } else {
-          storageSet('localStorage', 'angels_admin_seen', '1');
-          showToast('Bienvenida a Dominican Hair Salon');
-        }
+        const user = currentUser();
+        const role = (state.data.authRole || '').toUpperCase();
+        $('#welcomeTitle').textContent = state.data.authRole === 'developer' ? 'Developer Settings activo' : 'Bienvenido';
+        $('#welcomeName').textContent = user.displayName || user.email || user.username || 'Usuario';
+        $('#welcomeRole').textContent = `Rol: ${role}`;
+        $('#welcomeModal').classList.add('open');
+        refreshIcons();
+      }
+
+      function closeWelcomeModal() {
+        $('#welcomeModal').classList.remove('open');
       }
 
       function renderCategoryList() {
         $('#categoryList').innerHTML = (state.data.categories || [])
           .map(category => `<option value="${escapeHtml(category)}"></option>`)
           .join('');
+        if ($('#discountCategory')) {
+          $('#discountCategory').innerHTML = ['Todas'].concat(state.data.categories || [])
+            .map(category => `<option value="${escapeHtml(category)}">${escapeHtml(category)}</option>`)
+            .join('');
+        }
+        renderDiscountDayChecks();
       }
 
       function permissions() {
@@ -1624,8 +1949,11 @@
           services: can('canEditPage'),
           photos: can('canEditPage'),
           discounts: can('canManageDiscounts'),
+          events: can('canEditPage'),
+          qr: can('canEditAppointments'),
           users: can('canManageUsers'),
           settings: can('canEditPage'),
+          developer: state.data.authRole === 'developer',
           help: true
         };
         $$('.tab').forEach(tab => {
@@ -1777,7 +2105,7 @@
       }
 
       function renderManualReservationOptions() {
-        const users = ((state.data && state.data.users) || []).filter(user => user.active);
+        const users = ((state.data && state.data.users) || []).filter(user => user.active && user.role !== 'developer');
         const current = currentUser();
         const assignable = can('canEditAllAppointments') ? users : users.filter(user => user.username === current.username);
         $('#manualAssignedUser').innerHTML = assignable.map(user => (
@@ -2063,7 +2391,7 @@
                 ${discounts.map(item => `
                   <tr>
                     <td><strong>${escapeHtml(item.coupon)}</strong><br><span class="muted">${escapeHtml(item.days)}</span></td>
-                    <td>${escapeHtml(item.category)}<br><span class="muted">${escapeHtml(item.categoryEn || '')}</span></td>
+                    <td>${escapeHtml(item.category)}<br><span class="muted">${item.noExpiration ? 'Sin expiracion' : `${escapeHtml(item.startDate || '')} - ${escapeHtml(item.endDate || '')}`}</span></td>
                     <td>${item.value}%</td>
                     <td>${item.available ? 'Activo' : 'Inactivo'}<br><span class="muted">${item.visible ? 'Publico' : 'Privado'}</span></td>
                     <td><button class="btn secondary mini" data-edit-discount="${item.rowNumber}" type="button">Editar</button></td>
@@ -2078,8 +2406,159 @@
         });
       }
 
+      function renderEvents() {
+        const events = (state.data && state.data.events) || [];
+        if (!events.length) {
+          $('#eventTable').innerHTML = '<div class="empty">No hay eventos especiales.</div>';
+          return;
+        }
+        $('#eventTable').innerHTML = `
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Evento</th><th>Fechas</th><th>Visibilidad</th><th>Estado</th><th></th></tr></thead>
+              <tbody>
+                ${events.map(item => `
+                  <tr>
+                    <td><strong>${escapeHtml(item.title)}</strong><br><span class="muted">${escapeHtml(item.type)} - ${escapeHtml(item.description || '')}</span></td>
+                    <td>${escapeHtml(item.startDate)}${item.endDate && item.endDate !== item.startDate ? ` - ${escapeHtml(item.endDate)}` : ''}</td>
+                    <td>${escapeHtml(item.visibility)}<br><span class="muted">${item.blocksBooking ? 'Bloquea reservas' : 'Informativo'}</span></td>
+                    <td>${item.active ? 'Activo' : 'Inactivo'}</td>
+                    <td>
+                      <div class="row-actions">
+                        <button class="btn secondary mini" data-edit-event="${item.rowNumber}" type="button">Editar</button>
+                        <button class="btn danger mini" data-delete-event="${item.rowNumber}" type="button">Borrar</button>
+                      </div>
+                    </td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>`;
+        $$('[data-edit-event]').forEach(button => button.addEventListener('click', () => editEvent(Number(button.dataset.editEvent))));
+        $$('[data-delete-event]').forEach(button => button.addEventListener('click', () => deleteEvent(Number(button.dataset.deleteEvent))));
+      }
+
+      function renderReportControls() {
+        const users = ((state.data && state.data.users) || []).filter(user => user.active && user.role !== 'developer');
+        const services = (state.data && state.data.services) || [];
+        $('#reportWorker').innerHTML = can('canViewGeneralEarnings')
+          ? ['<option value="">Todas</option>'].concat(users.map(user => `<option value="${escapeHtml(user.username)}">${escapeHtml(user.displayName || user.username)}</option>`)).join('')
+          : `<option value="${escapeHtml(currentUser().username || '')}">${escapeHtml(currentUser().displayName || currentUser().username || '')}</option>`;
+        $('#reportWorker').disabled = !can('canViewGeneralEarnings');
+        $('#reportService').innerHTML = ['<option value="">Todos</option>'].concat(services.map(service => `<option value="${escapeHtml(service.service)}">${escapeHtml(service.service)}</option>`)).join('');
+      }
+
+      function renderDiscountDayChecks() {
+        const labels = [
+          ['Lunes', 'Lunes'],
+          ['Martes', 'Martes'],
+          ['Miercoles', 'Miercoles'],
+          ['Jueves', 'Jueves'],
+          ['Viernes', 'Viernes'],
+          ['Sabado', 'Sabado'],
+          ['Domingo', 'Domingo']
+        ];
+        $('#discountDaysChecks').innerHTML = `
+          <label class="check"><input type="checkbox" value="Todos" data-discount-all checked>Todos</label>
+          ${labels.map(([value, label]) => `<label class="check"><input type="checkbox" value="${value}">${label}</label>`).join('')}
+        `;
+      }
+
+      function setDiscountDays(value) {
+        const selected = String(value || 'Todos').split(',').map(item => item.trim().toLowerCase());
+        const all = selected.indexOf('todos') !== -1 || selected.indexOf('todas') !== -1 || selected.indexOf('all') !== -1;
+        $$('#discountDaysChecks input').forEach(input => {
+          input.checked = input.dataset.discountAll === '' ? all : (!all && selected.indexOf(input.value.toLowerCase()) !== -1);
+        });
+      }
+
+      function readDiscountDays() {
+        const inputs = $$('#discountDaysChecks input:checked');
+        const all = inputs.some(input => input.dataset.discountAll === '');
+        if (all || !inputs.length) return 'Todos';
+        return inputs.map(input => input.value).join(', ');
+      }
+
+      function renderUserServiceChecks() {
+        const services = (state.data && state.data.services) || [];
+        if (!$('#userAllowedServices')) return;
+        $('#userAllowedServices').innerHTML = `
+          <label class="check"><input type="checkbox" value="Todos" data-service-all checked>Todos</label>
+          ${services.map(service => `<label class="check"><input type="checkbox" value="${escapeHtml(service.service)}">${escapeHtml(service.service)}</label>`).join('')}
+        `;
+      }
+
+      function setAllowedServiceChecks(value) {
+        const text = String(value || 'Todos');
+        const selected = text.split(',').map(item => item.trim().toLowerCase());
+        const all = selected.indexOf('todos') !== -1 || selected.indexOf('all') !== -1 || !text.trim();
+        $$('#userAllowedServices input').forEach(input => {
+          input.checked = input.dataset.serviceAll === '' ? all : (!all && selected.indexOf(input.value.toLowerCase()) !== -1);
+        });
+      }
+
+      function readAllowedServices() {
+        const selected = $$('#userAllowedServices input:checked');
+        if (!selected.length || selected.some(input => input.dataset.serviceAll === '')) return 'Todos';
+        return selected.map(input => input.value).join(', ');
+      }
+
+      function renderUserAvailability() {
+        if (!$('#userAvailability')) return;
+        const labels = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'];
+        $('#userAvailability').innerHTML = labels.map((label, index) => `
+          <div class="availability-day" data-availability-day="${index}">
+            <label class="check"><input type="checkbox" data-avail-enabled value="${index}" ${index >= 1 && index <= 6 ? 'checked' : ''}>${label}</label>
+            <div class="time-row">
+              <input type="time" data-avail-start value="09:00">
+              <input type="time" data-avail-end value="18:00">
+            </div>
+          </div>
+        `).join('');
+      }
+
+      function readAvailabilityForm() {
+        const availability = {};
+        $$('[data-availability-day]').forEach(day => {
+          const index = day.dataset.availabilityDay;
+          const enabled = day.querySelector('[data-avail-enabled]').checked;
+          availability[index] = enabled ? [{
+            start: day.querySelector('[data-avail-start]').value || '09:00',
+            end: day.querySelector('[data-avail-end]').value || '18:00'
+          }] : [];
+        });
+        return JSON.stringify(availability);
+      }
+
+      function setAvailabilityForm(value) {
+        let availability = {};
+        try {
+          availability = typeof value === 'string' ? JSON.parse(value || '{}') : (value || {});
+        } catch (error) {
+          availability = {};
+        }
+        $$('[data-availability-day]').forEach(day => {
+          const index = day.dataset.availabilityDay;
+          const blocks = availability[index] || [];
+          const block = blocks[0] || {};
+          day.querySelector('[data-avail-enabled]').checked = Boolean(blocks.length);
+          day.querySelector('[data-avail-start]').value = block.start || '09:00';
+          day.querySelector('[data-avail-end]').value = block.end || '18:00';
+        });
+      }
+
+      function defaultAvailability() {
+        const availability = {};
+        for (let index = 0; index <= 6; index += 1) {
+          availability[index] = index >= 1 && index <= 6 ? [{ start: '09:00', end: '18:00' }] : [];
+        }
+        return availability;
+      }
+
       function renderTimeOff() {
-        const users = ((state.data && state.data.users) || []).filter(user => user.active);
+        const users = ((state.data && state.data.users) || [])
+          .filter(user => user.active && user.role !== 'developer')
+          .filter(user => !can('canManageTimeOff') || user.username !== currentUser().username);
         $('#timeOffUser').innerHTML = users.map(user => (
           `<option value="${escapeHtml(user.username)}">${escapeHtml(user.displayName || user.username)}</option>`
         )).join('');
@@ -2100,7 +2579,8 @@
             <div class="row-actions" style="margin-top: 8px;">
               <button class="btn secondary mini" data-edit-timeoff="${item.rowNumber}" type="button">Editar</button>
               ${can('canManageTimeOff') ? `<button class="btn soft mini" data-timeoff-status="${item.rowNumber}" data-status="Aprobada" type="button">Aprobar</button>
-              <button class="btn danger mini" data-timeoff-status="${item.rowNumber}" data-status="Denegada" type="button">Denegar</button>` : ''}
+              <button class="btn danger mini" data-timeoff-status="${item.rowNumber}" data-status="Denegada" type="button">Denegar</button>
+              <button class="btn secondary mini" data-timeoff-status="${item.rowNumber}" data-status="Mas informacion" type="button">Solicitar mas informacion</button>` : ''}
             </div>
           </article>
         `).join('');
@@ -2125,13 +2605,18 @@
               <tbody>
                 ${users.map(user => `
                   <tr>
-                    <td><strong>${escapeHtml(user.displayName || user.username)}</strong><br><span class="muted">${escapeHtml(user.username)}</span></td>
+                    <td>
+                      <strong>${escapeHtml(user.displayName || user.username)}</strong><br>
+                      <span class="muted">${escapeHtml(user.email || user.username)}</span><br>
+                      <span class="muted">${escapeHtml(user.phone || '')}</span>
+                    </td>
                     <td>${escapeHtml(user.role)}</td>
                     <td>${permissionSummary(user.permissions || {})}</td>
-                    <td>${user.active ? 'Activo' : 'Inactivo'}</td>
+                    <td>${user.accountLocked ? 'Bloqueado' : (user.active ? 'Activo' : 'Inactivo')}<br><span class="muted">Intentos ${user.failedAttempts || 0}</span></td>
                     <td>
                       <div class="row-actions">
                         <button class="btn secondary mini" data-edit-user="${user.rowNumber}" type="button">Editar</button>
+                        ${user.accountLocked ? `<button class="btn soft mini" data-reset-lock="${user.rowNumber}" type="button">Rehabilitar</button>` : ''}
                         <button class="btn danger mini" data-delete-user="${user.rowNumber}" type="button">Desactivar</button>
                       </div>
                     </td>
@@ -2146,6 +2631,9 @@
         });
         $$('[data-delete-user]').forEach(button => {
           button.addEventListener('click', () => deleteUser(Number(button.dataset.deleteUser)));
+        });
+        $$('[data-reset-lock]').forEach(button => {
+          button.addEventListener('click', () => resetUserLock(Number(button.dataset.resetLock)));
         });
       }
 
@@ -2184,13 +2672,20 @@
         const security = state.data && state.data.security ? state.data.security : {};
         $('#passwordLimitText').textContent = authRole === 'developer'
           ? 'Developer puede resetear la contrasena cuando sea necesario.'
-          : security.passwordChangedThisMonth
-            ? 'La contrasena ya fue cambiada este mes. Si necesitas cambiarla otra vez, contacta al developer.'
-            : 'Puedes cambiar tu contrasena 1 vez al mes.';
+          : 'Puedes cambiar la contrasena cuando sea necesario. Las cuentas bloqueadas se rehabilitan desde Usuarios.';
         const passwordLocked = authRole !== 'developer' && !security.canChangePassword;
         $('#newPassword').disabled = passwordLocked;
         $('#passwordForm button[type="submit"]').dataset.locked = passwordLocked ? 'true' : 'false';
         $('#passwordForm button[type="submit"]').disabled = passwordLocked;
+      }
+
+      function renderRoleHelp() {
+        const cards = $$('.help-card');
+        if (!cards.length) return;
+        if (cards[1]) cards[1].hidden = !can('canManageUsers');
+        if (cards[3]) cards[3].hidden = !can('canEditPage');
+        if (cards[4]) cards[4].hidden = !can('canEditPage');
+        if (cards[5]) cards[5].hidden = !can('canEditPage');
       }
 
       function renderOpenDays(openDays) {
@@ -2304,9 +2799,32 @@
         $('#discountCategory').value = item.category;
         $('#discountCategoryEn').value = item.categoryEn;
         $('#discountDays').value = item.days;
+        setDiscountDays(item.days || 'Todos');
         $('#discountDaysEn').value = item.daysEn;
+        $('#discountStart').value = item.startDate || '';
+        $('#discountEnd').value = item.endDate || '';
+        $('#discountDurationDays').value = item.durationDays || 0;
+        $('#discountNoExpiration').checked = item.noExpiration !== false;
         $('#discountAvailable').checked = item.available;
         $('#discountVisible').checked = item.visible;
+      }
+
+      function editEvent(rowNumber) {
+        const item = (state.data.events || []).find(event => event.rowNumber === rowNumber);
+        if (!item) return;
+        $('#eventRow').value = item.rowNumber;
+        $('#eventId').value = item.id || '';
+        $('#eventType').value = item.type || 'Otros';
+        $('#eventVisibility').value = item.visibility || 'ambos';
+        $('#eventTitle').value = item.title || '';
+        $('#eventTitleEn').value = item.titleEn || '';
+        $('#eventDescription').value = item.description || '';
+        $('#eventDescriptionEn').value = item.descriptionEn || '';
+        $('#eventStart').value = item.startDate || '';
+        $('#eventEnd').value = item.endDate || item.startDate || '';
+        $('#eventBlocksBooking').checked = Boolean(item.blocksBooking);
+        $('#eventActive').checked = Boolean(item.active);
+        setTab('events');
       }
 
       function editTimeOff(rowNumber) {
@@ -2328,10 +2846,14 @@
         $('#userRow').value = item.rowNumber;
         $('#userName').value = item.username;
         $('#userDisplayName').value = item.displayName;
+        $('#userEmail').value = item.email || '';
+        $('#userPhone').value = item.phone || '';
         $('#userPassword').value = item.password || '';
         $('#userRole').value = item.role || 'staff';
         $('#userActive').checked = Boolean(item.active);
         setPermissionForm(item.permissions || {});
+        setAllowedServiceChecks(item.allowedServices || 'Todos');
+        setAvailabilityForm(item.availability || '');
         setTab('users');
       }
 
@@ -2362,12 +2884,35 @@
           value: $('#discountValue').value,
           category: $('#discountCategory').value,
           categoryEn: $('#discountCategoryEn').value,
-          days: $('#discountDays').value,
+          days: readDiscountDays(),
           daysEn: $('#discountDaysEn').value,
+          startDate: $('#discountStart').value,
+          endDate: $('#discountEnd').value,
+          durationDays: $('#discountDurationDays').value,
+          noExpiration: $('#discountNoExpiration').checked,
           available: $('#discountAvailable').checked,
           visible: $('#discountVisible').checked
         }, 'Cupon guardado.');
         if (ok) resetDiscountForm();
+      }
+
+      async function saveEvent(event) {
+        event.preventDefault();
+        const ok = await mutate('saveSpecialEvent', {
+          rowNumber: $('#eventRow').value,
+          id: $('#eventId').value,
+          type: $('#eventType').value,
+          visibility: $('#eventVisibility').value,
+          title: $('#eventTitle').value,
+          titleEn: $('#eventTitleEn').value,
+          description: $('#eventDescription').value,
+          descriptionEn: $('#eventDescriptionEn').value,
+          startDate: $('#eventStart').value,
+          endDate: $('#eventEnd').value,
+          blocksBooking: $('#eventBlocksBooking').checked,
+          active: $('#eventActive').checked
+        }, 'Evento guardado.');
+        if (ok) resetEventForm();
       }
 
       async function saveTimeOffRequest(event) {
@@ -2404,9 +2949,13 @@
           rowNumber: $('#userRow').value,
           username: $('#userName').value,
           displayName: $('#userDisplayName').value,
+          email: $('#userEmail').value,
+          phone: $('#userPhone').value,
           password: $('#userPassword').value,
           role: $('#userRole').value,
           active: $('#userActive').checked,
+          allowedServices: readAllowedServices(),
+          availability: readAvailabilityForm(),
           permissions: readPermissionForm()
         }, 'Usuario guardado.');
         if (ok) resetUserForm();
@@ -2415,6 +2964,15 @@
       async function deleteUser(rowNumber) {
         if (!confirm('Desactivar este usuario?')) return;
         await mutate('deleteAdminUser', rowNumber, null, 'Usuario desactivado.');
+      }
+
+      async function resetUserLock(rowNumber) {
+        await mutate('resetUserLoginLock', rowNumber, null, 'Cuenta rehabilitada.');
+      }
+
+      async function deleteEvent(rowNumber) {
+        if (!confirm('Borrar este evento especial?')) return;
+        await mutate('deleteSpecialEvent', rowNumber, null, 'Evento borrado.');
       }
 
       async function saveSettings(event) {
@@ -2618,10 +3176,150 @@
         }
       }
 
+      function setReportRange(range) {
+        const today = new Date();
+        const from = new Date(today);
+        if (range === 'week') from.setDate(today.getDate() - 6);
+        if (range === 'month') from.setDate(1);
+        if (range === 'day') from.setTime(today.getTime());
+        $('#reportFrom').value = toIsoDate(from);
+        $('#reportTo').value = toIsoDate(today);
+      }
+
+      async function exportReport() {
+        setBusy(true);
+        try {
+          const payload = {
+            title: 'Reporte Dominican Hair Salon',
+            from: $('#reportFrom').value,
+            to: $('#reportTo').value,
+            worker: $('#reportWorker').value,
+            service: $('#reportService').value
+          };
+          const result = await gas('exportReportPdf', state.secret, payload);
+          if (result.report) state.data.reports = result.report;
+          $('#reportPdfLink').href = result.url || '#';
+          $('#reportPdfLink').hidden = !result.url;
+          showToast('Reporte PDF generado.');
+          renderEarnings();
+        } catch (error) {
+          showToast(error.message || String(error));
+        } finally {
+          setBusy(false);
+        }
+      }
+
+      async function disableAllStaffUsers() {
+        if (!confirm('Quitar acceso a todos los usuarios staff?')) return;
+        await mutate('disableAllStaffUsers', null, null, 'Acceso staff desactivado.');
+      }
+
+      async function setDeveloperPageState(target, enabled) {
+        if (target === 'public') $('#publicEnabled').checked = enabled;
+        if (target === 'admin') $('#adminEnabled').checked = enabled;
+        await saveSettings({ preventDefault() {} });
+      }
+
+      async function validateQrFromInput() {
+        const raw = $('#qrText').value.trim();
+        if (!raw) {
+          showToast('Pega o escanea el token QR.');
+          return;
+        }
+        await validateQr(raw);
+      }
+
+      async function validateQr(raw) {
+        setBusy(true);
+        try {
+          const result = await gas('validateAppointmentQr', state.secret, { raw });
+          state.qrReservation = result.reservation;
+          renderQrResult(result.reservation);
+        } catch (error) {
+          $('#qrResult').innerHTML = `<div class="empty">${escapeHtml(error.message || String(error))}</div>`;
+        } finally {
+          setBusy(false);
+        }
+      }
+
+      function renderQrResult(reservation) {
+        if (!reservation) {
+          $('#qrResult').innerHTML = '';
+          return;
+        }
+        $('#qrResult').innerHTML = `
+          <article class="stage-card">
+            <h3>${escapeHtml(reservation.clientName || 'Clienta')}</h3>
+            <p class="muted">${escapeHtml(reservation.service)} - ${escapeHtml(reservation.date)} ${escapeHtml(reservation.time)}</p>
+            <p>Asignada: ${escapeHtml(reservation.assignedUser || '')}</p>
+            <div class="row-actions">
+              <button class="btn soft mini" data-qr-stage="Cliente llego" type="button">Cliente llego</button>
+              <button class="btn secondary mini" data-qr-stage="En proceso" type="button">En proceso</button>
+              <button class="btn mini" data-qr-stage="Completada" type="button">Completada</button>
+            </div>
+          </article>`;
+        $$('[data-qr-stage]').forEach(button => button.addEventListener('click', () => updateQrStage(button.dataset.qrStage)));
+        refreshIcons();
+      }
+
+      async function updateQrStage(stage) {
+        if (!state.qrReservation) return;
+        await mutate('updateQrReservationStage', state.qrReservation.rowNumber, stage, `Cita marcada: ${stage}.`);
+        $('#qrResult').innerHTML = '';
+        $('#qrText').value = '';
+        state.qrReservation = null;
+      }
+
+      async function startQrScanner() {
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+          showToast('La camara no esta disponible en este navegador. Pega el token manualmente.');
+          return;
+        }
+        if (!('BarcodeDetector' in window)) {
+          showToast('Este navegador no soporta escaneo directo. Pega el token manualmente.');
+          return;
+        }
+        try {
+          const video = $('#qrVideo');
+          state.qrStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+          video.srcObject = state.qrStream;
+          video.hidden = false;
+          await video.play();
+          const detector = new BarcodeDetector({ formats: ['qr_code'] });
+          state.qrTimer = setInterval(async () => {
+            try {
+              const codes = await detector.detect(video);
+              if (codes && codes.length) {
+                const raw = codes[0].rawValue || '';
+                $('#qrText').value = raw;
+                stopQrScanner();
+                validateQr(raw);
+              }
+            } catch (error) {}
+          }, 700);
+        } catch (error) {
+          showToast('No se pudo abrir la camara. Puedes pegar el token manualmente.');
+        }
+      }
+
+      function stopQrScanner() {
+        if (state.qrTimer) clearInterval(state.qrTimer);
+        state.qrTimer = null;
+        if (state.qrStream) {
+          state.qrStream.getTracks().forEach(track => track.stop());
+        }
+        state.qrStream = null;
+        if ($('#qrVideo')) {
+          $('#qrVideo').pause();
+          $('#qrVideo').srcObject = null;
+          $('#qrVideo').hidden = true;
+        }
+      }
+
       async function mutate(functionName, payloadOrRow, statusOrExtra, maybeMessage) {
         setBusy(true);
         try {
-          if (functionName === 'updateAdminReservationStatus') {
+          if (functionName === 'updateAdminReservationStatus' || functionName === 'updateQrReservationStage') {
             state.data = await gas(functionName, state.secret, payloadOrRow, statusOrExtra);
             showToast(maybeMessage);
           } else {
@@ -2653,8 +3351,25 @@
         $('#discountCategoryEn').value = 'All';
         $('#discountDays').value = 'Todos';
         $('#discountDaysEn').value = 'Every day';
+        setDiscountDays('Todos');
+        $('#discountStart').value = '';
+        $('#discountEnd').value = '';
+        $('#discountDurationDays').value = 0;
+        $('#discountNoExpiration').checked = true;
         $('#discountAvailable').checked = true;
         $('#discountVisible').checked = false;
+      }
+
+      function resetEventForm() {
+        $('#eventForm').reset();
+        $('#eventRow').value = '';
+        $('#eventId').value = '';
+        $('#eventTitleEn').value = '';
+        $('#eventDescriptionEn').value = '';
+        $('#eventType').value = 'Holidays';
+        $('#eventVisibility').value = 'ambos';
+        $('#eventActive').checked = true;
+        $('#eventBlocksBooking').checked = false;
       }
 
       function resetTimeOffForm() {
@@ -2669,6 +3384,8 @@
         $('#userRow').value = '';
         $('#userRole').value = 'staff';
         $('#userActive').checked = true;
+        setAllowedServiceChecks('Todos');
+        setAvailabilityForm(defaultAvailability());
         applyRoleDefaults();
       }
 
@@ -2760,6 +3477,22 @@
         $('#blockedDayForm').reset();
         $('#blockedRow').value = '';
         $('#blockedActive').checked = true;
+      }
+
+      function resetNamedForm(name) {
+        const map = {
+          manual: resetManualReservationForm,
+          service: resetServiceForm,
+          discount: resetDiscountForm,
+          timeoff: resetTimeOffForm,
+          user: resetUserForm,
+          photo: resetPhotoForm,
+          beforeAfter: resetBeforeAfterForm,
+          blocked: resetBlockedDayForm,
+          event: resetEventForm,
+          settings: renderSettings
+        };
+        if (map[name]) map[name]();
       }
 
       function handlePhotoFile(event) {
@@ -2996,9 +3729,16 @@
       }
 
       function apiTimeoutFor(functionName) {
-        if (['saveAdminPhoto', 'saveBeforeAfter', 'createReservation'].indexOf(functionName) !== -1) return 120000;
+        if (['saveAdminPhoto', 'saveBeforeAfter', 'createReservation', 'exportReportPdf'].indexOf(functionName) !== -1) return 120000;
         if (['getAdminData', 'runAdminReminders', 'installReminderTrigger'].indexOf(functionName) !== -1) return 60000;
         return 40000;
+      }
+
+      function toIsoDate(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
       }
 
       function formatMoney(value) {
