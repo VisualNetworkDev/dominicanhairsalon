@@ -1,0 +1,186 @@
+{
+  "appName": "Dominican Hair Salon",
+  "appSubtitle": "By Yaleixi Paula Parra",
+  "currency": "USD",
+  "contact": {
+    "phone": "9044223600",
+    "email": "yaleixi20@gmail.com",
+    "instagramUrl": "",
+    "showContact": true,
+    "showInstagram": false
+  },
+  "agreementText": "Confirmo que la informacion proporcionada para esta solicitud de cita es correcta. Entiendo que Dominican Hair Salon reserva un espacio de tiempo exclusivo para mi servicio y que debo comunicarme con anticipacion si necesito cancelar, llegar tarde o reprogramar.\n\nPOLITICA DE CANCELACION: Para cancelar o reprogramar sin penalidad, debo llamar o comunicarme con al menos 24 horas de anticipacion. Si cancelo con menos de 24 horas, no asisto o hago cambios de ultimo momento que impidan usar el espacio reservado, Dominican Hair Salon podra aplicar un cargo administrativo entre el 5% y el 10% del valor de la cita.\n\nAcepto que el precio final puede variar si solicito cambios, agregados, tratamientos o servicios adicionales durante la cita. Reconozco que debo informar alergias, sensibilidad del cuero cabelludo, tratamientos recientes, decoloraciones, alisados, extensiones o cualquier condicion que pueda afectar el servicio. Autorizo el uso de mi firma como confirmacion de este acuerdo y entiendo que esta solicitud queda pendiente hasta ser confirmada por el salon.",
+  "agreementTexts": {
+    "es": "Confirmo que la informacion proporcionada para esta solicitud de cita es correcta. Entiendo que Dominican Hair Salon reserva un espacio de tiempo exclusivo para mi servicio y que debo comunicarme con anticipacion si necesito cancelar, llegar tarde o reprogramar.\n\nPOLITICA DE CANCELACION: Para cancelar o reprogramar sin penalidad, debo llamar o comunicarme con al menos 24 horas de anticipacion. Si cancelo con menos de 24 horas, no asisto o hago cambios de ultimo momento que impidan usar el espacio reservado, Dominican Hair Salon podra aplicar un cargo administrativo entre el 5% y el 10% del valor de la cita.\n\nAcepto que el precio final puede variar si solicito cambios, agregados, tratamientos o servicios adicionales durante la cita. Reconozco que debo informar alergias, sensibilidad del cuero cabelludo, tratamientos recientes, decoloraciones, alisados, extensiones o cualquier condicion que pueda afectar el servicio. Autorizo el uso de mi firma como confirmacion de este acuerdo y entiendo que esta solicitud queda pendiente hasta ser confirmada por el salon.",
+    "en": "I confirm that the information provided for this appointment request is accurate. I understand that Dominican Hair Salon reserves dedicated time for my service and that I should contact the salon in advance if I need to cancel, arrive late, or reschedule.\n\nCANCELLATION POLICY: To cancel or reschedule without penalty, I must call or contact the salon at least 24 hours in advance. If I cancel with less than 24 hours' notice, do not attend, or make last-minute changes that prevent the reserved time from being used, Dominican Hair Salon may apply an administrative fee between 5% and 10% of the appointment value.\n\nI accept that the final price may change if I request changes, add-ons, treatments, or additional services during the appointment. I acknowledge that I must disclose allergies, scalp sensitivity, recent treatments, color, relaxers, extensions, or any condition that may affect the service. I authorize the use of my signature as confirmation of this agreement and understand that this request remains pending until confirmed by the salon."
+  },
+  "hours": {
+    "start": "09:00",
+    "end": "18:00",
+    "intervalMinutes": 30,
+    "openDays": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ]
+  },
+  "blockedDates": [],
+  "beforeAfter": [],
+  "policyText": {
+    "es": "Para cancelar o reprogramar sin penalidad, comunicate con al menos 24 horas de anticipacion. Cancelaciones tardias, ausencia o cambios de ultimo momento pueden generar un cargo administrativo entre el 5% y el 10% del valor de la cita.",
+    "en": "To cancel or reschedule without penalty, please contact the salon at least 24 hours in advance. Late cancellations, no-shows, or last-minute changes may result in an administrative fee between 5% and 10% of the appointment value."
+  },
+  "categories": [
+    "Lavado y blower",
+    "Color y mechas",
+    "Tratamientos",
+    "Cortes y peinados"
+  ],
+  "categoryTranslations": {
+    "Lavado y blower": {
+      "en": "Dominican blowout"
+    },
+    "Color y mechas": {
+      "en": "Color and highlights"
+    },
+    "Tratamientos": {
+      "en": "Treatments"
+    },
+    "Cortes y peinados": {
+      "en": "Cuts and styling"
+    }
+  },
+  "services": [
+    {
+      "id": "svc-blower-dominicano",
+      "category": "Lavado y blower",
+      "categoryEn": "Dominican blowout",
+      "name": "Blower dominicano",
+      "nameEn": "Dominican blowout",
+      "description": "Lavado, secado y brillo con movimiento natural.",
+      "descriptionEn": "Wash, blowout and shine with natural movement.",
+      "price": 45,
+      "duration": 60,
+      "image": "https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=1400&q=80"
+    },
+    {
+      "id": "svc-blower-rolos",
+      "category": "Lavado y blower",
+      "categoryEn": "Dominican blowout",
+      "name": "Blower con rolos",
+      "nameEn": "Roller set blowout",
+      "description": "Preparacion con rolos y acabado pulido de larga duracion.",
+      "descriptionEn": "Roller-set prep with a polished long-lasting finish.",
+      "price": 55,
+      "duration": 90,
+      "image": "https://images.unsplash.com/photo-1522337660859-02fbefca4702?auto=format&fit=crop&w=1400&q=80"
+    },
+    {
+      "id": "svc-silk-press",
+      "category": "Lavado y blower",
+      "categoryEn": "Dominican blowout",
+      "name": "Silk press",
+      "nameEn": "Silk press",
+      "description": "Alisado temporal con plancha y proteccion termica.",
+      "descriptionEn": "Temporary smooth finish with heat protection.",
+      "price": 75,
+      "duration": 120,
+      "image": "https://images.unsplash.com/photo-1519699047748-de8e457a634e?auto=format&fit=crop&w=1400&q=80"
+    },
+    {
+      "id": "svc-retoque-color",
+      "category": "Color y mechas",
+      "categoryEn": "Color and highlights",
+      "name": "Retoque de color",
+      "nameEn": "Color touch-up",
+      "description": "Retoque de raiz o color completo segun evaluacion.",
+      "descriptionEn": "Root touch-up or full color after consultation.",
+      "price": 85,
+      "duration": 120,
+      "image": "https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?auto=format&fit=crop&w=1400&q=80"
+    },
+    {
+      "id": "svc-mechas-balayage",
+      "category": "Color y mechas",
+      "categoryEn": "Color and highlights",
+      "name": "Mechas o balayage",
+      "nameEn": "Highlights or balayage",
+      "description": "Iluminacion personalizada con acabado natural.",
+      "descriptionEn": "Custom brightness with a natural finish.",
+      "price": 160,
+      "duration": 180,
+      "image": "https://images.unsplash.com/photo-1605497788044-5a32c7078486?auto=format&fit=crop&w=1400&q=80"
+    },
+    {
+      "id": "svc-hidratacion-profunda",
+      "category": "Tratamientos",
+      "categoryEn": "Treatments",
+      "name": "Hidratacion profunda",
+      "nameEn": "Deep hydration",
+      "description": "Tratamiento nutritivo para suavidad, brillo y manejo.",
+      "descriptionEn": "Nourishing treatment for softness, shine and manageability.",
+      "price": 65,
+      "duration": 75,
+      "image": "https://images.unsplash.com/photo-1633681926022-84c23e8cb2d6?auto=format&fit=crop&w=1400&q=80"
+    },
+    {
+      "id": "svc-keratina",
+      "category": "Tratamientos",
+      "categoryEn": "Treatments",
+      "name": "Keratina",
+      "nameEn": "Keratin treatment",
+      "description": "Tratamiento suavizante para controlar frizz y mejorar brillo.",
+      "descriptionEn": "Smoothing treatment to control frizz and improve shine.",
+      "price": 180,
+      "duration": 180,
+      "image": "https://images.unsplash.com/photo-1519699047748-de8e457a634e?auto=format&fit=crop&w=1400&q=80"
+    },
+    {
+      "id": "svc-corte-puntas",
+      "category": "Cortes y peinados",
+      "categoryEn": "Cuts and styling",
+      "name": "Corte de puntas",
+      "nameEn": "Trim",
+      "description": "Corte de mantenimiento para sanear y dar forma.",
+      "descriptionEn": "Maintenance cut to refresh ends and shape.",
+      "price": 35,
+      "duration": 45,
+      "image": "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1400&q=80"
+    },
+    {
+      "id": "svc-peinado-evento",
+      "category": "Cortes y peinados",
+      "categoryEn": "Cuts and styling",
+      "name": "Peinado para evento",
+      "nameEn": "Event styling",
+      "description": "Ondas, recogido o estilo elegante para ocasion especial.",
+      "descriptionEn": "Waves, updo or elegant style for a special occasion.",
+      "price": 95,
+      "duration": 90,
+      "image": "https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?auto=format&fit=crop&w=1400&q=80"
+    }
+  ],
+  "photos": {
+    "Lavado y blower": [
+      "https://images.unsplash.com/photo-1522337660859-02fbefca4702?auto=format&fit=crop&w=1400&q=80",
+      "https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=1400&q=80"
+    ],
+    "Color y mechas": [
+      "https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?auto=format&fit=crop&w=1400&q=80",
+      "https://images.unsplash.com/photo-1605497788044-5a32c7078486?auto=format&fit=crop&w=1400&q=80"
+    ],
+    "Tratamientos": [
+      "https://images.unsplash.com/photo-1519699047748-de8e457a634e?auto=format&fit=crop&w=1400&q=80",
+      "https://images.unsplash.com/photo-1633681926022-84c23e8cb2d6?auto=format&fit=crop&w=1400&q=80"
+    ],
+    "Cortes y peinados": [
+      "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1400&q=80",
+      "https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?auto=format&fit=crop&w=1400&q=80"
+    ]
+  },
+  "publicDiscounts": [],
+  "today": ""
+}

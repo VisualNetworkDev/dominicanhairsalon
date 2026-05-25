@@ -1,0 +1,3040 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dominican Hair Salon Admin</title>
+    <link rel="preconnect" href="https://unpkg.com">
+    <script src="assets/admin-config.js?v=20260522-2"></script>
+    <script defer src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <style>
+      :root {
+        --ink: #2c2528;
+        --muted: #76696e;
+        --line: #eadde1;
+        --paper: #fffaf7;
+        --panel: #ffffff;
+        --rose: #b76e79;
+        --plum: #432233;
+        --sage: #7f9277;
+        --gold: #c28d55;
+        --danger: #ad3f4b;
+        --shadow: 0 18px 44px rgba(67, 34, 51, 0.12);
+        --radius: 8px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      [hidden] {
+        display: none !important;
+      }
+
+      body {
+        margin: 0;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: var(--ink);
+        background: var(--paper);
+      }
+
+      button,
+      input,
+      select,
+      textarea {
+        font: inherit;
+      }
+
+      button {
+        cursor: pointer;
+      }
+
+      .shell {
+        width: min(1280px, calc(100% - 28px));
+        margin: 0 auto;
+      }
+
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background: rgba(255, 250, 247, 0.92);
+        border-bottom: 1px solid var(--line);
+        backdrop-filter: blur(16px);
+      }
+
+      .topbar-inner {
+        min-height: 66px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--plum);
+        font-weight: 850;
+      }
+
+      .brand-mark {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        color: #fff;
+        background: linear-gradient(135deg, var(--plum), var(--rose));
+      }
+
+      .top-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        min-height: 40px;
+        border: 0;
+        border-radius: var(--radius);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 9px 13px;
+        background: var(--plum);
+        color: #fff;
+        text-decoration: none;
+        font-weight: 800;
+      }
+
+      .btn.secondary {
+        background: #fff;
+        color: var(--plum);
+        border: 1px solid var(--line);
+      }
+
+      .btn.soft {
+        background: rgba(183, 110, 121, 0.13);
+        color: var(--plum);
+      }
+
+      .btn.danger {
+        background: rgba(173, 63, 75, 0.11);
+        color: var(--danger);
+      }
+
+      .btn:disabled {
+        opacity: 0.56;
+        cursor: not-allowed;
+      }
+
+      .login {
+        min-height: calc(100vh - 66px);
+        display: grid;
+        place-items: center;
+        padding: 40px 0;
+      }
+
+      .login-card,
+      .panel {
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: var(--panel);
+        box-shadow: var(--shadow);
+      }
+
+      .login-card {
+        width: min(420px, 100%);
+        padding: 24px;
+      }
+
+      h1,
+      h2,
+      h3 {
+        margin: 0;
+        color: var(--plum);
+      }
+
+      .muted {
+        color: var(--muted);
+      }
+
+      .field {
+        display: grid;
+        gap: 7px;
+        margin-bottom: 12px;
+      }
+
+      label {
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 800;
+      }
+
+      input,
+      select,
+      textarea {
+        width: 100%;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: #fff;
+        color: var(--ink);
+        padding: 10px 11px;
+        outline: none;
+      }
+
+      textarea {
+        min-height: 76px;
+        resize: vertical;
+      }
+
+      input:focus,
+      select:focus,
+      textarea:focus {
+        border-color: var(--rose);
+        box-shadow: 0 0 0 4px rgba(183, 110, 121, 0.13);
+      }
+
+      .admin {
+        display: none;
+        padding: 22px 0 60px;
+      }
+
+      .admin.open,
+      .login.hidden {
+        display: none;
+      }
+
+      .admin.open {
+        display: block;
+      }
+
+      .tabs {
+        display: flex;
+        gap: 8px;
+        overflow-x: auto;
+        padding: 8px 0 18px;
+      }
+
+      .tab {
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: #fff;
+        color: var(--muted);
+        padding: 10px 14px;
+        font-weight: 850;
+        white-space: nowrap;
+      }
+
+      .tab.active {
+        background: var(--plum);
+        color: #fff;
+        border-color: var(--plum);
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: 390px minmax(0, 1fr);
+        gap: 16px;
+        align-items: start;
+      }
+
+      .before-after-admin {
+        margin-top: 16px;
+      }
+
+      .manual-form {
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: #fff;
+        padding: 14px;
+        margin-bottom: 14px;
+      }
+
+      .permission-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 6px 10px;
+        margin: 12px 0;
+      }
+
+      .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 10px;
+        margin-bottom: 14px;
+      }
+
+      .metric-card {
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: #fff;
+        padding: 13px;
+      }
+
+      .metric-card span {
+        display: block;
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 850;
+        text-transform: uppercase;
+      }
+
+      .metric-card strong {
+        display: block;
+        margin-top: 6px;
+        color: var(--plum);
+        font-size: 24px;
+      }
+
+      .panel {
+        padding: 16px;
+      }
+
+      .panel-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 14px;
+      }
+
+      .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .full {
+        grid-column: 1 / -1;
+      }
+
+      .check {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        min-height: 40px;
+        color: var(--ink);
+        font-weight: 700;
+      }
+
+      .check input {
+        width: 18px;
+        height: 18px;
+      }
+
+      .table-wrap {
+        overflow: auto;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 760px;
+        background: #fff;
+      }
+
+      th,
+      td {
+        padding: 10px;
+        border-bottom: 1px solid var(--line);
+        text-align: left;
+        vertical-align: top;
+        font-size: 14px;
+      }
+
+      th {
+        color: var(--muted);
+        background: #fff4f1;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+
+      tr:last-child td {
+        border-bottom: 0;
+      }
+
+      .status {
+        display: inline-flex;
+        align-items: center;
+        border-radius: 999px;
+        padding: 5px 9px;
+        font-size: 12px;
+        font-weight: 900;
+        background: rgba(194, 141, 85, 0.14);
+        color: #8b5b23;
+      }
+
+      .status.confirmada {
+        background: rgba(127, 146, 119, 0.18);
+        color: #4c6846;
+      }
+
+      .status.aprobada {
+        background: rgba(127, 146, 119, 0.18);
+        color: #4c6846;
+      }
+
+      .status.cancelada {
+        background: rgba(173, 63, 75, 0.13);
+        color: var(--danger);
+      }
+
+      .status.denegada {
+        background: rgba(173, 63, 75, 0.13);
+        color: var(--danger);
+      }
+
+      .row-actions {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+      }
+
+      .note-box {
+        min-width: 220px;
+        min-height: 70px;
+        margin-top: 8px;
+      }
+
+      .history-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+        margin-top: 14px;
+      }
+
+      .history-card,
+      .blocked-card {
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: #fff;
+        padding: 12px;
+      }
+
+      .history-card strong,
+      .blocked-card strong {
+        color: var(--plum);
+      }
+
+      .help-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .help-card {
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: #fff;
+        padding: 14px;
+      }
+
+      .help-card h3 {
+        margin-bottom: 8px;
+      }
+
+      .help-card ol {
+        margin: 0;
+        padding-left: 20px;
+        color: var(--muted);
+        line-height: 1.55;
+      }
+
+      .drag-row {
+        cursor: grab;
+      }
+
+      .drag-row.dragging {
+        opacity: 0.45;
+      }
+
+      .drag-handle {
+        color: var(--muted);
+        font-weight: 900;
+        letter-spacing: 0.08em;
+      }
+
+      .mini {
+        min-height: 32px;
+        padding: 6px 9px;
+        font-size: 12px;
+      }
+
+      .thumb {
+        width: 72px;
+        height: 72px;
+        border-radius: var(--radius);
+        object-fit: cover;
+        border: 1px solid var(--line);
+        background: #fff4f1;
+      }
+
+      .preview {
+        width: 100%;
+        aspect-ratio: 4 / 5;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: #fff4f1;
+        object-fit: cover;
+        display: none;
+      }
+
+      .preview.show {
+        display: block;
+      }
+
+      .range-pair {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .day-checks {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      .compact-list {
+        display: grid;
+        gap: 8px;
+      }
+
+      .before-after-preview {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+
+      .before-after-preview img {
+        width: 100%;
+        aspect-ratio: 4 / 5;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        object-fit: cover;
+        background: #fff4f1;
+      }
+
+      .before-after-preview img[src=""] {
+        display: none;
+      }
+
+      input[type="range"] {
+        padding: 0;
+        accent-color: var(--rose);
+      }
+
+      .developer-only {
+        display: none;
+      }
+
+      .developer-mode .developer-only {
+        display: block;
+      }
+
+      .hidden-by-permission,
+      .staff-mode .admin-timeoff-only,
+      .staff-mode .payment-only {
+        display: none !important;
+      }
+
+      .role-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border-radius: 999px;
+        padding: 7px 10px;
+        color: var(--plum);
+        background: rgba(183, 110, 121, 0.13);
+        font-size: 12px;
+        font-weight: 900;
+      }
+
+      .filters {
+        display: grid;
+        grid-template-columns: minmax(180px, 1fr) 150px 150px 160px;
+        gap: 10px;
+        margin-bottom: 12px;
+      }
+
+      .empty {
+        border: 1px dashed var(--line);
+        border-radius: var(--radius);
+        padding: 20px;
+        color: var(--muted);
+        background: #fff;
+      }
+
+      .toast {
+        position: fixed;
+        z-index: 30;
+        left: 50%;
+        bottom: 18px;
+        transform: translateX(-50%) translateY(140%);
+        max-width: min(560px, calc(100% - 24px));
+        border-radius: var(--radius);
+        background: var(--plum);
+        color: #fff;
+        padding: 12px 14px;
+        box-shadow: var(--shadow);
+        transition: transform 180ms ease;
+      }
+
+      .toast.show {
+        transform: translateX(-50%) translateY(0);
+      }
+
+      @media (max-width: 980px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+
+        .dashboard-grid,
+        .history-grid,
+        .help-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 620px) {
+        .topbar-inner {
+          align-items: flex-start;
+          flex-direction: column;
+          padding: 12px 0;
+        }
+
+        .form-grid,
+        .filters,
+        .range-pair,
+        .dashboard-grid,
+        .history-grid,
+        .help-grid,
+        .day-checks,
+        .before-after-preview {
+          grid-template-columns: 1fr;
+        }
+
+        .tabs {
+          position: sticky;
+          top: 66px;
+          z-index: 8;
+          margin: 0 -14px;
+          padding: 10px 14px;
+          background: rgba(255, 250, 247, 0.95);
+          backdrop-filter: blur(12px);
+        }
+
+        .panel {
+          padding: 13px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="shell topbar-inner">
+        <div class="brand">
+          <span class="brand-mark"><i data-lucide="sparkles" aria-hidden="true"></i></span>
+          <span id="brandName">Dominican Hair Salon Admin</span>
+        </div>
+        <div class="top-actions">
+          <a id="publicLink" class="btn secondary" href="?" target="_blank" rel="noopener"><i data-lucide="external-link" aria-hidden="true"></i>Vista clientas</a>
+          <button id="refreshBtn" class="btn secondary" type="button"><i data-lucide="refresh-cw" aria-hidden="true"></i>Actualizar</button>
+          <button id="logoutBtn" class="btn secondary" type="button" hidden><i data-lucide="log-out" aria-hidden="true"></i>Cerrar sesion</button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section id="login" class="login">
+        <form id="loginForm" class="login-card">
+          <h1>Admin</h1>
+          <p class="muted">Dominican Hair Salon</p>
+          <div class="field">
+            <label for="username">Usuario</label>
+            <input id="username" autocomplete="username" required>
+          </div>
+          <div class="field">
+            <label for="secret">Contrasena</label>
+            <input id="secret" type="password" autocomplete="current-password" required>
+          </div>
+          <button class="btn" type="submit"><i data-lucide="lock-keyhole" aria-hidden="true"></i>Entrar</button>
+        </form>
+      </section>
+
+      <section id="admin" class="admin shell">
+        <nav class="tabs" aria-label="Admin">
+          <button class="tab active" type="button" data-tab="reservations">Reservas</button>
+          <button class="tab" type="button" data-tab="earnings">Ganancias</button>
+          <button class="tab" type="button" data-tab="timeoff">Dias libres</button>
+          <button class="tab" type="button" data-tab="services">Servicios</button>
+          <button class="tab" type="button" data-tab="photos">Fotos</button>
+          <button class="tab" type="button" data-tab="discounts">Descuentos</button>
+          <button class="tab" type="button" data-tab="users">Usuarios</button>
+          <button class="tab" type="button" data-tab="settings">Ajustes</button>
+          <button class="tab" type="button" data-tab="help">Ayuda</button>
+        </nav>
+
+        <section id="reservations" class="tab-panel">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h2>Reservas</h2>
+                <div class="muted" id="reservationCount"></div>
+              </div>
+            </div>
+            <div id="dashboardGrid" class="dashboard-grid"></div>
+            <form id="manualReservationForm" class="manual-form">
+              <div class="panel-head">
+                <div>
+                  <h3>Cita manual</h3>
+                  <div class="muted">Agendar o editar citas segun los permisos del usuario.</div>
+                </div>
+                <button class="btn secondary mini" type="button" id="newManualReservationBtn"><i data-lucide="plus" aria-hidden="true"></i>Nueva</button>
+              </div>
+              <input type="hidden" id="manualRow">
+              <div class="form-grid">
+                <div class="field">
+                  <label for="manualAssignedUser">Asignada a</label>
+                  <select id="manualAssignedUser"></select>
+                </div>
+                <div class="field">
+                  <label for="manualStatus">Estado</label>
+                  <select id="manualStatus">
+                    <option>Confirmada</option>
+                    <option>Pendiente</option>
+                    <option>Cancelada</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="manualClient">Cliente</label>
+                  <input id="manualClient" required>
+                </div>
+                <div class="field">
+                  <label for="manualPhone">Telefono</label>
+                  <input id="manualPhone">
+                </div>
+                <div class="field">
+                  <label for="manualEmail">Email</label>
+                  <input id="manualEmail" type="email">
+                </div>
+                <div class="field">
+                  <label for="manualCategory">Categoria</label>
+                  <select id="manualCategory" required></select>
+                </div>
+                <div class="field">
+                  <label for="manualService">Servicio</label>
+                  <select id="manualService" required></select>
+                </div>
+                <div class="field">
+                  <label for="manualDate">Fecha</label>
+                  <input id="manualDate" type="date" required>
+                </div>
+                <div class="field">
+                  <label for="manualTime">Hora</label>
+                  <input id="manualTime" type="time" required>
+                </div>
+                <div class="field payment-only">
+                  <label for="manualDiscount">Descuento pago</label>
+                  <input id="manualDiscount" type="number" min="0" step="0.01" value="0">
+                </div>
+                <div class="field payment-only">
+                  <label for="manualTip">Propina</label>
+                  <input id="manualTip" type="number" min="0" step="0.01" value="0">
+                </div>
+                <label class="check payment-only">
+                  <input id="manualPaid" type="checkbox">
+                  Pagado
+                </label>
+                <div class="field payment-only">
+                  <label for="manualPaymentMethod">Metodo pago</label>
+                  <input id="manualPaymentMethod" placeholder="Cash, Zelle, tarjeta">
+                </div>
+                <div class="field full">
+                  <label for="manualNotes">Notas</label>
+                  <textarea id="manualNotes"></textarea>
+                </div>
+              </div>
+              <button class="btn" type="submit"><i data-lucide="calendar-plus" aria-hidden="true"></i>Guardar cita</button>
+            </form>
+            <div class="filters">
+              <input id="reservationSearch" placeholder="Buscar cliente, servicio, telefono o email">
+              <select id="reservationStatus">
+                <option value="">Todos los estados</option>
+                <option>Pendiente</option>
+                <option>Confirmada</option>
+                <option>Cancelada</option>
+              </select>
+              <input id="reservationFrom" type="date" aria-label="Desde">
+              <input id="reservationTo" type="date" aria-label="Hasta">
+            </div>
+            <div id="reservationTable"></div>
+            <div id="clientHistory"></div>
+          </div>
+        </section>
+
+        <section id="earnings" class="tab-panel" hidden>
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h2>Ganancias</h2>
+                <div class="muted" id="earningsHint"></div>
+              </div>
+            </div>
+            <div id="earningsGrid" class="dashboard-grid"></div>
+            <div id="earningsTable"></div>
+          </div>
+        </section>
+
+        <section id="timeoff" class="tab-panel" hidden>
+          <div class="grid">
+            <form id="timeOffForm" class="panel">
+              <div class="panel-head">
+                <h2>Solicitar dias libres</h2>
+                <button class="btn secondary mini" type="button" id="newTimeOffBtn"><i data-lucide="plus" aria-hidden="true"></i>Nueva</button>
+              </div>
+              <input type="hidden" id="timeOffRow">
+              <div class="form-grid">
+                <div class="field admin-timeoff-only">
+                  <label for="timeOffUser">Usuario</label>
+                  <select id="timeOffUser"></select>
+                </div>
+                <div class="field">
+                  <label for="timeOffStart">Desde</label>
+                  <input id="timeOffStart" type="date" required>
+                </div>
+                <div class="field">
+                  <label for="timeOffEnd">Hasta</label>
+                  <input id="timeOffEnd" type="date" required>
+                </div>
+                <div class="field admin-timeoff-only">
+                  <label for="timeOffStatus">Estado</label>
+                  <select id="timeOffStatus">
+                    <option>Pendiente</option>
+                    <option>Aprobada</option>
+                    <option>Denegada</option>
+                  </select>
+                </div>
+                <div class="field full">
+                  <label for="timeOffReason">Motivo</label>
+                  <textarea id="timeOffReason" placeholder="Ej. cita personal, vacaciones, emergencia"></textarea>
+                </div>
+                <div class="field full admin-timeoff-only">
+                  <label for="timeOffResponse">Respuesta admin</label>
+                  <textarea id="timeOffResponse"></textarea>
+                </div>
+              </div>
+              <button class="btn" type="submit"><i data-lucide="calendar-days" aria-hidden="true"></i>Guardar solicitud</button>
+            </form>
+            <div class="panel">
+              <div class="panel-head">
+                <h2>Calendario de solicitudes</h2>
+              </div>
+              <div id="timeOffList" class="compact-list"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="users" class="tab-panel" hidden>
+          <div class="grid">
+            <form id="userForm" class="panel">
+              <div class="panel-head">
+                <h2>Usuario</h2>
+                <button class="btn secondary mini" type="button" id="newUserBtn"><i data-lucide="plus" aria-hidden="true"></i>Nuevo</button>
+              </div>
+              <input type="hidden" id="userRow">
+              <div class="form-grid">
+                <div class="field">
+                  <label for="userName">Usuario</label>
+                  <input id="userName" required>
+                </div>
+                <div class="field">
+                  <label for="userDisplayName">Nombre visible</label>
+                  <input id="userDisplayName">
+                </div>
+                <div class="field">
+                  <label for="userPassword">Contrasena</label>
+                  <input id="userPassword" required>
+                </div>
+                <div class="field">
+                  <label for="userRole">Rol</label>
+                  <select id="userRole">
+                    <option value="staff">Staff</option>
+                    <option value="admin">Admin</option>
+                    <option value="developer">Developer</option>
+                  </select>
+                </div>
+                <label class="check full">
+                  <input id="userActive" type="checkbox" checked>
+                  Usuario activo
+                </label>
+              </div>
+              <div class="permission-grid">
+                <label class="check"><input id="permEditPage" type="checkbox">Editar pagina</label>
+                <label class="check"><input id="permEditAppointments" type="checkbox" checked>Editar citas</label>
+                <label class="check"><input id="permEditAllAppointments" type="checkbox">Editar citas ajenas</label>
+                <label class="check"><input id="permViewGeneralEarnings" type="checkbox">Ver ganancias generales</label>
+                <label class="check"><input id="permManageUsers" type="checkbox">Administrar usuarios</label>
+                <label class="check"><input id="permManageDiscounts" type="checkbox">Administrar descuentos</label>
+                <label class="check"><input id="permManageTimeOff" type="checkbox">Aprobar dias libres</label>
+                <label class="check"><input id="permManageBlockedDays" type="checkbox">Bloquear dias</label>
+                <label class="check"><input id="permManagePayments" type="checkbox">Gestionar pagos</label>
+              </div>
+              <button class="btn" type="submit"><i data-lucide="user-cog" aria-hidden="true"></i>Guardar usuario</button>
+            </form>
+            <div class="panel">
+              <div class="panel-head">
+                <h2>Usuarios</h2>
+              </div>
+              <div id="userTable"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="services" class="tab-panel" hidden>
+          <div class="grid">
+            <form id="serviceForm" class="panel">
+              <div class="panel-head">
+                <h2>Servicio</h2>
+                <button class="btn secondary mini" type="button" id="newServiceBtn"><i data-lucide="plus" aria-hidden="true"></i>Nuevo</button>
+              </div>
+              <input type="hidden" id="serviceRow">
+              <div class="form-grid">
+                <div class="field">
+                  <label for="serviceCategory">Categoria</label>
+                  <input id="serviceCategory" list="categoryList" required>
+                </div>
+                <div class="field">
+                  <label for="serviceCategoryEn">Categoria EN</label>
+                  <input id="serviceCategoryEn">
+                </div>
+                <div class="field">
+                  <label for="serviceName">Servicio</label>
+                  <input id="serviceName" required>
+                </div>
+                <div class="field">
+                  <label for="serviceNameEn">Servicio EN</label>
+                  <input id="serviceNameEn">
+                </div>
+                <div class="field full">
+                  <label for="serviceDescription">Descripcion</label>
+                  <textarea id="serviceDescription"></textarea>
+                </div>
+                <div class="field full">
+                  <label for="serviceDescriptionEn">Descripcion EN</label>
+                  <textarea id="serviceDescriptionEn"></textarea>
+                </div>
+                <div class="field">
+                  <label for="servicePrice">Precio</label>
+                  <input id="servicePrice" type="number" min="0" step="0.01" required>
+                </div>
+                <div class="field">
+                  <label for="serviceDuration">Duracion min</label>
+                  <input id="serviceDuration" type="number" min="15" step="5" value="60">
+                </div>
+                <div class="field">
+                  <label for="serviceOrder">Orden</label>
+                  <input id="serviceOrder" type="number" min="1" step="1" value="1">
+                </div>
+                <label class="check">
+                  <input id="serviceVisible" type="checkbox" checked>
+                  Visible
+                </label>
+                <div class="field full">
+                  <label for="serviceImage">Imagen principal</label>
+                  <input id="serviceImage">
+                </div>
+              </div>
+              <button class="btn" type="submit"><i data-lucide="save" aria-hidden="true"></i>Guardar servicio</button>
+            </form>
+            <div class="panel">
+              <div class="panel-head">
+                <h2>Lista</h2>
+              </div>
+              <div id="serviceTable"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="photos" class="tab-panel" hidden>
+          <div class="grid">
+            <form id="photoForm" class="panel">
+              <div class="panel-head">
+                <h2>Foto</h2>
+                <button class="btn secondary mini" type="button" id="newPhotoBtn"><i data-lucide="plus" aria-hidden="true"></i>Nueva</button>
+              </div>
+              <input type="hidden" id="photoRow">
+              <input type="hidden" id="photoId">
+              <input type="hidden" id="photoDriveId">
+              <div class="form-grid">
+                <div class="field">
+                  <label for="photoCategory">Categoria</label>
+                  <input id="photoCategory" list="categoryList" required>
+                </div>
+                <div class="field">
+                  <label for="photoOrder">Orden</label>
+                  <input id="photoOrder" type="number" min="1" step="1" value="1">
+                </div>
+                <div class="field">
+                  <label for="photoTitle">Titulo</label>
+                  <input id="photoTitle">
+                </div>
+                <div class="field">
+                  <label for="photoTitleEn">Titulo EN</label>
+                  <input id="photoTitleEn">
+                </div>
+                <label class="check">
+                  <input id="photoVisible" type="checkbox" checked>
+                  Visible
+                </label>
+                <div class="field full">
+                  <label for="photoFile">Subir desde galeria</label>
+                  <input id="photoFile" type="file" accept="image/jpeg,image/png,image/webp">
+                </div>
+                <div class="field">
+                  <label for="photoAspect">Recorte</label>
+                  <select id="photoAspect">
+                    <option value="4:5">Retrato 4:5</option>
+                    <option value="3:2">Galeria 3:2</option>
+                    <option value="1:1">Cuadrada 1:1</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="photoFocus">Enfoque</label>
+                  <select id="photoFocus">
+                    <option value="center">Centro</option>
+                    <option value="top">Arriba</option>
+                    <option value="bottom">Abajo</option>
+                  </select>
+                </div>
+                <div class="field full">
+                  <label>Ajuste libre</label>
+                  <div class="range-pair">
+                    <div>
+                      <label for="photoOffsetX">Horizontal</label>
+                      <input id="photoOffsetX" type="range" min="0" max="100" value="50">
+                    </div>
+                    <div>
+                      <label for="photoOffsetY">Vertical</label>
+                      <input id="photoOffsetY" type="range" min="0" max="100" value="50">
+                    </div>
+                  </div>
+                </div>
+                <div class="field full">
+                  <img id="photoPreview" class="preview" alt="">
+                </div>
+                <div class="field full">
+                  <label for="photoUrl">Url existente opcional</label>
+                  <input id="photoUrl">
+                </div>
+              </div>
+              <button class="btn" type="submit"><i data-lucide="image-up" aria-hidden="true"></i>Guardar foto</button>
+            </form>
+            <div class="panel">
+              <div class="panel-head">
+                <h2>Galeria</h2>
+              </div>
+              <div id="photoTable"></div>
+            </div>
+          </div>
+          <div class="grid before-after-admin">
+            <form id="beforeAfterForm" class="panel">
+              <div class="panel-head">
+                <h2>Antes / Despues</h2>
+                <button class="btn secondary mini" type="button" id="newBeforeAfterBtn"><i data-lucide="plus" aria-hidden="true"></i>Nuevo</button>
+              </div>
+              <input type="hidden" id="beforeAfterRow">
+              <input type="hidden" id="beforeAfterId">
+              <input type="hidden" id="beforeDriveId">
+              <input type="hidden" id="afterDriveId">
+              <div class="form-grid">
+                <div class="field">
+                  <label for="beforeAfterTitle">Titulo</label>
+                  <input id="beforeAfterTitle" required>
+                </div>
+                <div class="field">
+                  <label for="beforeAfterTitleEn">Titulo EN</label>
+                  <input id="beforeAfterTitleEn">
+                </div>
+                <div class="field">
+                  <label for="beforeAfterOrder">Orden</label>
+                  <input id="beforeAfterOrder" type="number" min="1" step="1" value="1">
+                </div>
+                <label class="check">
+                  <input id="beforeAfterVisible" type="checkbox" checked>
+                  Visible
+                </label>
+                <div class="field">
+                  <label for="beforeFile">Foto antes</label>
+                  <input id="beforeFile" type="file" accept="image/jpeg,image/png,image/webp">
+                </div>
+                <div class="field">
+                  <label for="afterFile">Foto despues</label>
+                  <input id="afterFile" type="file" accept="image/jpeg,image/png,image/webp">
+                </div>
+                <div class="field full before-after-preview">
+                  <img id="beforePreview" alt="">
+                  <img id="afterPreview" alt="">
+                </div>
+                <div class="field">
+                  <label for="beforeUrl">Url antes opcional</label>
+                  <input id="beforeUrl">
+                </div>
+                <div class="field">
+                  <label for="afterUrl">Url despues opcional</label>
+                  <input id="afterUrl">
+                </div>
+              </div>
+              <button class="btn" type="submit"><i data-lucide="images" aria-hidden="true"></i>Guardar antes/despues</button>
+            </form>
+            <div class="panel">
+              <div class="panel-head">
+                <h2>Resultados</h2>
+              </div>
+              <div id="beforeAfterTable"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="discounts" class="tab-panel" hidden>
+          <div class="grid">
+            <form id="discountForm" class="panel">
+              <div class="panel-head">
+                <h2>Cupon</h2>
+                <button class="btn secondary mini" type="button" id="newDiscountBtn"><i data-lucide="plus" aria-hidden="true"></i>Nuevo</button>
+              </div>
+              <input type="hidden" id="discountRow">
+              <div class="form-grid">
+                <div class="field">
+                  <label for="discountCoupon">Cupon</label>
+                  <input id="discountCoupon" required>
+                </div>
+                <div class="field">
+                  <label for="discountValue">Valor</label>
+                  <input id="discountValue" type="number" min="0" step="0.01" value="0">
+                </div>
+                <div class="field">
+                  <label for="discountCategory">Categoria</label>
+                  <input id="discountCategory" list="categoryList" value="Todas">
+                </div>
+                <div class="field">
+                  <label for="discountCategoryEn">Categoria EN</label>
+                  <input id="discountCategoryEn" value="All">
+                </div>
+                <div class="field">
+                  <label for="discountDays">Dias</label>
+                  <input id="discountDays" value="Todos">
+                </div>
+                <div class="field">
+                  <label for="discountDaysEn">Dias EN</label>
+                  <input id="discountDaysEn" value="Every day">
+                </div>
+                <label class="check">
+                  <input id="discountAvailable" type="checkbox" checked>
+                  Disponible
+                </label>
+                <label class="check">
+                  <input id="discountVisible" type="checkbox">
+                  Publico
+                </label>
+              </div>
+              <button class="btn" type="submit"><i data-lucide="ticket-percent" aria-hidden="true"></i>Guardar cupon</button>
+            </form>
+            <div class="panel">
+              <div class="panel-head">
+                <h2>Descuentos</h2>
+              </div>
+              <div id="discountTable"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="settings" class="tab-panel" hidden>
+          <div class="grid">
+            <form id="settingsForm" class="panel">
+              <div class="panel-head">
+                <div>
+                  <h2>Ajustes</h2>
+                  <div id="rolePill" class="role-pill"></div>
+                </div>
+              </div>
+              <div class="form-grid">
+                <label class="check full">
+                  <input id="contactVisible" type="checkbox">
+                  Mostrar seccion Contactame
+                </label>
+                <div class="field">
+                  <label for="contactPhone">Telefono</label>
+                  <input id="contactPhone">
+                </div>
+                <div class="field">
+                  <label for="contactEmail">Email</label>
+                  <input id="contactEmail" type="email">
+                </div>
+                <label class="check full">
+                  <input id="instagramVisible" type="checkbox">
+                  Mostrar boton de Instagram
+                </label>
+                <div class="field full">
+                  <label for="instagramUrl">Instagram URL</label>
+                  <input id="instagramUrl" placeholder="https://instagram.com/...">
+                </div>
+                <div class="field">
+                  <label for="businessStart">Hora de inicio</label>
+                  <input id="businessStart" type="time">
+                </div>
+                <div class="field">
+                  <label for="businessEnd">Hora de cierre</label>
+                  <input id="businessEnd" type="time">
+                </div>
+                <div class="field">
+                  <label for="businessInterval">Intervalo min</label>
+                  <input id="businessInterval" type="number" min="15" step="5">
+                </div>
+                <label class="check">
+                  <input id="remindersEnabled" type="checkbox">
+                  Recordatorios por email
+                </label>
+                <div class="field full">
+                  <label>Dias abiertos</label>
+                  <div id="openDays" class="day-checks"></div>
+                </div>
+                <div class="field">
+                  <label for="reminderHours">Primer recordatorio (horas)</label>
+                  <input id="reminderHours" type="number" min="24" step="1" value="24" readonly>
+                </div>
+                <div class="field full">
+                  <label for="maintenanceMessage">Mensaje de mantenimiento</label>
+                  <textarea id="maintenanceMessage"></textarea>
+                </div>
+                <div class="developer-only full">
+                  <h3>Developer</h3>
+                  <label class="check">
+                    <input id="publicEnabled" type="checkbox">
+                    Pagina de clientas activa
+                  </label>
+                  <label class="check">
+                    <input id="adminEnabled" type="checkbox">
+                    Acceso admin activo
+                  </label>
+                </div>
+              </div>
+              <div class="row-actions">
+                <button class="btn" type="submit"><i data-lucide="settings" aria-hidden="true"></i>Guardar ajustes</button>
+                <button class="btn secondary" type="button" id="sendRemindersBtn"><i data-lucide="bell-ring" aria-hidden="true"></i>Enviar recordatorios ahora</button>
+                <button class="btn secondary developer-only" type="button" id="installReminderTriggerBtn"><i data-lucide="alarm-clock" aria-hidden="true"></i>Activar automaticos</button>
+                <button class="btn secondary" type="button" id="clearPublicCacheBtn"><i data-lucide="rotate-cw" aria-hidden="true"></i>Actualizar pagina clientas</button>
+              </div>
+            </form>
+
+            <div class="panel">
+              <div class="panel-head">
+                <h2>Seguridad</h2>
+              </div>
+              <form id="passwordForm">
+                <p id="passwordLimitText" class="muted"></p>
+                <div class="field" id="currentPasswordField">
+                  <label for="currentPassword">Contrasena actual</label>
+                  <input id="currentPassword" type="password" autocomplete="current-password">
+                </div>
+                <div class="field">
+                  <label for="newPassword">Nueva contrasena admin</label>
+                  <input id="newPassword" type="password" autocomplete="new-password">
+                </div>
+                <button class="btn" type="submit"><i data-lucide="key-round" aria-hidden="true"></i>Cambiar contrasena</button>
+              </form>
+
+              <form id="developerPinForm" class="developer-only" style="margin-top: 18px;">
+                <div class="field">
+                  <label for="newDeveloperPin">Nuevo PIN developer</label>
+                  <input id="newDeveloperPin" type="password">
+                </div>
+                <button class="btn secondary" type="submit"><i data-lucide="shield" aria-hidden="true"></i>Cambiar PIN developer</button>
+              </form>
+            </div>
+
+            <div class="panel">
+              <div class="panel-head">
+                <h2>Dias bloqueados</h2>
+              </div>
+              <form id="blockedDayForm">
+                <input type="hidden" id="blockedRow">
+                <div class="field">
+                  <label for="blockedDate">Fecha</label>
+                  <input id="blockedDate" type="date" required>
+                </div>
+                <div class="field">
+                  <label for="blockedReason">Motivo interno</label>
+                  <input id="blockedReason" placeholder="Ej. Vacaciones, evento, cerrado">
+                </div>
+                <label class="check">
+                  <input id="blockedActive" type="checkbox" checked>
+                  Bloqueo activo
+                </label>
+                <div class="row-actions">
+                  <button class="btn" type="submit"><i data-lucide="calendar-x" aria-hidden="true"></i>Guardar bloqueo</button>
+                  <button class="btn secondary" id="newBlockedDayBtn" type="button">Nuevo</button>
+                </div>
+              </form>
+              <div id="blockedDaysList" class="compact-list" style="margin-top: 14px;"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="help" class="tab-panel" hidden>
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h2>Guia rapida</h2>
+                <div class="muted">Pasos cortos para mantener Dominican Hair Salon actualizada desde el telefono.</div>
+              </div>
+            </div>
+            <div class="help-grid">
+              <article class="help-card">
+                <h3>Reservas</h3>
+                <ol>
+                  <li>Busca por nombre, telefono, email o servicio.</li>
+                  <li>Usa Confirmar, Cancelar o Pendiente para cambiar el estado.</li>
+                  <li>Guarda notas internas si necesitas recordar detalles de la clienta.</li>
+                  <li>Abre PDF para ver o compartir el recibo.</li>
+                </ol>
+              </article>
+              <article class="help-card">
+                <h3>Usuarios</h3>
+                <ol>
+                  <li>Admin y Developer pueden crear usuarios y decidir permisos.</li>
+                  <li>Los usuarios staff solo editan citas asignadas a su usuario.</li>
+                  <li>Las ganancias staff no incluyen propinas ni descuentos.</li>
+                </ol>
+              </article>
+              <article class="help-card">
+                <h3>Dias libres</h3>
+                <ol>
+                  <li>El staff puede pedir dias libres desde su acceso.</li>
+                  <li>Admin revisa la solicitud y la aprueba o deniega.</li>
+                  <li>Cada solicitud se guarda en la hoja Dias Libres.</li>
+                </ol>
+              </article>
+              <article class="help-card">
+                <h3>Servicios</h3>
+                <ol>
+                  <li>Agrega categoria, nombre, descripcion, precio y duracion.</li>
+                  <li>Marca Visible para que aparezca en la pagina de clientas.</li>
+                  <li>Usa Orden para controlar como se muestra cada servicio.</li>
+                </ol>
+              </article>
+              <article class="help-card">
+                <h3>Fotos</h3>
+                <ol>
+                  <li>Selecciona una foto desde la galeria del telefono.</li>
+                  <li>Elige recorte y ajusta la posicion antes de guardar.</li>
+                  <li>Arrastra filas para cambiar el orden.</li>
+                  <li>Borra fotos que ya no quieras mostrar.</li>
+                </ol>
+              </article>
+              <article class="help-card">
+                <h3>Ajustes</h3>
+                <ol>
+                  <li>Cambia telefono, email, Instagram y horario.</li>
+                  <li>Bloquea dias cerrados o vacaciones.</li>
+                  <li>Usa Actualizar pagina clientas despues de editar fotos o servicios.</li>
+                  <li>Usa Cerrar sesion cuando termines.</li>
+                </ol>
+              </article>
+            </div>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <datalist id="categoryList"></datalist>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <script>
+      const $ = selector => document.querySelector(selector);
+      const $$ = selector => Array.prototype.slice.call(document.querySelectorAll(selector));
+      const ADMIN_CONFIG = Object.assign({
+        apiBaseUrl: 'https://script.google.com/macros/s/AKfycbw7l_IyUV_R70TfyIzOqUC8hk0qySep2apa-zo6Zp5dv2F0LZO7hmSnQcMaCrro11XMzg/exec',
+        publicUrl: ''
+      }, window.ANGELS_ADMIN_CONFIG || {});
+      const PUBLIC_APP_URL = ADMIN_CONFIG.publicUrl || './';
+
+      function readJsonElement(id, fallback) {
+        try {
+          const element = document.getElementById(id);
+          return element ? JSON.parse(element.textContent || 'null') : fallback;
+        } catch (error) {
+          return fallback;
+        }
+      }
+
+      function storageGet(type, key, fallback) {
+        try {
+          const storage = window[type];
+          return storage ? storage.getItem(key) || fallback : fallback;
+        } catch (error) {
+          return fallback;
+        }
+      }
+
+      function storageSet(type, key, value) {
+        try {
+          const storage = window[type];
+          if (storage) storage.setItem(key, value);
+        } catch (error) {
+          console.warn('Storage no disponible:', key);
+        }
+      }
+
+      function storageRemove(type, key) {
+        try {
+          const storage = window[type];
+          if (storage) storage.removeItem(key);
+        } catch (error) {
+          console.warn('Storage no disponible:', key);
+        }
+      }
+
+      const state = {
+        secret: storageGet('sessionStorage', 'angels_admin_secret', ''),
+        data: null,
+        tab: 'reservations',
+        photoFile: null,
+        beforeFile: null,
+        afterFile: null
+      };
+
+      document.addEventListener('DOMContentLoaded', init);
+
+      function init() {
+        bindEvents();
+        setPublicLink();
+        hydrateLoginFields();
+        refreshIcons();
+        if (state.secret) loadAdminData();
+      }
+
+      function hydrateLoginFields() {
+        try {
+          const saved = JSON.parse(state.secret || '{}');
+          if (saved.username) $('#username').value = saved.username;
+        } catch (error) {}
+      }
+
+      function bindEvents() {
+        $('#loginForm').addEventListener('submit', event => {
+          event.preventDefault();
+          state.secret = JSON.stringify({
+            username: $('#username').value.trim(),
+            password: $('#secret').value.trim()
+          });
+          storageSet('sessionStorage', 'angels_admin_secret', state.secret);
+          loadAdminData();
+        });
+        $('#publicLink').addEventListener('click', event => {
+          if ($('#publicLink').dataset.missing === 'true') {
+            event.preventDefault();
+            showToast('Configura publicUrl en assets/admin-config.js.');
+          }
+        });
+        $('#refreshBtn').addEventListener('click', loadAdminData);
+        $('#logoutBtn').addEventListener('click', logoutAdmin);
+        $$('.tab').forEach(tab => tab.addEventListener('click', () => setTab(tab.dataset.tab)));
+        $('#reservationSearch').addEventListener('input', renderReservations);
+        $('#reservationStatus').addEventListener('change', renderReservations);
+        $('#reservationFrom').addEventListener('change', renderReservations);
+        $('#reservationTo').addEventListener('change', renderReservations);
+        $('#manualReservationForm').addEventListener('submit', saveManualReservation);
+        $('#newManualReservationBtn').addEventListener('click', resetManualReservationForm);
+        $('#manualCategory').addEventListener('change', fillManualServiceSelect);
+        $('#serviceForm').addEventListener('submit', saveService);
+        $('#discountForm').addEventListener('submit', saveDiscount);
+        $('#photoForm').addEventListener('submit', savePhoto);
+        $('#beforeAfterForm').addEventListener('submit', saveBeforeAfter);
+        $('#timeOffForm').addEventListener('submit', saveTimeOffRequest);
+        $('#newTimeOffBtn').addEventListener('click', resetTimeOffForm);
+        $('#userForm').addEventListener('submit', saveUser);
+        $('#newUserBtn').addEventListener('click', resetUserForm);
+        $('#userRole').addEventListener('change', applyRoleDefaults);
+        $('#settingsForm').addEventListener('submit', saveSettings);
+        $('#blockedDayForm').addEventListener('submit', saveBlockedDay);
+        $('#passwordForm').addEventListener('submit', changePassword);
+        $('#developerPinForm').addEventListener('submit', changeDeveloperPin);
+        $('#newServiceBtn').addEventListener('click', resetServiceForm);
+        $('#newDiscountBtn').addEventListener('click', resetDiscountForm);
+        $('#newPhotoBtn').addEventListener('click', resetPhotoForm);
+        $('#newBeforeAfterBtn').addEventListener('click', resetBeforeAfterForm);
+        $('#newBlockedDayBtn').addEventListener('click', resetBlockedDayForm);
+        $('#sendRemindersBtn').addEventListener('click', runReminders);
+        $('#installReminderTriggerBtn').addEventListener('click', installReminderTrigger);
+        $('#clearPublicCacheBtn').addEventListener('click', clearPublicPageCache);
+        $('#photoFile').addEventListener('change', handlePhotoFile);
+        $('#beforeFile').addEventListener('change', event => handleBeforeAfterFile(event, 'before'));
+        $('#afterFile').addEventListener('change', event => handleBeforeAfterFile(event, 'after'));
+        $('#photoAspect').addEventListener('change', updatePreviewAspect);
+        $('#photoFocus').addEventListener('change', syncFocusSliders);
+        $('#photoOffsetX').addEventListener('input', updatePreviewPosition);
+        $('#photoOffsetY').addEventListener('input', updatePreviewPosition);
+      }
+
+      function setPublicLink() {
+        const candidates = [PUBLIC_APP_URL, document.referrer, window.location.href];
+        let publicUrl = '';
+        candidates.some(candidate => {
+          publicUrl = getCleanPublicUrl(candidate);
+          return Boolean(publicUrl);
+        });
+        $('#publicLink').href = publicUrl || '#';
+        $('#publicLink').dataset.missing = publicUrl ? 'false' : 'true';
+      }
+
+      function getCleanPublicUrl(value) {
+        const rawUrl = String(value || '').trim();
+        if (!rawUrl) return '';
+        if (rawUrl === './' || rawUrl === '/' || /^\.{1,2}\//.test(rawUrl)) return rawUrl;
+
+        try {
+          const url = new URL(rawUrl, window.location.href);
+          if (url.protocol !== 'https:' && url.protocol !== 'http:') return '';
+          url.hash = '';
+          url.search = '';
+
+          if (/\/admin\.html$/i.test(url.pathname)) {
+            url.pathname = url.pathname.replace(/admin\.html$/i, '');
+          } else if (/\/admin\/?$/i.test(url.pathname)) {
+            url.pathname = url.pathname.replace(/admin\/?$/i, '');
+          }
+
+          return url.href;
+        } catch (error) {
+          return '';
+        }
+      }
+
+      async function loadAdminData() {
+        if (!state.secret) return;
+        setBusy(true);
+        try {
+          state.data = await gas('getAdminData', state.secret);
+          $('#brandName').textContent = `${state.data.appName} Admin`;
+          $('#login').classList.add('hidden');
+          $('#admin').classList.add('open');
+          $('#logoutBtn').hidden = false;
+          document.body.classList.toggle('developer-mode', state.data.authRole === 'developer');
+          document.body.classList.toggle('staff-mode', state.data.authRole === 'staff');
+          applyAccessVisibility();
+          showLoginGreeting();
+          renderAll();
+        } catch (error) {
+          storageRemove('sessionStorage', 'angels_admin_secret');
+          state.secret = '';
+          $('#login').classList.remove('hidden');
+          $('#admin').classList.remove('open');
+          $('#logoutBtn').hidden = true;
+          showToast(error.message || String(error));
+        } finally {
+          setBusy(false);
+        }
+      }
+
+      function renderAll() {
+        applyAccessVisibility();
+        renderCategoryList();
+        renderManualReservationOptions();
+        renderDashboard();
+        renderReservations();
+        renderEarnings();
+        renderServices();
+        renderPhotos();
+        renderBeforeAfter();
+        renderDiscounts();
+        renderTimeOff();
+        renderUsers();
+        renderSettings();
+        renderBlockedDays();
+        refreshIcons();
+      }
+
+      function logoutAdmin() {
+        storageRemove('sessionStorage', 'angels_admin_secret');
+        state.secret = '';
+        state.data = null;
+        $('#secret').value = '';
+        $('#login').classList.remove('hidden');
+        $('#admin').classList.remove('open');
+        $('#logoutBtn').hidden = true;
+        document.body.classList.remove('developer-mode');
+        document.body.classList.remove('staff-mode');
+        showToast('Sesion cerrada.');
+      }
+
+      function showLoginGreeting() {
+        if (showLoginGreeting.done) return;
+        showLoginGreeting.done = true;
+        if (state.data.authRole === 'developer') {
+          showToast('Modo developer activo.');
+          return;
+        }
+        if (state.data.authRole === 'staff') {
+          showToast(`Bienvenida ${currentUser().displayName || currentUser().username || ''}.`);
+          return;
+        }
+        const seen = storageGet('localStorage', 'angels_admin_seen', '');
+        if (seen) {
+          showToast('En serio, Otra vez tu aqui? jajajaja');
+        } else {
+          storageSet('localStorage', 'angels_admin_seen', '1');
+          showToast('Bienvenida a Dominican Hair Salon');
+        }
+      }
+
+      function renderCategoryList() {
+        $('#categoryList').innerHTML = (state.data.categories || [])
+          .map(category => `<option value="${escapeHtml(category)}"></option>`)
+          .join('');
+      }
+
+      function permissions() {
+        return (state.data && state.data.permissions) || {};
+      }
+
+      function currentUser() {
+        return (state.data && state.data.currentUser) || {};
+      }
+
+      function can(permission) {
+        const perms = permissions();
+        return Boolean(perms[permission]);
+      }
+
+      function applyAccessVisibility() {
+        if (!state.data) return;
+        const access = {
+          reservations: true,
+          earnings: true,
+          timeoff: true,
+          services: can('canEditPage'),
+          photos: can('canEditPage'),
+          discounts: can('canManageDiscounts'),
+          users: can('canManageUsers'),
+          settings: can('canEditPage'),
+          help: true
+        };
+        $$('.tab').forEach(tab => {
+          tab.classList.toggle('hidden-by-permission', !access[tab.dataset.tab]);
+        });
+        Object.keys(access).forEach(tabName => {
+          const panel = document.getElementById(tabName);
+          if (panel) panel.classList.toggle('hidden-by-permission', !access[tabName]);
+        });
+        if (!access[state.tab]) setTab('reservations');
+        $$('.payment-only').forEach(node => {
+          node.classList.toggle('hidden-by-permission', !can('canManagePayments'));
+        });
+        $$('.admin-timeoff-only').forEach(node => {
+          node.classList.toggle('hidden-by-permission', !can('canManageTimeOff'));
+        });
+      }
+
+      function setTab(tabName) {
+        const tabButton = document.querySelector(`.tab[data-tab="${tabName}"]`);
+        if (tabButton && tabButton.classList.contains('hidden-by-permission')) tabName = 'reservations';
+        state.tab = tabName;
+        $$('.tab').forEach(tab => tab.classList.toggle('active', tab.dataset.tab === tabName));
+        $$('.tab-panel').forEach(panel => {
+          panel.hidden = panel.id !== tabName;
+        });
+      }
+
+      function renderDashboard() {
+        const dashboard = state.data && state.data.dashboard ? state.data.dashboard : {};
+        const next = dashboard.nextReservation;
+        const totalLabel = can('canViewGeneralEarnings') ? 'Total de hoy' : 'Mi produccion hoy';
+        $('#dashboardGrid').innerHTML = `
+          <article class="metric-card"><span>Hoy</span><strong>${dashboard.todayCount || 0}</strong></article>
+          <article class="metric-card"><span>Mis citas hoy</span><strong>${dashboard.ownTodayCount || 0}</strong></article>
+          <article class="metric-card"><span>Pendientes</span><strong>${dashboard.pendingCount || 0}</strong></article>
+          <article class="metric-card"><span>${totalLabel}</span><strong>${formatMoney(dashboard.todayTotal || 0)}</strong></article>
+          <article class="metric-card"><span>Proxima cita</span><strong>${next ? `${escapeHtml(next.date)} ${escapeHtml(next.time)}` : 'Sin cita'}</strong></article>
+        `;
+      }
+
+      function renderReservations() {
+        const query = $('#reservationSearch').value.trim().toLowerCase();
+        const status = $('#reservationStatus').value;
+        const from = $('#reservationFrom').value;
+        const to = $('#reservationTo').value;
+        const reservations = ((state.data && state.data.reservations) || []).filter(item => {
+          const haystack = [item.clientName, item.phone, item.email, item.service, item.category, item.id].join(' ').toLowerCase();
+          const matchesText = !query || haystack.indexOf(query) !== -1;
+          const matchesStatus = !status || item.status === status;
+          const matchesFrom = !from || item.date >= from;
+          const matchesTo = !to || item.date <= to;
+          return matchesText && matchesStatus && matchesFrom && matchesTo;
+        });
+
+        $('#reservationCount').textContent = `${reservations.length} reservas`;
+        renderClientHistory(query);
+        if (!reservations.length) {
+          $('#reservationTable').innerHTML = '<div class="empty">No hay reservas para mostrar.</div>';
+          return;
+        }
+
+        $('#reservationTable').innerHTML = `
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Cliente</th>
+                  <th>Cita</th>
+                  <th>Total</th>
+                  <th>Estado</th>
+                  <th>Notas internas</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${reservations.map(item => `
+                  <tr>
+                    <td>
+                      <strong>${escapeHtml(item.clientName || 'Sin nombre')}</strong><br>
+                      <span class="muted">${escapeHtml(item.phone || '')}</span><br>
+                      <span class="muted">${escapeHtml(item.email || '')}</span>
+                    </td>
+                    <td>
+                      <strong>${escapeHtml(item.category)} - ${escapeHtml(item.service)}</strong><br>
+                      <span>${escapeHtml(item.date)} ${escapeHtml(item.time)}</span><br>
+                      <span class="muted">${item.duration} min - ${escapeHtml(item.id)}</span><br>
+                      <span class="muted">Asignada: ${escapeHtml(item.assignedUser || 'Sin asignar')}</span>
+                      ${item.reminder24hSent ? `<br><span class="muted">Recordatorio 24h: ${escapeHtml(item.reminder24hSent)}</span>` : ''}
+                      ${item.reminder1hSent ? `<br><span class="muted">Recordatorio 1h: ${escapeHtml(item.reminder1hSent)}</span>` : ''}
+                    </td>
+                    <td>
+                      ${item.financialPrivate ? '<strong>Privado</strong>' : `<strong>${formatMoney(item.total || item.price)}</strong><br><span class="muted">Servicio ${formatMoney(item.price || 0)}</span>`}
+                      ${item.canManagePayments ? `<br><span class="muted">Propina ${formatMoney(item.tip || 0)} - Desc. ${formatMoney((item.discount || 0) + (item.manualDiscount || 0))}</span>` : ''}
+                    </td>
+                    <td><span class="status ${slug(item.status)}">${escapeHtml(item.status)}</span></td>
+                    <td>
+                      <textarea class="note-box" data-note-input="${item.rowNumber}" placeholder="Notas internas" ${item.canEdit ? '' : 'disabled'}>${escapeHtml(item.internalNotes || '')}</textarea>
+                      ${item.canEdit ? `<button class="btn secondary mini" data-note-row="${item.rowNumber}" type="button">Guardar nota</button>` : '<span class="muted">Solo lectura</span>'}
+                    </td>
+                    <td>
+                      <div class="row-actions">
+                        ${item.canEdit ? `<button class="btn secondary mini" data-edit-manual="${item.rowNumber}" type="button">Editar</button>
+                        <button class="btn soft mini" data-status-row="${item.rowNumber}" data-status="Confirmada" type="button">Confirmar</button>
+                        <button class="btn danger mini" data-status-row="${item.rowNumber}" data-status="Cancelada" type="button">Cancelar</button>
+                        <button class="btn secondary mini" data-status-row="${item.rowNumber}" data-status="Pendiente" type="button">Pendiente</button>` : '<span class="muted">Solo ver</span>'}
+                        ${contactLinks(item)}
+                        ${item.receiptUrl ? `<a class="btn secondary mini" href="${escapeHtml(item.receiptUrl)}" target="_blank" rel="noopener">PDF</a>` : ''}
+                      </div>
+                    </td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        `;
+
+        $$('[data-status-row]').forEach(button => {
+          button.addEventListener('click', () => updateReservationStatus(button.dataset.statusRow, button.dataset.status));
+        });
+        $$('[data-note-row]').forEach(button => {
+          button.addEventListener('click', () => saveReservationNote(button.dataset.noteRow));
+        });
+        $$('[data-edit-manual]').forEach(button => {
+          button.addEventListener('click', () => editManualReservation(Number(button.dataset.editManual)));
+        });
+      }
+
+      function contactLinks(item) {
+        const digits = normalizePhoneDigits(item.phone);
+        if (!digits) return '';
+        const message = contactMessage(item);
+        const smsHref = `sms:${digits}?&body=${encodeURIComponent(message)}`;
+        const whatsAppNumber = digits.length === 10 ? `1${digits}` : digits;
+        const whatsAppHref = `https://wa.me/${whatsAppNumber}?text=${encodeURIComponent(message)}`;
+        return `
+          <a class="btn secondary mini" href="${escapeHtml(smsHref)}">SMS</a>
+          <a class="btn secondary mini" href="${escapeHtml(whatsAppHref)}" target="_blank" rel="noopener">WhatsApp</a>
+        `;
+      }
+
+      function contactMessage(item) {
+        const name = item.clientName ? ` ${item.clientName}` : '';
+        return `Hola${name}, te escribimos de Dominican Hair Salon sobre tu cita de ${item.service} el ${item.date} a las ${item.time}.`;
+      }
+
+      function normalizePhoneDigits(value) {
+        return String(value || '').replace(/\D/g, '');
+      }
+
+      function renderManualReservationOptions() {
+        const users = ((state.data && state.data.users) || []).filter(user => user.active);
+        const current = currentUser();
+        const assignable = can('canEditAllAppointments') ? users : users.filter(user => user.username === current.username);
+        $('#manualAssignedUser').innerHTML = assignable.map(user => (
+          `<option value="${escapeHtml(user.username)}">${escapeHtml(user.displayName || user.username)}</option>`
+        )).join('');
+        if (!can('canEditAllAppointments')) {
+          $('#manualAssignedUser').value = current.username || '';
+          $('#manualAssignedUser').disabled = true;
+        } else {
+          $('#manualAssignedUser').disabled = false;
+        }
+        $('#manualCategory').innerHTML = (state.data.categories || []).map(category => (
+          `<option value="${escapeHtml(category)}">${escapeHtml(category)}</option>`
+        )).join('');
+        fillManualServiceSelect();
+      }
+
+      function fillManualServiceSelect() {
+        const category = $('#manualCategory').value || (state.data.categories || [])[0] || '';
+        const services = ((state.data && state.data.services) || []).filter(service => service.category === category);
+        $('#manualService').innerHTML = services.map(service => (
+          `<option value="${escapeHtml(service.service)}">${escapeHtml(service.service)} - ${formatMoney(service.price)}</option>`
+        )).join('');
+      }
+
+      function editManualReservation(rowNumber) {
+        const item = (state.data.reservations || []).find(reservation => reservation.rowNumber === rowNumber);
+        if (!item || !item.canEdit) return;
+        $('#manualRow').value = item.rowNumber;
+        $('#manualAssignedUser').value = item.assignedUser || currentUser().username || '';
+        $('#manualStatus').value = item.status || 'Confirmada';
+        $('#manualClient').value = item.clientName || '';
+        $('#manualPhone').value = item.phone || '';
+        $('#manualEmail').value = item.email || '';
+        $('#manualCategory').value = item.category || '';
+        fillManualServiceSelect();
+        $('#manualService').value = item.service || '';
+        $('#manualDate').value = item.date || '';
+        $('#manualTime').value = item.time24 || '';
+        $('#manualDiscount').value = item.manualDiscount || 0;
+        $('#manualTip').value = item.tip || 0;
+        $('#manualPaid').checked = Boolean(item.paid);
+        $('#manualPaymentMethod').value = item.paymentMethod || '';
+        $('#manualNotes').value = item.notes || '';
+        setTab('reservations');
+        $('#manualClient').focus();
+      }
+
+      async function saveManualReservation(event) {
+        event.preventDefault();
+        const service = (state.data.services || []).find(item => (
+          item.category === $('#manualCategory').value && item.service === $('#manualService').value
+        ));
+        const ok = await mutate('saveManualReservation', {
+          rowNumber: $('#manualRow').value,
+          assignedUser: $('#manualAssignedUser').value,
+          status: $('#manualStatus').value,
+          clientName: $('#manualClient').value,
+          phone: $('#manualPhone').value,
+          email: $('#manualEmail').value,
+          category: $('#manualCategory').value,
+          service: $('#manualService').value,
+          date: $('#manualDate').value,
+          time: $('#manualTime').value,
+          price: service ? service.price : '',
+          duration: service ? service.duration : '',
+          manualDiscount: $('#manualDiscount').value,
+          tip: $('#manualTip').value,
+          paid: $('#manualPaid').checked,
+          paymentMethod: $('#manualPaymentMethod').value,
+          notes: $('#manualNotes').value
+        }, 'Cita manual guardada.');
+        if (ok) resetManualReservationForm();
+      }
+
+      function resetManualReservationForm() {
+        $('#manualReservationForm').reset();
+        $('#manualRow').value = '';
+        renderManualReservationOptions();
+        $('#manualStatus').value = 'Confirmada';
+        $('#manualDiscount').value = 0;
+        $('#manualTip').value = 0;
+      }
+
+      function renderClientHistory(query) {
+        const histories = (state.data && state.data.clientHistory) || [];
+        const filtered = histories.filter(item => {
+          if (!query) return true;
+          return [item.clientName, item.phone, item.email].join(' ').toLowerCase().indexOf(query) !== -1;
+        }).slice(0, 6);
+
+        if (!filtered.length) {
+          $('#clientHistory').innerHTML = '';
+          return;
+        }
+
+        $('#clientHistory').innerHTML = `
+          <div class="panel-head" style="margin-top: 16px;">
+            <div>
+              <h2>Historial de clientas</h2>
+              <div class="muted">Resumen rapido por telefono, email o nombre.</div>
+            </div>
+          </div>
+          <div class="history-grid">
+            ${filtered.map(item => `
+              <article class="history-card">
+                <strong>${escapeHtml(item.clientName || 'Sin nombre')}</strong><br>
+                <span class="muted">${escapeHtml(item.phone || '')}</span><br>
+                <span class="muted">${escapeHtml(item.email || '')}</span><br>
+                <span>${item.count} citas - ${formatMoney(item.total)}</span><br>
+                <span class="muted">Ultima: ${escapeHtml(item.lastDate || '')}</span>
+              </article>
+            `).join('')}
+          </div>
+        `;
+      }
+
+      function renderEarnings() {
+        const earnings = (state.data && state.data.earnings) || {};
+        const totals = earnings.totals || {};
+        $('#earningsHint').textContent = earnings.canViewGeneral
+          ? 'Vista general con propinas, descuentos y cobros.'
+          : 'Tu vista muestra solo tu produccion por servicios, sin propinas ni descuentos.';
+        $('#earningsGrid').innerHTML = `
+          <article class="metric-card"><span>Citas</span><strong>${totals.count || 0}</strong></article>
+          <article class="metric-card"><span>Servicios</span><strong>${formatMoney(totals.serviceEarnings || 0)}</strong></article>
+          <article class="metric-card ${earnings.canViewGeneral ? '' : 'hidden-by-permission'}"><span>Propinas</span><strong>${formatMoney(totals.tips || 0)}</strong></article>
+          <article class="metric-card ${earnings.canViewGeneral ? '' : 'hidden-by-permission'}"><span>Descuentos</span><strong>${formatMoney(totals.discounts || 0)}</strong></article>
+          <article class="metric-card ${earnings.canViewGeneral ? '' : 'hidden-by-permission'}"><span>Cobrado</span><strong>${formatMoney(totals.collected || 0)}</strong></article>
+        `;
+        const rows = earnings.byUser || [];
+        if (!rows.length) {
+          $('#earningsTable').innerHTML = '<div class="empty">No hay ganancias para mostrar.</div>';
+          return;
+        }
+        $('#earningsTable').innerHTML = `
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Usuario</th><th>Citas</th><th>Servicios</th><th>Propinas</th><th>Descuentos</th><th>Cobrado</th></tr></thead>
+              <tbody>
+                ${rows.map(row => `
+                  <tr>
+                    <td><strong>${escapeHtml(row.displayName || row.username)}</strong><br><span class="muted">${escapeHtml(row.username)}</span></td>
+                    <td>${row.count || 0}</td>
+                    <td>${formatMoney(row.serviceEarnings || 0)}</td>
+                    <td>${earnings.canViewGeneral ? formatMoney(row.tips || 0) : 'Privado'}</td>
+                    <td>${earnings.canViewGeneral ? formatMoney(row.discounts || 0) : 'Privado'}</td>
+                    <td>${earnings.canViewGeneral ? formatMoney(row.collected || 0) : 'Privado'}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        `;
+      }
+
+      function renderServices() {
+        const services = (state.data && state.data.services) || [];
+        if (!services.length) {
+          $('#serviceTable').innerHTML = '<div class="empty">No hay servicios.</div>';
+          return;
+        }
+        $('#serviceTable').innerHTML = `
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Servicio</th><th>Precio</th><th>Visible</th><th></th></tr></thead>
+              <tbody>
+                ${services.map(item => `
+                  <tr>
+                    <td>
+                      <strong>${escapeHtml(item.category)} - ${escapeHtml(item.service)}</strong><br>
+                      <span class="muted">${escapeHtml(item.serviceEn || '')}</span>
+                    </td>
+                    <td>${formatMoney(item.price)}<br><span class="muted">${item.duration} min</span></td>
+                    <td>${item.visible ? 'Si' : 'No'}</td>
+                    <td><button class="btn secondary mini" data-edit-service="${item.rowNumber}" type="button">Editar</button></td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        `;
+        $$('[data-edit-service]').forEach(button => {
+          button.addEventListener('click', () => editService(Number(button.dataset.editService)));
+        });
+      }
+
+      function renderPhotos() {
+        const photos = (state.data && state.data.photos) || [];
+        if (!photos.length) {
+          $('#photoTable').innerHTML = '<div class="empty">No hay fotos.</div>';
+          return;
+        }
+        $('#photoTable').innerHTML = `
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Orden</th><th>Foto</th><th>Categoria</th><th>Visible</th><th></th></tr></thead>
+              <tbody>
+                ${photos.map(item => `
+                  <tr class="drag-row" draggable="true" data-photo-row="${item.rowNumber}">
+                    <td><span class="drag-handle">::</span></td>
+                    <td>
+                      ${item.imageUrl ? `<img class="thumb" src="${escapeHtml(item.imageUrl)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none'">` : ''}
+                      <br><strong>${escapeHtml(item.title || item.id)}</strong>
+                    </td>
+                    <td>${escapeHtml(item.category)}<br><span class="muted">Orden ${item.order}</span></td>
+                    <td>${item.visible ? 'Si' : 'No'}</td>
+                    <td>
+                      <div class="row-actions">
+                        <button class="btn secondary mini" data-edit-photo="${item.rowNumber}" type="button">Editar</button>
+                        <button class="btn danger mini" data-delete-photo="${item.rowNumber}" type="button">Borrar</button>
+                      </div>
+                    </td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        `;
+        $$('[data-edit-photo]').forEach(button => {
+          button.addEventListener('click', () => editPhoto(Number(button.dataset.editPhoto)));
+        });
+        $$('[data-delete-photo]').forEach(button => {
+          button.addEventListener('click', () => deletePhoto(Number(button.dataset.deletePhoto)));
+        });
+        bindPhotoDrag();
+      }
+
+      function renderBeforeAfter() {
+        const pairs = (state.data && state.data.beforeAfter) || [];
+        if (!pairs.length) {
+          $('#beforeAfterTable').innerHTML = '<div class="empty">No hay resultados antes/despues.</div>';
+          return;
+        }
+        $('#beforeAfterTable').innerHTML = `
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Resultado</th><th>Orden</th><th>Visible</th><th></th></tr></thead>
+              <tbody>
+                ${pairs.map(item => `
+                  <tr>
+                    <td>
+                      <div class="before-after-preview">
+                        ${item.beforeImageUrl ? `<img src="${escapeHtml(item.beforeImageUrl)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none'">` : '<img alt="">'}
+                        ${item.afterImageUrl ? `<img src="${escapeHtml(item.afterImageUrl)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none'">` : '<img alt="">'}
+                      </div>
+                      <strong>${escapeHtml(item.title || item.id)}</strong><br>
+                      <span class="muted">${escapeHtml(item.titleEn || '')}</span>
+                    </td>
+                    <td>${item.order}</td>
+                    <td>${item.visible ? 'Si' : 'No'}</td>
+                    <td>
+                      <div class="row-actions">
+                        <button class="btn secondary mini" data-edit-before-after="${item.rowNumber}" type="button">Editar</button>
+                        <button class="btn danger mini" data-delete-before-after="${item.rowNumber}" type="button">Borrar</button>
+                      </div>
+                    </td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        `;
+        $$('[data-edit-before-after]').forEach(button => {
+          button.addEventListener('click', () => editBeforeAfter(Number(button.dataset.editBeforeAfter)));
+        });
+        $$('[data-delete-before-after]').forEach(button => {
+          button.addEventListener('click', () => deleteBeforeAfter(Number(button.dataset.deleteBeforeAfter)));
+        });
+      }
+
+      function renderDiscounts() {
+        const discounts = (state.data && state.data.discounts) || [];
+        if (!discounts.length) {
+          $('#discountTable').innerHTML = '<div class="empty">No hay descuentos.</div>';
+          return;
+        }
+        $('#discountTable').innerHTML = `
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Cupon</th><th>Categoria</th><th>Valor</th><th>Estado</th><th></th></tr></thead>
+              <tbody>
+                ${discounts.map(item => `
+                  <tr>
+                    <td><strong>${escapeHtml(item.coupon)}</strong><br><span class="muted">${escapeHtml(item.days)}</span></td>
+                    <td>${escapeHtml(item.category)}<br><span class="muted">${escapeHtml(item.categoryEn || '')}</span></td>
+                    <td>${item.value}%</td>
+                    <td>${item.available ? 'Activo' : 'Inactivo'}<br><span class="muted">${item.visible ? 'Publico' : 'Privado'}</span></td>
+                    <td><button class="btn secondary mini" data-edit-discount="${item.rowNumber}" type="button">Editar</button></td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        `;
+        $$('[data-edit-discount]').forEach(button => {
+          button.addEventListener('click', () => editDiscount(Number(button.dataset.editDiscount)));
+        });
+      }
+
+      function renderTimeOff() {
+        const users = ((state.data && state.data.users) || []).filter(user => user.active);
+        $('#timeOffUser').innerHTML = users.map(user => (
+          `<option value="${escapeHtml(user.username)}">${escapeHtml(user.displayName || user.username)}</option>`
+        )).join('');
+        if (!can('canManageTimeOff')) {
+          $('#timeOffUser').value = currentUser().username || '';
+        }
+        const requests = (state.data && state.data.timeOffRequests) || [];
+        if (!requests.length) {
+          $('#timeOffList').innerHTML = '<div class="empty">No hay solicitudes de dias libres.</div>';
+          return;
+        }
+        $('#timeOffList').innerHTML = requests.map(item => `
+          <article class="blocked-card">
+            <strong>${escapeHtml(item.startDate)}${item.endDate && item.endDate !== item.startDate ? ` - ${escapeHtml(item.endDate)}` : ''}</strong><br>
+            <span class="muted">${escapeHtml(item.displayName || item.username)} - ${escapeHtml(item.reason || 'Sin motivo')}</span><br>
+            <span class="status ${slug(item.status)}">${escapeHtml(item.status)}</span>
+            ${item.adminResponse ? `<p class="muted">${escapeHtml(item.adminResponse)}</p>` : ''}
+            <div class="row-actions" style="margin-top: 8px;">
+              <button class="btn secondary mini" data-edit-timeoff="${item.rowNumber}" type="button">Editar</button>
+              ${can('canManageTimeOff') ? `<button class="btn soft mini" data-timeoff-status="${item.rowNumber}" data-status="Aprobada" type="button">Aprobar</button>
+              <button class="btn danger mini" data-timeoff-status="${item.rowNumber}" data-status="Denegada" type="button">Denegar</button>` : ''}
+            </div>
+          </article>
+        `).join('');
+        $$('[data-edit-timeoff]').forEach(button => {
+          button.addEventListener('click', () => editTimeOff(Number(button.dataset.editTimeoff)));
+        });
+        $$('[data-timeoff-status]').forEach(button => {
+          button.addEventListener('click', () => updateTimeOffStatus(button.dataset.timeoffStatus, button.dataset.status));
+        });
+      }
+
+      function renderUsers() {
+        const users = (state.data && state.data.users) || [];
+        if (!users.length) {
+          $('#userTable').innerHTML = '<div class="empty">No hay usuarios.</div>';
+          return;
+        }
+        $('#userTable').innerHTML = `
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Usuario</th><th>Rol</th><th>Permisos</th><th>Estado</th><th></th></tr></thead>
+              <tbody>
+                ${users.map(user => `
+                  <tr>
+                    <td><strong>${escapeHtml(user.displayName || user.username)}</strong><br><span class="muted">${escapeHtml(user.username)}</span></td>
+                    <td>${escapeHtml(user.role)}</td>
+                    <td>${permissionSummary(user.permissions || {})}</td>
+                    <td>${user.active ? 'Activo' : 'Inactivo'}</td>
+                    <td>
+                      <div class="row-actions">
+                        <button class="btn secondary mini" data-edit-user="${user.rowNumber}" type="button">Editar</button>
+                        <button class="btn danger mini" data-delete-user="${user.rowNumber}" type="button">Desactivar</button>
+                      </div>
+                    </td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        `;
+        $$('[data-edit-user]').forEach(button => {
+          button.addEventListener('click', () => editUser(Number(button.dataset.editUser)));
+        });
+        $$('[data-delete-user]').forEach(button => {
+          button.addEventListener('click', () => deleteUser(Number(button.dataset.deleteUser)));
+        });
+      }
+
+      function permissionSummary(perms) {
+        const labels = [];
+        if (perms.canEditPage) labels.push('Pagina');
+        if (perms.canEditAppointments) labels.push('Citas');
+        if (perms.canEditAllAppointments) labels.push('Todas las citas');
+        if (perms.canViewGeneralEarnings) labels.push('Ganancias');
+        if (perms.canManageUsers) labels.push('Usuarios');
+        if (perms.canManagePayments) labels.push('Pagos');
+        if (perms.canManageTimeOff) labels.push('Dias libres');
+        return labels.length ? labels.join(', ') : 'Basico';
+      }
+
+      function renderSettings() {
+        const settings = state.data && state.data.settings ? state.data.settings : {};
+        const authRole = state.data && state.data.authRole ? state.data.authRole : 'admin';
+        $('#rolePill').textContent = `${currentUser().displayName || authRole} - ${authRole}`;
+        $('#contactVisible').checked = Boolean(settings.contactVisible);
+        $('#instagramVisible').checked = Boolean(settings.instagramVisible);
+        $('#instagramUrl').value = settings.instagramUrl || '';
+        $('#contactPhone').value = settings.contactPhone || '9044223600';
+        $('#contactEmail').value = settings.contactEmail || 'yaleixi20@gmail.com';
+        $('#publicEnabled').checked = settings.publicEnabled !== false;
+        $('#adminEnabled').checked = settings.adminEnabled !== false;
+        const hours = state.data && state.data.businessHours ? state.data.businessHours : {};
+        $('#businessStart').value = hours.start || '09:00';
+        $('#businessEnd').value = hours.end || '18:00';
+        $('#businessInterval').value = hours.intervalMinutes || 30;
+        $('#maintenanceMessage').value = settings.maintenanceMessage || 'La pagina esta temporalmente desactivada.';
+        $('#remindersEnabled').checked = Boolean(settings.remindersEnabled);
+        $('#reminderHours').value = settings.reminderHours || 24;
+        renderOpenDays(hours.openDays || [1, 2, 3, 4, 5, 6]);
+        $('#currentPasswordField').hidden = authRole === 'developer';
+        const security = state.data && state.data.security ? state.data.security : {};
+        $('#passwordLimitText').textContent = authRole === 'developer'
+          ? 'Developer puede resetear la contrasena cuando sea necesario.'
+          : security.passwordChangedThisMonth
+            ? 'La contrasena ya fue cambiada este mes. Si necesitas cambiarla otra vez, contacta al developer.'
+            : 'Puedes cambiar tu contrasena 1 vez al mes.';
+        const passwordLocked = authRole !== 'developer' && !security.canChangePassword;
+        $('#newPassword').disabled = passwordLocked;
+        $('#passwordForm button[type="submit"]').dataset.locked = passwordLocked ? 'true' : 'false';
+        $('#passwordForm button[type="submit"]').disabled = passwordLocked;
+      }
+
+      function renderOpenDays(openDays) {
+        const labels = ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'];
+        $('#openDays').innerHTML = labels.map((label, index) => `
+          <label class="check">
+            <input type="checkbox" value="${index}" ${openDays.indexOf(index) !== -1 ? 'checked' : ''}>
+            ${label}
+          </label>
+        `).join('');
+      }
+
+      function renderBlockedDays() {
+        const days = (state.data && state.data.blockedDays) || [];
+        if (!days.length) {
+          $('#blockedDaysList').innerHTML = '<div class="empty">No hay dias bloqueados.</div>';
+          return;
+        }
+        $('#blockedDaysList').innerHTML = days.map(day => `
+          <article class="blocked-card">
+            <strong>${escapeHtml(day.date)}</strong><br>
+            <span class="muted">${escapeHtml(day.reason || 'Sin motivo')}</span><br>
+            <span>${day.active ? 'Activo' : 'Inactivo'}</span>
+            <div class="row-actions" style="margin-top: 8px;">
+              <button class="btn secondary mini" data-edit-block="${day.rowNumber}" type="button">Editar</button>
+              <button class="btn danger mini" data-delete-block="${day.rowNumber}" type="button">Borrar</button>
+            </div>
+          </article>
+        `).join('');
+        $$('[data-edit-block]').forEach(button => {
+          button.addEventListener('click', () => editBlockedDay(Number(button.dataset.editBlock)));
+        });
+        $$('[data-delete-block]').forEach(button => {
+          button.addEventListener('click', () => deleteBlockedDay(Number(button.dataset.deleteBlock)));
+        });
+      }
+
+      function editService(rowNumber) {
+        const item = state.data.services.find(service => service.rowNumber === rowNumber);
+        if (!item) return;
+        $('#serviceRow').value = item.rowNumber;
+        $('#serviceCategory').value = item.category;
+        $('#serviceCategoryEn').value = item.categoryEn;
+        $('#serviceName').value = item.service;
+        $('#serviceNameEn').value = item.serviceEn;
+        $('#serviceDescription').value = item.description;
+        $('#serviceDescriptionEn').value = item.descriptionEn;
+        $('#servicePrice').value = item.price;
+        $('#serviceDuration').value = item.duration;
+        $('#serviceOrder').value = item.order === 9999 ? '' : item.order;
+        $('#serviceImage').value = item.image;
+        $('#serviceVisible').checked = item.visible;
+      }
+
+      function editPhoto(rowNumber) {
+        const item = state.data.photos.find(photo => photo.rowNumber === rowNumber);
+        if (!item) return;
+        $('#photoRow').value = item.rowNumber;
+        $('#photoId').value = item.id;
+        $('#photoDriveId').value = item.driveFileId;
+        $('#photoCategory').value = item.category;
+        $('#photoTitle').value = item.title;
+        $('#photoTitleEn').value = item.titleEn;
+        $('#photoOrder').value = item.order === 9999 ? '' : item.order;
+        $('#photoUrl').value = item.url;
+        $('#photoVisible').checked = item.visible;
+        $('#photoOffsetX').value = 50;
+        $('#photoOffsetY').value = 50;
+        $('#photoFocus').value = 'center';
+        state.photoFile = null;
+        $('#photoFile').value = '';
+        showPreview(item.imageUrl);
+      }
+
+      function editBeforeAfter(rowNumber) {
+        const item = state.data.beforeAfter.find(pair => pair.rowNumber === rowNumber);
+        if (!item) return;
+        $('#beforeAfterRow').value = item.rowNumber;
+        $('#beforeAfterId').value = item.id;
+        $('#beforeDriveId').value = item.beforeDriveFileId;
+        $('#afterDriveId').value = item.afterDriveFileId;
+        $('#beforeAfterTitle').value = item.title;
+        $('#beforeAfterTitleEn').value = item.titleEn;
+        $('#beforeAfterOrder').value = item.order === 9999 ? '' : item.order;
+        $('#beforeAfterVisible').checked = item.visible;
+        $('#beforeUrl').value = item.beforeUrl;
+        $('#afterUrl').value = item.afterUrl;
+        state.beforeFile = null;
+        state.afterFile = null;
+        $('#beforeFile').value = '';
+        $('#afterFile').value = '';
+        showBeforeAfterPreview('before', item.beforeImageUrl);
+        showBeforeAfterPreview('after', item.afterImageUrl);
+      }
+
+      function editBlockedDay(rowNumber) {
+        const item = state.data.blockedDays.find(day => day.rowNumber === rowNumber);
+        if (!item) return;
+        $('#blockedRow').value = item.rowNumber;
+        $('#blockedDate').value = item.date;
+        $('#blockedReason').value = item.reason;
+        $('#blockedActive').checked = item.active;
+      }
+
+      function editDiscount(rowNumber) {
+        const item = state.data.discounts.find(discount => discount.rowNumber === rowNumber);
+        if (!item) return;
+        $('#discountRow').value = item.rowNumber;
+        $('#discountCoupon').value = item.coupon;
+        $('#discountValue').value = item.value;
+        $('#discountCategory').value = item.category;
+        $('#discountCategoryEn').value = item.categoryEn;
+        $('#discountDays').value = item.days;
+        $('#discountDaysEn').value = item.daysEn;
+        $('#discountAvailable').checked = item.available;
+        $('#discountVisible').checked = item.visible;
+      }
+
+      function editTimeOff(rowNumber) {
+        const item = (state.data.timeOffRequests || []).find(request => request.rowNumber === rowNumber);
+        if (!item) return;
+        $('#timeOffRow').value = item.rowNumber;
+        $('#timeOffUser').value = item.username;
+        $('#timeOffStart').value = item.startDate;
+        $('#timeOffEnd').value = item.endDate || item.startDate;
+        $('#timeOffStatus').value = item.status || 'Pendiente';
+        $('#timeOffReason').value = item.reason || '';
+        $('#timeOffResponse').value = item.adminResponse || '';
+        setTab('timeoff');
+      }
+
+      function editUser(rowNumber) {
+        const item = (state.data.users || []).find(user => user.rowNumber === rowNumber);
+        if (!item) return;
+        $('#userRow').value = item.rowNumber;
+        $('#userName').value = item.username;
+        $('#userDisplayName').value = item.displayName;
+        $('#userPassword').value = item.password || '';
+        $('#userRole').value = item.role || 'staff';
+        $('#userActive').checked = Boolean(item.active);
+        setPermissionForm(item.permissions || {});
+        setTab('users');
+      }
+
+      async function saveService(event) {
+        event.preventDefault();
+        const ok = await mutate('saveAdminService', {
+          rowNumber: $('#serviceRow').value,
+          category: $('#serviceCategory').value,
+          categoryEn: $('#serviceCategoryEn').value,
+          service: $('#serviceName').value,
+          serviceEn: $('#serviceNameEn').value,
+          description: $('#serviceDescription').value,
+          descriptionEn: $('#serviceDescriptionEn').value,
+          price: $('#servicePrice').value,
+          duration: $('#serviceDuration').value,
+          order: $('#serviceOrder').value,
+          image: $('#serviceImage').value,
+          visible: $('#serviceVisible').checked
+        }, 'Servicio guardado.');
+        if (ok) resetServiceForm();
+      }
+
+      async function saveDiscount(event) {
+        event.preventDefault();
+        const ok = await mutate('saveAdminDiscount', {
+          rowNumber: $('#discountRow').value,
+          coupon: $('#discountCoupon').value,
+          value: $('#discountValue').value,
+          category: $('#discountCategory').value,
+          categoryEn: $('#discountCategoryEn').value,
+          days: $('#discountDays').value,
+          daysEn: $('#discountDaysEn').value,
+          available: $('#discountAvailable').checked,
+          visible: $('#discountVisible').checked
+        }, 'Cupon guardado.');
+        if (ok) resetDiscountForm();
+      }
+
+      async function saveTimeOffRequest(event) {
+        event.preventDefault();
+        const ok = await mutate('saveTimeOffRequest', {
+          rowNumber: $('#timeOffRow').value,
+          username: $('#timeOffUser').value,
+          startDate: $('#timeOffStart').value,
+          endDate: $('#timeOffEnd').value,
+          status: $('#timeOffStatus').value,
+          reason: $('#timeOffReason').value,
+          adminResponse: $('#timeOffResponse').value
+        }, 'Solicitud guardada.');
+        if (ok) resetTimeOffForm();
+      }
+
+      async function updateTimeOffStatus(rowNumber, status) {
+        const response = prompt(`Respuesta para marcar como ${status}:`, '');
+        setBusy(true);
+        try {
+          state.data = await gas('updateTimeOffRequestStatus', state.secret, rowNumber, status, response || '');
+          showToast(`Solicitud marcada como ${status}.`);
+          renderAll();
+        } catch (error) {
+          showToast(error.message || String(error));
+        } finally {
+          setBusy(false);
+        }
+      }
+
+      async function saveUser(event) {
+        event.preventDefault();
+        const ok = await mutate('saveAdminUser', {
+          rowNumber: $('#userRow').value,
+          username: $('#userName').value,
+          displayName: $('#userDisplayName').value,
+          password: $('#userPassword').value,
+          role: $('#userRole').value,
+          active: $('#userActive').checked,
+          permissions: readPermissionForm()
+        }, 'Usuario guardado.');
+        if (ok) resetUserForm();
+      }
+
+      async function deleteUser(rowNumber) {
+        if (!confirm('Desactivar este usuario?')) return;
+        await mutate('deleteAdminUser', rowNumber, null, 'Usuario desactivado.');
+      }
+
+      async function saveSettings(event) {
+        event.preventDefault();
+        await mutate('saveAdminSettings', {
+          contactVisible: $('#contactVisible').checked,
+          contactPhone: $('#contactPhone').value,
+          contactEmail: $('#contactEmail').value,
+          instagramVisible: $('#instagramVisible').checked,
+          instagramUrl: $('#instagramUrl').value,
+          businessStart: $('#businessStart').value,
+          businessEnd: $('#businessEnd').value,
+          businessInterval: $('#businessInterval').value,
+          openDays: $$('#openDays input:checked').map(input => input.value),
+          maintenanceMessage: $('#maintenanceMessage').value,
+          remindersEnabled: $('#remindersEnabled').checked,
+          reminderHours: $('#reminderHours').value,
+          publicEnabled: $('#publicEnabled').checked,
+          adminEnabled: $('#adminEnabled').checked
+        }, 'Ajustes guardados.');
+      }
+
+      async function changePassword(event) {
+        event.preventDefault();
+        const newPassword = $('#newPassword').value.trim();
+        if (!newPassword) {
+          showToast('Escribe la nueva contrasena.');
+          return;
+        }
+        const ok = await mutate('changeAdminPassword', {
+          currentPassword: $('#currentPassword').value,
+          newPassword
+        }, 'Contrasena actualizada.');
+        if (ok) {
+          if (state.data.authRole !== 'developer') {
+            state.secret = JSON.stringify({ username: currentUser().username || $('#username').value.trim(), password: newPassword });
+            storageSet('sessionStorage', 'angels_admin_secret', state.secret);
+          }
+          $('#passwordForm').reset();
+        }
+      }
+
+      async function changeDeveloperPin(event) {
+        event.preventDefault();
+        const newDeveloperPin = $('#newDeveloperPin').value.trim();
+        if (!newDeveloperPin) {
+          showToast('Escribe el nuevo PIN developer.');
+          return;
+        }
+        const ok = await mutate('changeDeveloperPin', { newDeveloperPin }, 'PIN developer actualizado.');
+        if (ok) {
+          state.secret = JSON.stringify({ username: 'Developer', password: newDeveloperPin });
+          storageSet('sessionStorage', 'angels_admin_secret', state.secret);
+          $('#developerPinForm').reset();
+        }
+      }
+
+      async function savePhoto(event) {
+        event.preventDefault();
+        try {
+          let dataUrl = '';
+          if (state.photoFile) {
+            dataUrl = await cropImage(
+              state.photoFile,
+              $('#photoAspect').value,
+              Number($('#photoOffsetX').value),
+              Number($('#photoOffsetY').value)
+            );
+          }
+          const ok = await mutate('saveAdminPhoto', {
+            rowNumber: $('#photoRow').value,
+            id: $('#photoId').value,
+            category: $('#photoCategory').value,
+            title: $('#photoTitle').value,
+            titleEn: $('#photoTitleEn').value,
+            order: $('#photoOrder').value,
+            visible: $('#photoVisible').checked,
+            url: $('#photoUrl').value,
+            driveFileId: $('#photoDriveId').value,
+            dataUrl,
+            fileName: state.photoFile ? state.photoFile.name : ''
+          }, 'Foto guardada.');
+          if (ok) resetPhotoForm();
+        } catch (error) {
+          showToast(error.message || String(error));
+        }
+      }
+
+      async function saveBeforeAfter(event) {
+        event.preventDefault();
+        try {
+          const beforeDataUrl = state.beforeFile ? await cropImage(state.beforeFile, '4:5', 50, 50) : '';
+          const afterDataUrl = state.afterFile ? await cropImage(state.afterFile, '4:5', 50, 50) : '';
+          const ok = await mutate('saveBeforeAfter', {
+            rowNumber: $('#beforeAfterRow').value,
+            id: $('#beforeAfterId').value,
+            title: $('#beforeAfterTitle').value,
+            titleEn: $('#beforeAfterTitleEn').value,
+            order: $('#beforeAfterOrder').value,
+            visible: $('#beforeAfterVisible').checked,
+            beforeDriveFileId: $('#beforeDriveId').value,
+            afterDriveFileId: $('#afterDriveId').value,
+            beforeUrl: $('#beforeUrl').value,
+            afterUrl: $('#afterUrl').value,
+            beforeDataUrl,
+            afterDataUrl,
+            fileName: [state.beforeFile ? state.beforeFile.name : '', state.afterFile ? state.afterFile.name : ''].filter(Boolean).join('-')
+          }, 'Resultado guardado.');
+          if (ok) resetBeforeAfterForm();
+        } catch (error) {
+          showToast(error.message || String(error));
+        }
+      }
+
+      async function saveBlockedDay(event) {
+        event.preventDefault();
+        const ok = await mutate('saveBlockedDay', {
+          rowNumber: $('#blockedRow').value,
+          date: $('#blockedDate').value,
+          reason: $('#blockedReason').value,
+          active: $('#blockedActive').checked
+        }, 'Dia bloqueado guardado.');
+        if (ok) resetBlockedDayForm();
+      }
+
+      async function updateReservationStatus(rowNumber, status) {
+        await mutate('updateAdminReservationStatus', rowNumber, status, `Reserva marcada como ${status}.`);
+      }
+
+      async function saveReservationNote(rowNumber) {
+        const input = document.querySelector(`[data-note-input="${rowNumber}"]`);
+        if (!input) return;
+        setBusy(true);
+        try {
+          state.data = await gas('saveAdminReservationNote', state.secret, rowNumber, input.value);
+          showToast('Nota interna guardada.');
+          renderAll();
+        } catch (error) {
+          showToast(error.message || String(error));
+        } finally {
+          setBusy(false);
+        }
+      }
+
+      async function deletePhoto(rowNumber) {
+        if (!confirm('Borrar esta foto tambien la movera a la papelera de Drive si fue subida desde aqui.')) return;
+        await mutate('deleteAdminPhoto', rowNumber, null, 'Foto borrada.');
+      }
+
+      async function deleteBeforeAfter(rowNumber) {
+        if (!confirm('Borrar este antes/despues y mover sus fotos a la papelera si fueron subidas aqui?')) return;
+        await mutate('deleteBeforeAfter', rowNumber, null, 'Resultado borrado.');
+      }
+
+      async function deleteBlockedDay(rowNumber) {
+        if (!confirm('Borrar este bloqueo de fecha?')) return;
+        await mutate('deleteBlockedDay', rowNumber, null, 'Bloqueo borrado.');
+      }
+
+      async function runReminders() {
+        setBusy(true);
+        try {
+          const result = await gas('runAdminReminders', state.secret);
+          state.data = result.data;
+          showToast(result.message || 'Recordatorios procesados.');
+          renderAll();
+        } catch (error) {
+          showToast(error.message || String(error));
+        } finally {
+          setBusy(false);
+        }
+      }
+
+      async function installReminderTrigger() {
+        if (state.data && state.data.authRole !== 'developer') {
+          showToast('Solo developer puede activar los recordatorios automaticos.');
+          return;
+        }
+        setBusy(true);
+        try {
+          const result = await gas('installReminderTrigger', state.secret);
+          state.data = result.data;
+          showToast(result.message || 'Recordatorios automaticos activos.');
+          renderAll();
+        } catch (error) {
+          showToast(error.message || String(error));
+        } finally {
+          setBusy(false);
+        }
+      }
+
+      async function clearPublicPageCache() {
+        setBusy(true);
+        try {
+          await gas('clearPublicCache', state.secret);
+          showToast('Pagina de clientas actualizada. Abrela de nuevo o refrescala.');
+        } catch (error) {
+          showToast(error.message || String(error));
+        } finally {
+          setBusy(false);
+        }
+      }
+
+      async function mutate(functionName, payloadOrRow, statusOrExtra, maybeMessage) {
+        setBusy(true);
+        try {
+          if (functionName === 'updateAdminReservationStatus') {
+            state.data = await gas(functionName, state.secret, payloadOrRow, statusOrExtra);
+            showToast(maybeMessage);
+          } else {
+            state.data = await gas(functionName, state.secret, payloadOrRow);
+            showToast(maybeMessage || statusOrExtra);
+          }
+          renderAll();
+          return true;
+        } catch (error) {
+          showToast(error.message || String(error));
+          return false;
+        } finally {
+          setBusy(false);
+        }
+      }
+
+      function resetServiceForm() {
+        $('#serviceForm').reset();
+        $('#serviceRow').value = '';
+        $('#serviceDuration').value = 60;
+        $('#serviceOrder').value = 1;
+        $('#serviceVisible').checked = true;
+      }
+
+      function resetDiscountForm() {
+        $('#discountForm').reset();
+        $('#discountRow').value = '';
+        $('#discountCategory').value = 'Todas';
+        $('#discountCategoryEn').value = 'All';
+        $('#discountDays').value = 'Todos';
+        $('#discountDaysEn').value = 'Every day';
+        $('#discountAvailable').checked = true;
+        $('#discountVisible').checked = false;
+      }
+
+      function resetTimeOffForm() {
+        $('#timeOffForm').reset();
+        $('#timeOffRow').value = '';
+        $('#timeOffStatus').value = 'Pendiente';
+        $('#timeOffUser').value = currentUser().username || $('#timeOffUser').value;
+      }
+
+      function resetUserForm() {
+        $('#userForm').reset();
+        $('#userRow').value = '';
+        $('#userRole').value = 'staff';
+        $('#userActive').checked = true;
+        applyRoleDefaults();
+      }
+
+      function applyRoleDefaults() {
+        const role = $('#userRole').value;
+        if (role === 'developer' || role === 'admin') {
+          setPermissionForm({
+            canEditPage: true,
+            canEditAppointments: true,
+            canEditAllAppointments: true,
+            canViewGeneralEarnings: true,
+            canManageUsers: true,
+            canManageDiscounts: true,
+            canManageTimeOff: true,
+            canManageBlockedDays: true,
+            canManagePayments: true
+          });
+          return;
+        }
+        setPermissionForm({
+          canEditPage: false,
+          canEditAppointments: true,
+          canEditAllAppointments: false,
+          canViewGeneralEarnings: false,
+          canManageUsers: false,
+          canManageDiscounts: false,
+          canManageTimeOff: false,
+          canManageBlockedDays: false,
+          canManagePayments: false
+        });
+      }
+
+      function readPermissionForm() {
+        return {
+          canEditPage: $('#permEditPage').checked,
+          canEditAppointments: $('#permEditAppointments').checked,
+          canEditAllAppointments: $('#permEditAllAppointments').checked,
+          canViewGeneralEarnings: $('#permViewGeneralEarnings').checked,
+          canManageUsers: $('#permManageUsers').checked,
+          canManageDiscounts: $('#permManageDiscounts').checked,
+          canManageTimeOff: $('#permManageTimeOff').checked,
+          canManageBlockedDays: $('#permManageBlockedDays').checked,
+          canManagePayments: $('#permManagePayments').checked
+        };
+      }
+
+      function setPermissionForm(perms) {
+        $('#permEditPage').checked = Boolean(perms.canEditPage);
+        $('#permEditAppointments').checked = Boolean(perms.canEditAppointments);
+        $('#permEditAllAppointments').checked = Boolean(perms.canEditAllAppointments);
+        $('#permViewGeneralEarnings').checked = Boolean(perms.canViewGeneralEarnings);
+        $('#permManageUsers').checked = Boolean(perms.canManageUsers);
+        $('#permManageDiscounts').checked = Boolean(perms.canManageDiscounts);
+        $('#permManageTimeOff').checked = Boolean(perms.canManageTimeOff);
+        $('#permManageBlockedDays').checked = Boolean(perms.canManageBlockedDays);
+        $('#permManagePayments').checked = Boolean(perms.canManagePayments);
+      }
+
+      function resetPhotoForm() {
+        $('#photoForm').reset();
+        $('#photoRow').value = '';
+        $('#photoId').value = '';
+        $('#photoDriveId').value = '';
+        $('#photoOrder').value = 1;
+        $('#photoVisible').checked = true;
+        $('#photoOffsetX').value = 50;
+        $('#photoOffsetY').value = 50;
+        $('#photoFocus').value = 'center';
+        state.photoFile = null;
+        showPreview('');
+        updatePreviewAspect();
+      }
+
+      function resetBeforeAfterForm() {
+        $('#beforeAfterForm').reset();
+        $('#beforeAfterRow').value = '';
+        $('#beforeAfterId').value = '';
+        $('#beforeDriveId').value = '';
+        $('#afterDriveId').value = '';
+        $('#beforeAfterOrder').value = 1;
+        $('#beforeAfterVisible').checked = true;
+        state.beforeFile = null;
+        state.afterFile = null;
+        showBeforeAfterPreview('before', '');
+        showBeforeAfterPreview('after', '');
+      }
+
+      function resetBlockedDayForm() {
+        $('#blockedDayForm').reset();
+        $('#blockedRow').value = '';
+        $('#blockedActive').checked = true;
+      }
+
+      function handlePhotoFile(event) {
+        const file = event.target.files && event.target.files[0];
+        state.photoFile = null;
+        if (!file) {
+          showPreview('');
+          return;
+        }
+        if (!isAllowedImageFile(file)) {
+          event.target.value = '';
+          showPreview('');
+          showToast('Usa una imagen JPG, PNG o WebP.');
+          return;
+        }
+        state.photoFile = file;
+        const reader = new FileReader();
+        reader.onload = () => showPreview(reader.result);
+        reader.readAsDataURL(file);
+      }
+
+      function handleBeforeAfterFile(event, side) {
+        const file = event.target.files && event.target.files[0];
+        if (side === 'before') state.beforeFile = null;
+        if (side === 'after') state.afterFile = null;
+        if (!file) {
+          showBeforeAfterPreview(side, '');
+          return;
+        }
+        if (!isAllowedImageFile(file)) {
+          event.target.value = '';
+          showBeforeAfterPreview(side, '');
+          showToast('Usa una imagen JPG, PNG o WebP.');
+          return;
+        }
+        if (side === 'before') state.beforeFile = file;
+        if (side === 'after') state.afterFile = file;
+        const reader = new FileReader();
+        reader.onload = () => showBeforeAfterPreview(side, reader.result);
+        reader.readAsDataURL(file);
+      }
+
+      function isAllowedImageFile(file) {
+        return ['image/jpeg', 'image/png', 'image/webp'].indexOf(file.type) !== -1;
+      }
+
+      function showPreview(src) {
+        const preview = $('#photoPreview');
+        preview.src = src || '';
+        preview.classList.toggle('show', Boolean(src));
+        updatePreviewPosition();
+      }
+
+      function showBeforeAfterPreview(side, src) {
+        const preview = side === 'before' ? $('#beforePreview') : $('#afterPreview');
+        preview.src = src || '';
+      }
+
+      function updatePreviewAspect() {
+        const [w, h] = $('#photoAspect').value.split(':').map(Number);
+        $('#photoPreview').style.aspectRatio = `${w} / ${h}`;
+      }
+
+      function syncFocusSliders() {
+        const focus = $('#photoFocus').value;
+        $('#photoOffsetX').value = 50;
+        $('#photoOffsetY').value = focus === 'top' ? 0 : focus === 'bottom' ? 100 : 50;
+        updatePreviewPosition();
+      }
+
+      function updatePreviewPosition() {
+        $('#photoPreview').style.objectPosition = `${$('#photoOffsetX').value}% ${$('#photoOffsetY').value}%`;
+      }
+
+      function bindPhotoDrag() {
+        let dragged = null;
+        $$('[data-photo-row]').forEach(row => {
+          row.addEventListener('dragstart', () => {
+            dragged = row;
+            row.classList.add('dragging');
+          });
+          row.addEventListener('dragend', async () => {
+            row.classList.remove('dragging');
+            dragged = null;
+            const ordered = $$('[data-photo-row]').map(item => item.dataset.photoRow);
+            setBusy(true);
+            try {
+              state.data = await gas('reorderAdminPhotos', state.secret, ordered);
+              showToast('Orden de fotos actualizado.');
+              renderAll();
+            } catch (error) {
+              showToast(error.message || String(error));
+            } finally {
+              setBusy(false);
+            }
+          });
+          row.addEventListener('dragover', event => {
+            event.preventDefault();
+            if (!dragged || dragged === row) return;
+            const body = row.parentElement;
+            const rect = row.getBoundingClientRect();
+            const after = event.clientY > rect.top + rect.height / 2;
+            body.insertBefore(dragged, after ? row.nextSibling : row);
+          });
+        });
+      }
+
+      function cropImage(file, aspectValue, offsetXPercent, offsetYPercent) {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onerror = () => reject(new Error('No se pudo leer la imagen.'));
+          reader.onload = () => {
+            const image = new Image();
+            image.onerror = () => reject(new Error('No se pudo preparar la imagen.'));
+            image.onload = () => {
+              const [aspectW, aspectH] = aspectValue.split(':').map(Number);
+              const targetRatio = aspectW / aspectH;
+              const imageRatio = image.naturalWidth / image.naturalHeight;
+              let cropW = image.naturalWidth;
+              let cropH = image.naturalHeight;
+              let cropX = 0;
+              let cropY = 0;
+
+              if (imageRatio > targetRatio) {
+                cropW = cropH * targetRatio;
+                cropX = (image.naturalWidth - cropW) * clamp(offsetXPercent / 100, 0, 1);
+              } else {
+                cropH = cropW / targetRatio;
+                cropY = (image.naturalHeight - cropH) * clamp(offsetYPercent / 100, 0, 1);
+              }
+
+              resolve(makeCompressedCrop(image, cropX, cropY, cropW, cropH, targetRatio));
+            };
+            image.src = reader.result;
+          };
+          reader.readAsDataURL(file);
+        });
+      }
+
+      function makeCompressedCrop(image, cropX, cropY, cropW, cropH, targetRatio) {
+        const attempts = [
+          { width: 1280, quality: 0.82 },
+          { width: 1100, quality: 0.8 },
+          { width: 920, quality: 0.78 }
+        ];
+        let result = '';
+        attempts.some(settings => {
+          const outputW = Math.min(settings.width, Math.round(cropW));
+          const outputH = Math.round(outputW / targetRatio);
+          const canvas = document.createElement('canvas');
+          canvas.width = outputW;
+          canvas.height = outputH;
+          const context = canvas.getContext('2d');
+          context.drawImage(image, cropX, cropY, cropW, cropH, 0, 0, outputW, outputH);
+          result = canvas.toDataURL('image/jpeg', settings.quality);
+          return result.length < 1800000;
+        });
+        return result;
+      }
+
+      function clamp(value, min, max) {
+        return Math.max(min, Math.min(max, value));
+      }
+
+      function setBusy(isBusy) {
+        $$('button').forEach(button => {
+          button.disabled = isBusy || button.dataset.locked === 'true';
+        });
+      }
+
+      function gas(functionName, ...args) {
+        return postToAppsScript(functionName, args);
+      }
+
+      function postToAppsScript(functionName, args) {
+        const endpoint = String(ADMIN_CONFIG.apiBaseUrl || '').trim();
+        if (!endpoint) {
+          throw new Error('Configura apiBaseUrl en assets/admin-config.js con el link /exec de Apps Script.');
+        }
+
+        return new Promise((resolve, reject) => {
+          const requestId = `angels_${Date.now()}_${Math.random().toString(16).slice(2)}`;
+          const iframeName = `frame_${requestId}`;
+          const iframe = document.createElement('iframe');
+          const form = document.createElement('form');
+          const timeout = setTimeout(() => finish(null, new Error('La conexion esta tardando mas de lo normal.')), apiTimeoutFor(functionName));
+
+          iframe.name = iframeName;
+          iframe.hidden = true;
+          iframe.style.display = 'none';
+
+          form.method = 'POST';
+          form.action = endpoint;
+          form.target = iframeName;
+          form.style.display = 'none';
+
+          addHiddenField(form, 'requestId', requestId);
+          addHiddenField(form, 'fn', functionName);
+          addHiddenField(form, 'args', JSON.stringify(args || []));
+
+          function onMessage(event) {
+            const message = event.data || {};
+            if (!message.angelsApi || message.requestId !== requestId) return;
+            if (message.ok) finish(message.data);
+            else finish(null, new Error(message.error || 'No se pudo completar la solicitud.'));
+          }
+
+          function finish(data, error) {
+            clearTimeout(timeout);
+            window.removeEventListener('message', onMessage);
+            removeNode(form);
+            removeNode(iframe);
+            if (error) reject(error);
+            else resolve(data);
+          }
+
+          window.addEventListener('message', onMessage);
+          document.body.appendChild(iframe);
+          document.body.appendChild(form);
+          form.submit();
+        });
+      }
+
+      function addHiddenField(form, name, value) {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = name;
+        input.value = value;
+        form.appendChild(input);
+      }
+
+      function removeNode(node) {
+        if (node && node.parentNode) node.parentNode.removeChild(node);
+      }
+
+      function apiTimeoutFor(functionName) {
+        if (['saveAdminPhoto', 'saveBeforeAfter', 'createReservation'].indexOf(functionName) !== -1) return 120000;
+        if (['getAdminData', 'runAdminReminders', 'installReminderTrigger'].indexOf(functionName) !== -1) return 60000;
+        return 40000;
+      }
+
+      function formatMoney(value) {
+        return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(Number(value || 0));
+      }
+
+      function showToast(message) {
+        const toast = $('#toast');
+        toast.textContent = message;
+        toast.classList.add('show');
+        clearTimeout(showToast.timer);
+        showToast.timer = setTimeout(() => toast.classList.remove('show'), 3600);
+      }
+
+      function refreshIcons() {
+        if (window.lucide) lucide.createIcons();
+      }
+
+      function escapeHtml(value) {
+        return String(value == null ? '' : value)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      function slug(value) {
+        const text = String(value || '');
+        const normalized = text.normalize ? text.normalize('NFD') : text;
+        return normalized
+          .replace(/[\u0300-\u036f]/g, '')
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-|-$/g, '');
+      }
+    </script>
+  </body>
+</html>
