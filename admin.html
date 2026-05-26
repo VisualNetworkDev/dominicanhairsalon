@@ -1498,15 +1498,15 @@
                 </div>
               </div>
               <div class="form-grid">
-                <div class="field full">
+                <div class="field full developer-only">
                   <label for="localName">Nombre del local</label>
                   <input id="localName" placeholder="Dominican Hair Salon">
                 </div>
-                <div class="field full">
+                <div class="field full developer-only">
                   <label for="logoUrl">Logo URL</label>
                   <input id="logoUrl" placeholder="https://...">
                 </div>
-                <div class="field full">
+                <div class="field full developer-only">
                   <label for="heroImageUrl">Imagen principal URL</label>
                   <input id="heroImageUrl" placeholder="https://...">
                 </div>
@@ -1567,19 +1567,19 @@
                 </div>
                 <label class="check module-payments">
                   <input id="paymentsEnabledPublic" type="checkbox">
-                  Pagos online publicos
+                  Mostrar pago online en pagina de clientas
                 </label>
                 <div class="field module-payments">
-                  <label for="paymentProvider">Proveedor de pago</label>
-                  <input id="paymentProvider" placeholder="Square, Stripe, Zelle, otro">
+                  <label for="paymentProvider">Proveedor o metodo de pago</label>
+                  <input id="paymentProvider" placeholder="Square, Stripe, Zelle, Cash App, PayPal u otro">
                 </div>
                 <div class="field module-payments">
-                  <label for="paymentCredentials">Credenciales / login interno</label>
-                  <input id="paymentCredentials" placeholder="Solo visible para Admin/Developer">
+                  <label for="paymentCredentials">Datos privados del proveedor</label>
+                  <input id="paymentCredentials" placeholder="Usuario, correo de cuenta o nota interna. No se muestra a clientas.">
                 </div>
                 <div class="field full module-payments">
-                  <label for="paymentInstructions">Instrucciones de pago publico</label>
-                  <textarea id="paymentInstructions" placeholder="Mensaje que vera la clienta si paga online."></textarea>
+                  <label for="paymentInstructions">Instrucciones visibles para clientas</label>
+                  <textarea id="paymentInstructions" placeholder="Mensaje que vera la clienta al elegir pagar online."></textarea>
                 </div>
                 <div class="field full">
                   <label>Dias abiertos</label>
@@ -4411,7 +4411,9 @@
       }
 
       function formatMoney(value) {
-        return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(Number(value || 0));
+        const number = Number(value);
+        const safe = Number.isFinite(number) && Math.abs(number) <= 10000000 ? number : 0;
+        return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(safe);
       }
 
       function showToast(message) {
