@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://unpkg.com">
     <script src="assets/admin-config.js?v=20260522-2"></script>
     <script defer src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
     <style>
       :root {
         --ink: #2c2528;
@@ -714,6 +715,36 @@
         border: 1px solid var(--line);
         border-radius: var(--radius);
         background: #1f171b;
+      }
+
+      .qr-status {
+        margin: 10px 0 0;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.45;
+      }
+
+      .module-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 12px;
+      }
+
+      .module-card {
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        padding: 14px;
+        background: #fffaf7;
+      }
+
+      .module-card strong {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--plum);
+      }
+
+      .module-card label {
+        margin-top: 8px;
       }
 
       .stage-card {
@@ -1434,17 +1465,24 @@
             </div>
             <div class="qr-box">
               <video id="qrVideo" class="qr-video" playsinline muted hidden></video>
+              <canvas id="qrCanvas" hidden></canvas>
               <div class="form-grid">
                 <div class="field full">
                   <label for="qrText">Token o contenido del QR</label>
                   <input id="qrText" placeholder="DHS|ID|TOKEN">
                 </div>
+                <div class="field full">
+                  <label for="qrImageFile">Foto del QR</label>
+                  <input id="qrImageFile" type="file" accept="image/*" capture="environment">
+                </div>
               </div>
               <div class="row-actions">
                 <button class="btn" type="button" id="startQrBtn"><i data-lucide="scan-line" aria-hidden="true"></i>Abrir camara</button>
+                <button class="btn secondary" type="button" id="openExternalQrBtn"><i data-lucide="external-link" aria-hidden="true"></i>Scanner externo</button>
                 <button class="btn secondary" type="button" id="validateQrBtn"><i data-lucide="badge-check" aria-hidden="true"></i>Validar</button>
                 <button class="btn secondary" type="button" id="stopQrBtn"><i data-lucide="x" aria-hidden="true"></i>Cancelar</button>
               </div>
+              <p id="qrCameraStatus" class="qr-status">Si Safari o Chrome bloquean la camara dentro de Apps Script, usa Scanner externo, sube una foto del QR o pega el token manualmente.</p>
             </div>
             <div id="qrResult"></div>
           </div>
@@ -1460,6 +1498,18 @@
                 </div>
               </div>
               <div class="form-grid">
+                <div class="field full">
+                  <label for="localName">Nombre del local</label>
+                  <input id="localName" placeholder="Dominican Hair Salon">
+                </div>
+                <div class="field full">
+                  <label for="logoUrl">Logo URL</label>
+                  <input id="logoUrl" placeholder="https://...">
+                </div>
+                <div class="field full">
+                  <label for="heroImageUrl">Imagen principal URL</label>
+                  <input id="heroImageUrl" placeholder="https://...">
+                </div>
                 <label class="check full">
                   <input id="contactVisible" type="checkbox">
                   Mostrar seccion Contactame
@@ -1492,10 +1542,45 @@
                   <label for="businessInterval">Intervalo min</label>
                   <input id="businessInterval" type="number" min="15" step="5">
                 </div>
-                <label class="check">
+                <label class="check module-reminders">
                   <input id="remindersEnabled" type="checkbox">
                   Recordatorios por email
                 </label>
+                <label class="check module-qr">
+                  <input id="qrEnabled" type="checkbox">
+                  QR activo
+                </label>
+                <label class="check module-qr">
+                  <input id="qrIncludeEmail" type="checkbox">
+                  Incluir QR en email/PDF
+                </label>
+                <div class="field module-qr">
+                  <label for="qrExpirationHours">Expiracion QR (horas)</label>
+                  <input id="qrExpirationHours" type="number" min="1" step="1">
+                </div>
+                <div class="field module-qr">
+                  <label for="qrStatus">Estado QR</label>
+                  <select id="qrStatus">
+                    <option value="Activo">Activo</option>
+                    <option value="Desactivado">Desactivado</option>
+                  </select>
+                </div>
+                <label class="check module-payments">
+                  <input id="paymentsEnabledPublic" type="checkbox">
+                  Pagos online publicos
+                </label>
+                <div class="field module-payments">
+                  <label for="paymentProvider">Proveedor de pago</label>
+                  <input id="paymentProvider" placeholder="Square, Stripe, Zelle, otro">
+                </div>
+                <div class="field module-payments">
+                  <label for="paymentCredentials">Credenciales / login interno</label>
+                  <input id="paymentCredentials" placeholder="Solo visible para Admin/Developer">
+                </div>
+                <div class="field full module-payments">
+                  <label for="paymentInstructions">Instrucciones de pago publico</label>
+                  <textarea id="paymentInstructions" placeholder="Mensaje que vera la clienta si paga online."></textarea>
+                </div>
                 <div class="field full">
                   <label>Dias abiertos</label>
                   <div id="openDays" class="day-checks"></div>
@@ -1520,8 +1605,8 @@
               <div class="row-actions">
                 <button class="btn" type="submit"><i data-lucide="settings" aria-hidden="true"></i>Guardar ajustes</button>
                 <button class="btn secondary" type="button" data-reset-form="settings"><i data-lucide="x" aria-hidden="true"></i>Cancelar</button>
-                <button class="btn secondary" type="button" id="sendRemindersBtn"><i data-lucide="bell-ring" aria-hidden="true"></i>Enviar recordatorios ahora</button>
-                <button class="btn secondary developer-only" type="button" id="installReminderTriggerBtn"><i data-lucide="alarm-clock" aria-hidden="true"></i>Activar automaticos</button>
+                <button class="btn secondary module-reminders" type="button" id="sendRemindersBtn"><i data-lucide="bell-ring" aria-hidden="true"></i>Enviar recordatorios ahora</button>
+                <button class="btn secondary developer-only module-reminders" type="button" id="installReminderTriggerBtn"><i data-lucide="alarm-clock" aria-hidden="true"></i>Activar automaticos</button>
                 <button class="btn secondary" type="button" id="clearPublicCacheBtn"><i data-lucide="rotate-cw" aria-hidden="true"></i>Actualizar pagina clientas</button>
               </div>
             </form>
@@ -1583,13 +1668,24 @@
 
         <section id="developer" class="tab-panel developer-only" hidden>
           <div class="grid">
-            <div class="panel">
+            <form id="developerConfigForm" class="panel">
               <div class="panel-head">
                 <div>
                   <h2>Developer Settings</h2>
-                  <div class="muted">Controles privados para acceso, paginas y configuraciones avanzadas.</div>
+                  <div class="muted">Panel interno privado para modulos, version y preparacion de migracion.</div>
                 </div>
               </div>
+              <div class="form-grid">
+                <div class="field">
+                  <label for="developerLocalName">Nombre del local</label>
+                  <input id="developerLocalName" placeholder="Dominican Hair Salon">
+                </div>
+                <div class="field">
+                  <label for="systemVersion">Version del sistema</label>
+                  <input id="systemVersion" readonly>
+                </div>
+              </div>
+              <div id="developerModuleGrid" class="module-grid" style="margin: 14px 0;"></div>
               <div class="compact-list">
                 <article class="blocked-card">
                   <strong>Acceso general</strong>
@@ -1598,7 +1694,7 @@
                 </article>
                 <article class="blocked-card">
                   <strong>Paginas</strong>
-                  <p class="muted">Usa Ajustes para activar/desactivar pagina de clientas y acceso admin. Developer puede desactivar ambos.</p>
+                  <p class="muted">Control rapido del modo mantenimiento y acceso interno.</p>
                   <div class="row-actions">
                     <button class="btn secondary" type="button" id="developerDisablePublicBtn">Deshabilitar clientas</button>
                     <button class="btn secondary" type="button" id="developerDisableAdminBtn">Deshabilitar usuarios</button>
@@ -1610,12 +1706,17 @@
                   <button class="btn secondary" type="button" onclick="document.querySelector('[data-tab=users]').click()">Ir a usuarios</button>
                 </article>
               </div>
-            </div>
+              <div class="row-actions" style="margin-top: 16px;">
+                <button class="btn" type="submit"><i data-lucide="save" aria-hidden="true"></i>Guardar Developer Settings</button>
+                <button class="btn secondary" type="button" data-reset-form="developer"><i data-lucide="x" aria-hidden="true"></i>Cancelar</button>
+              </div>
+            </form>
             <div class="panel">
               <div class="panel-head">
-                <h2>Logs importantes</h2>
+                <h2>Logs tecnicos</h2>
               </div>
-              <p class="muted">Apps Script guarda acciones importantes en la hoja Logs: usuario, fecha, rol, accion y detalle.</p>
+              <p class="muted">Los cambios internos se guardan en la hoja privada Developer. Esta informacion no se muestra a Admin ni staff.</p>
+              <div id="developerLogs" class="compact-list"></div>
             </div>
           </div>
         </section>
@@ -1651,7 +1752,8 @@
       const $$ = selector => Array.prototype.slice.call(document.querySelectorAll(selector));
       const ADMIN_CONFIG = Object.assign({
         apiBaseUrl: 'https://script.google.com/macros/s/AKfycbw7l_IyUV_R70TfyIzOqUC8hk0qySep2apa-zo6Zp5dv2F0LZO7hmSnQcMaCrro11XMzg/exec',
-        publicUrl: ''
+        publicUrl: '',
+        qrScannerUrl: ''
       }, window.ANGELS_ADMIN_CONFIG || {});
       const PUBLIC_APP_URL = ADMIN_CONFIG.publicUrl || './';
 
@@ -1701,6 +1803,7 @@
         afterFile: null,
         qrStream: null,
         qrTimer: null,
+        qrFrame: null,
         qrReservation: null
       };
 
@@ -1854,6 +1957,7 @@
         $('#newUserBtn').addEventListener('click', resetUserForm);
         $('#userRole').addEventListener('change', applyRoleDefaults);
         $('#settingsForm').addEventListener('submit', saveSettings);
+        $('#developerConfigForm').addEventListener('submit', saveDeveloperConfig);
         $('#blockedDayForm').addEventListener('submit', saveBlockedDay);
         $('#passwordForm').addEventListener('submit', changePassword);
         $('#developerPinForm').addEventListener('submit', changeDeveloperPin);
@@ -1870,6 +1974,8 @@
         $('#startQrBtn').addEventListener('click', startQrScanner);
         $('#stopQrBtn').addEventListener('click', stopQrScanner);
         $('#validateQrBtn').addEventListener('click', validateQrFromInput);
+        $('#qrImageFile').addEventListener('change', scanQrImageFile);
+        $('#openExternalQrBtn').addEventListener('click', openExternalQrScanner);
         $('#disableAllStaffBtn').addEventListener('click', disableAllStaffUsers);
         $('#developerDisablePublicBtn').addEventListener('click', () => setDeveloperPageState('public', false));
         $('#developerDisableAdminBtn').addEventListener('click', () => setDeveloperPageState('admin', false));
@@ -1882,6 +1988,7 @@
         $('#photoFocus').addEventListener('change', syncFocusSliders);
         $('#photoOffsetX').addEventListener('input', updatePreviewPosition);
         $('#photoOffsetY').addEventListener('input', updatePreviewPosition);
+        window.addEventListener('message', handleQrScannerMessage);
       }
 
       function setPublicLink() {
@@ -1989,6 +2096,7 @@
         renderReportControls();
         renderUserServiceChecks();
         renderUserAvailability();
+        renderDeveloperSettings();
         renderRoleHelp();
         applyAdminLanguage();
         refreshIcons();
@@ -2048,18 +2156,24 @@
         return Boolean(perms[permission]);
       }
 
+      function moduleEnabled(key) {
+        const modules = (state.data && state.data.modules) || {};
+        const module = modules[key];
+        return !module || module.enabled !== false;
+      }
+
       function applyAccessVisibility() {
         if (!state.data) return;
         const access = {
           reservations: true,
-          earnings: true,
+          earnings: moduleEnabled('REPORTS') && can('canEditAppointments'),
           timeoff: true,
           services: can('canEditPage'),
           photos: can('canEditPage'),
           discounts: can('canManageDiscounts'),
           events: can('canEditPage'),
-          qr: can('canEditAppointments'),
-          users: can('canManageUsers'),
+          qr: moduleEnabled('QR') && can('canEditAppointments'),
+          users: moduleEnabled('WORKERS') && can('canManageUsers'),
           settings: can('canEditPage'),
           developer: state.data.authRole === 'developer',
           help: true
@@ -2074,6 +2188,15 @@
         if (!access[state.tab]) setTab('reservations');
         $$('.payment-only').forEach(node => {
           node.classList.toggle('hidden-by-permission', !can('canManagePayments'));
+        });
+        $$('.module-payments').forEach(node => {
+          node.classList.toggle('hidden-by-permission', !moduleEnabled('ONLINE_PAYMENTS'));
+        });
+        $$('.module-qr').forEach(node => {
+          node.classList.toggle('hidden-by-permission', !moduleEnabled('QR'));
+        });
+        $$('.module-reminders').forEach(node => {
+          node.classList.toggle('hidden-by-permission', !moduleEnabled('REMINDERS'));
         });
         $$('.admin-timeoff-only').forEach(node => {
           node.classList.toggle('hidden-by-permission', !can('canManageTimeOff'));
@@ -2761,6 +2884,9 @@
         const settings = state.data && state.data.settings ? state.data.settings : {};
         const authRole = state.data && state.data.authRole ? state.data.authRole : 'admin';
         $('#rolePill').textContent = `${currentUser().displayName || authRole} - ${authRole}`;
+        $('#localName').value = settings.localName || state.data.appName || 'Dominican Hair Salon';
+        $('#logoUrl').value = settings.logoUrl || '';
+        $('#heroImageUrl').value = settings.heroImageUrl || '';
         $('#contactVisible').checked = Boolean(settings.contactVisible);
         $('#instagramVisible').checked = Boolean(settings.instagramVisible);
         $('#instagramUrl').value = settings.instagramUrl || '';
@@ -2775,6 +2901,14 @@
         $('#maintenanceMessage').value = settings.maintenanceMessage || 'La pagina esta temporalmente desactivada.';
         $('#remindersEnabled').checked = Boolean(settings.remindersEnabled);
         $('#reminderHours').value = settings.reminderHours || 24;
+        $('#qrEnabled').checked = settings.qrEnabled !== false;
+        $('#qrIncludeEmail').checked = settings.qrIncludeEmail !== false;
+        $('#qrExpirationHours').value = settings.qrExpirationHours || 72;
+        $('#qrStatus').value = settings.qrStatus || 'Activo';
+        $('#paymentsEnabledPublic').checked = Boolean(settings.paymentsEnabledPublic);
+        $('#paymentProvider').value = settings.paymentProvider || '';
+        $('#paymentCredentials').value = settings.paymentCredentials || '';
+        $('#paymentInstructions').value = settings.paymentInstructions || '';
         renderOpenDays(hours.openDays || [1, 2, 3, 4, 5, 6]);
         $('#currentPasswordField').hidden = authRole === 'developer';
         const security = state.data && state.data.security ? state.data.security : {};
@@ -2785,6 +2919,39 @@
         $('#newPassword').disabled = passwordLocked;
         $('#passwordForm button[type="submit"]').dataset.locked = passwordLocked ? 'true' : 'false';
         $('#passwordForm button[type="submit"]').disabled = passwordLocked;
+      }
+
+      function renderDeveloperSettings() {
+        if (!state.data || state.data.authRole !== 'developer') return;
+        const config = state.data.developerConfig || {};
+        const client = config.client || {};
+        const modules = config.modules || {};
+        $('#developerLocalName').value = client.localName || (state.data.settings && state.data.settings.localName) || state.data.appName || 'Dominican Hair Salon';
+        $('#systemVersion').value = state.data.systemVersion || '';
+        const moduleList = Object.keys(modules).map(key => modules[key]);
+        $('#developerModuleGrid').innerHTML = moduleList.map(module => `
+          <article class="module-card">
+            <strong>${escapeHtml(module.label || module.key)}</strong>
+            <label class="check">
+              <input type="checkbox" data-dev-module="${escapeHtml(module.key)}" data-dev-field="active" ${module.active ? 'checked' : ''}>
+              Activo
+            </label>
+            <label class="check">
+              <input type="checkbox" data-dev-module="${escapeHtml(module.key)}" data-dev-field="visibleAdmin" ${module.visibleAdmin ? 'checked' : ''}>
+              Visible para Admin
+            </label>
+          </article>
+        `).join('');
+        const logs = (config.logs || []).slice().reverse();
+        $('#developerLogs').innerHTML = logs.length
+          ? logs.map(log => `
+            <article class="blocked-card">
+              <strong>${escapeHtml(log.action || 'log')}</strong>
+              <p class="muted">${escapeHtml(log.date || '')} - ${escapeHtml(log.user || '')}</p>
+              <p>${escapeHtml(log.details || '')}</p>
+            </article>
+          `).join('')
+          : '<div class="empty">No hay logs tecnicos para mostrar.</div>';
       }
 
       function renderRoleHelp() {
@@ -2814,7 +2981,7 @@
             },
             {
               title: 'Ganancias y reportes',
-              show: true,
+              show: moduleEnabled('REPORTS'),
               steps: [
                 can('canViewGeneralEarnings') ? 'Admin ve totales generales, descuentos, propinas y cobrado.' : 'Staff ve solo su produccion asignada, sin ganancias generales, propinas ni descuentos globales.',
                 'Selecciona rango diario, semanal, mensual o personalizado.',
@@ -2874,17 +3041,17 @@
             },
             {
               title: 'Escanear QR',
-              show: can('canEditAppointments'),
+              show: can('canEditAppointments') && moduleEnabled('QR'),
               steps: [
                 'Abre Escanear QR desde el Admin con tu sesion iniciada.',
-                'Usa la camara o pega el token si el navegador no permite escaneo.',
+                'Usa la camara, Scanner externo, foto del QR o token manual si el navegador bloquea escaneo.',
                 'El sistema valida usuario activo, permiso, cita y asignacion.',
                 'Marca Llegó, En proceso o Completada segun avance la cita.'
               ]
             },
             {
               title: 'Usuarios',
-              show: can('canManageUsers'),
+              show: can('canManageUsers') && moduleEnabled('WORKERS'),
               steps: [
                 'Crea usuarios con nombre, correo, telefono, contrasena, rol y estado.',
                 'Asigna servicios permitidos y disponibilidad por dia/hora.',
@@ -2926,7 +3093,7 @@
             },
             {
               title: 'Earnings and reports',
-              show: true,
+              show: moduleEnabled('REPORTS'),
               steps: [
                 can('canViewGeneralEarnings') ? 'Admin sees general totals, discounts, tips and collected amounts.' : 'Staff only sees their own assigned production.',
                 'Choose daily, weekly, monthly or custom ranges.',
@@ -2986,17 +3153,17 @@
             },
             {
               title: 'Scan QR',
-              show: can('canEditAppointments'),
+              show: can('canEditAppointments') && moduleEnabled('QR'),
               steps: [
                 'Open Scan QR from Admin while signed in.',
-                'Use the camera or paste the token if the browser blocks scanning.',
+                'Use the camera, external scanner, QR image upload or manual token if the browser blocks scanning.',
                 'The system validates active user, permission, appointment and assignment.',
                 'Mark Arrived, In process or Completed as the appointment progresses.'
               ]
             },
             {
               title: 'Users',
-              show: can('canManageUsers'),
+              show: can('canManageUsers') && moduleEnabled('WORKERS'),
               steps: [
                 'Create users with name, email, phone, password, role and status.',
                 'Assign allowed services and day/time availability.',
@@ -3317,6 +3484,9 @@
       async function saveSettings(event) {
         event.preventDefault();
         await mutate('saveAdminSettings', {
+          localName: $('#localName').value,
+          logoUrl: $('#logoUrl').value,
+          heroImageUrl: $('#heroImageUrl').value,
           contactVisible: $('#contactVisible').checked,
           contactPhone: $('#contactPhone').value,
           contactEmail: $('#contactEmail').value,
@@ -3329,9 +3499,32 @@
           maintenanceMessage: $('#maintenanceMessage').value,
           remindersEnabled: $('#remindersEnabled').checked,
           reminderHours: $('#reminderHours').value,
+          qrEnabled: $('#qrEnabled').checked,
+          qrIncludeEmail: $('#qrIncludeEmail').checked,
+          qrExpirationHours: $('#qrExpirationHours').value,
+          qrStatus: $('#qrStatus').value,
+          paymentsEnabledPublic: $('#paymentsEnabledPublic').checked,
+          paymentProvider: $('#paymentProvider').value,
+          paymentCredentials: $('#paymentCredentials').value,
+          paymentInstructions: $('#paymentInstructions').value,
           publicEnabled: $('#publicEnabled').checked,
           adminEnabled: $('#adminEnabled').checked
         }, 'Ajustes guardados.');
+      }
+
+      async function saveDeveloperConfig(event) {
+        event.preventDefault();
+        const modules = {};
+        $$('[data-dev-module]').forEach(input => {
+          const key = input.dataset.devModule;
+          const field = input.dataset.devField;
+          if (!modules[key]) modules[key] = {};
+          modules[key][field] = input.checked;
+        });
+        await mutate('saveDeveloperConfig', {
+          localName: $('#developerLocalName').value,
+          modules
+        }, 'Developer Settings guardado.');
       }
 
       async function changePassword(event) {
@@ -3610,40 +3803,175 @@
       }
 
       async function startQrScanner() {
+        stopQrScanner();
         if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-          showToast('La camara no esta disponible en este navegador. Pega el token manualmente.');
-          return;
-        }
-        if (!('BarcodeDetector' in window)) {
-          showToast('Este navegador no soporta escaneo directo. Pega el token manualmente.');
+          setQrStatus('Este navegador no esta entregando camara aqui. Usa Scanner externo, sube una foto del QR o pega el token.');
+          showToast('Camara no disponible en este entorno.');
           return;
         }
         try {
           const video = $('#qrVideo');
-          state.qrStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
-          video.srcObject = state.qrStream;
+          const constraints = [
+            { video: { facingMode: { ideal: 'environment' } }, audio: false },
+            { video: true, audio: false }
+          ];
+          let stream = null;
+          let lastError = null;
+          for (let index = 0; index < constraints.length && !stream; index += 1) {
+            try {
+              stream = await navigator.mediaDevices.getUserMedia(constraints[index]);
+            } catch (error) {
+              lastError = error;
+            }
+          }
+          if (!stream) throw lastError || new Error('Camara no disponible.');
+          state.qrStream = stream;
+          video.srcObject = stream;
           video.hidden = false;
           await video.play();
-          const detector = new BarcodeDetector({ formats: ['qr_code'] });
-          state.qrTimer = setInterval(async () => {
+          setQrStatus('Camara activa. Apunta al QR. Si no detecta, toma una foto del QR y subela aqui.');
+          runQrScanLoop(video);
+        } catch (error) {
+          setQrStatus('No se pudo abrir la camara dentro de esta pagina. En iPhone suele funcionar mejor el Scanner externo en HTTPS o subir una foto del QR.');
+          showToast('No se pudo abrir la camara.');
+        }
+      }
+
+      function runQrScanLoop(video) {
+        let detectorPromise = Promise.resolve(null);
+        if ('BarcodeDetector' in window) {
+          try {
+            detectorPromise = Promise.resolve(new BarcodeDetector({ formats: ['qr_code'] }));
+          } catch (error) {
+            detectorPromise = Promise.resolve(null);
+          }
+        }
+        detectorPromise.then(detector => {
+          const scan = async () => {
+            if (!state.qrStream || video.hidden) return;
             try {
-              const codes = await detector.detect(video);
-              if (codes && codes.length) {
-                const raw = codes[0].rawValue || '';
+              let raw = '';
+              if (detector) {
+                const codes = await detector.detect(video);
+                raw = codes && codes.length ? codes[0].rawValue || '' : '';
+              }
+              if (!raw) raw = decodeQrFromVideo(video);
+              if (raw) {
                 $('#qrText').value = raw;
                 stopQrScanner();
                 validateQr(raw);
+                return;
               }
-            } catch (error) {}
-          }, 700);
-        } catch (error) {
-          showToast('No se pudo abrir la camara. Puedes pegar el token manualmente.');
+            } catch (error) {
+              if (!window.jsQR) setQrStatus('Tu navegador no soporta BarcodeDetector y jsQR no cargo. Usa foto del QR o token manual.');
+            }
+            state.qrFrame = requestAnimationFrame(scan);
+          };
+          state.qrFrame = requestAnimationFrame(scan);
+        });
+      }
+
+      function decodeQrFromVideo(video) {
+        if (!window.jsQR || !video.videoWidth || !video.videoHeight) return '';
+        const canvas = $('#qrCanvas');
+        const context = canvas.getContext('2d', { willReadFrequently: true });
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        return decodeQrFromCanvas(canvas);
+      }
+
+      function decodeQrFromCanvas(canvas) {
+        if (!window.jsQR) return '';
+        const context = canvas.getContext('2d', { willReadFrequently: true });
+        const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+        const code = window.jsQR(imageData.data, imageData.width, imageData.height, { inversionAttempts: 'attemptBoth' });
+        return code && code.data ? code.data : '';
+      }
+
+      async function scanQrImageFile(event) {
+        const file = event.target.files && event.target.files[0];
+        if (!file) return;
+        if (!/^image\//i.test(file.type)) {
+          showToast('Selecciona una imagen del QR.');
+          event.target.value = '';
+          return;
         }
+        try {
+          const dataUrl = await readFileAsDataUrl(file);
+          const image = await loadImageElement(dataUrl);
+          const canvas = $('#qrCanvas');
+          const maxSide = 1600;
+          const scale = Math.min(1, maxSide / Math.max(image.naturalWidth || image.width, image.naturalHeight || image.height));
+          canvas.width = Math.max(1, Math.round((image.naturalWidth || image.width) * scale));
+          canvas.height = Math.max(1, Math.round((image.naturalHeight || image.height) * scale));
+          const context = canvas.getContext('2d', { willReadFrequently: true });
+          context.drawImage(image, 0, 0, canvas.width, canvas.height);
+          let raw = '';
+          if ('BarcodeDetector' in window) {
+            try {
+              const detector = new BarcodeDetector({ formats: ['qr_code'] });
+              const codes = await detector.detect(canvas);
+              raw = codes && codes.length ? codes[0].rawValue || '' : '';
+            } catch (error) {}
+          }
+          if (!raw) raw = decodeQrFromCanvas(canvas);
+          if (!raw) throw new Error('No pude leer el QR de esa imagen. Intenta una foto mas clara o pega el token.');
+          $('#qrText').value = raw;
+          setQrStatus('QR leido desde imagen. Validando cita...');
+          await validateQr(raw);
+        } catch (error) {
+          setQrStatus(error.message || String(error));
+          showToast(error.message || String(error));
+        } finally {
+          event.target.value = '';
+        }
+      }
+
+      function readFileAsDataUrl(file) {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = () => reject(new Error('No se pudo leer la imagen.'));
+          reader.readAsDataURL(file);
+        });
+      }
+
+      function loadImageElement(src) {
+        return new Promise((resolve, reject) => {
+          const image = new Image();
+          image.onload = () => resolve(image);
+          image.onerror = () => reject(new Error('No se pudo cargar la imagen.'));
+          image.src = src;
+        });
+      }
+
+      function openExternalQrScanner() {
+        const base = ADMIN_CONFIG.publicUrl || ADMIN_CONFIG.apiBaseUrl || window.location.href;
+        const fallback = base.indexOf('?') === -1 ? `${base}?page=qr` : `${base}&page=qr`;
+        const url = ADMIN_CONFIG.qrScannerUrl || fallback;
+        const popup = window.open(url, 'dhsQrScanner', 'width=460,height=720');
+        if (!popup) showToast('Permite ventanas emergentes o abre qr-scanner.html directamente.');
+        else setQrStatus('Scanner externo abierto. Cuando detecte un QR, enviara el token a esta pagina si el navegador lo permite.');
+      }
+
+      function handleQrScannerMessage(event) {
+        const data = event && event.data ? event.data : null;
+        if (!data || data.type !== 'DHS_QR_TOKEN' || !data.raw) return;
+        $('#qrText').value = data.raw;
+        validateQr(data.raw);
+      }
+
+      function setQrStatus(message) {
+        const node = $('#qrCameraStatus');
+        if (node) node.textContent = message;
       }
 
       function stopQrScanner() {
         if (state.qrTimer) clearInterval(state.qrTimer);
+        if (state.qrFrame) cancelAnimationFrame(state.qrFrame);
         state.qrTimer = null;
+        state.qrFrame = null;
         if (state.qrStream) {
           state.qrStream.getTracks().forEach(track => track.stop());
         }
@@ -3653,6 +3981,7 @@
           $('#qrVideo').srcObject = null;
           $('#qrVideo').hidden = true;
         }
+        setQrStatus('Camara cerrada. Tambien puedes subir una foto del QR o pegar el token.');
       }
 
       async function mutate(functionName, payloadOrRow, statusOrExtra, maybeMessage) {
@@ -3829,7 +4158,8 @@
           beforeAfter: resetBeforeAfterForm,
           blocked: resetBlockedDayForm,
           event: resetEventForm,
-          settings: renderSettings
+          settings: renderSettings,
+          developer: renderDeveloperSettings
         };
         if (map[name]) map[name]();
       }
