@@ -747,6 +747,32 @@
         margin-top: 8px;
       }
 
+      .payment-config-card {
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: #fffaf7;
+        padding: 14px;
+        margin: 10px 0 14px;
+      }
+
+      .payment-status-pill {
+        display: inline-flex;
+        width: fit-content;
+        border-radius: 999px;
+        padding: 7px 10px;
+        background: rgba(194, 141, 85, 0.14);
+        color: #8b5b23;
+        font-size: 12px;
+        font-weight: 900;
+      }
+
+      .payment-provider-help {
+        margin: 8px 0 0;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.45;
+      }
+
       .stage-card {
         border: 1px solid var(--line);
         border-radius: var(--radius);
@@ -1565,21 +1591,66 @@
                     <option value="Desactivado">Desactivado</option>
                   </select>
                 </div>
-                <label class="check module-payments">
-                  <input id="paymentsEnabledPublic" type="checkbox">
-                  Mostrar pago online en pagina de clientas
-                </label>
-                <div class="field module-payments">
-                  <label for="paymentProvider">Proveedor o metodo de pago</label>
-                  <input id="paymentProvider" placeholder="Square, Stripe, Zelle, Cash App, PayPal u otro">
-                </div>
-                <div class="field module-payments">
-                  <label for="paymentCredentials">Datos privados del proveedor</label>
-                  <input id="paymentCredentials" placeholder="Usuario, correo de cuenta o nota interna. No se muestra a clientas.">
-                </div>
                 <div class="field full module-payments">
-                  <label for="paymentInstructions">Instrucciones visibles para clientas</label>
-                  <textarea id="paymentInstructions" placeholder="Mensaje que vera la clienta al elegir pagar online."></textarea>
+                  <label>Pagos online</label>
+                  <div class="payment-config-card">
+                    <span id="paymentStatusPill" class="payment-status-pill">No configurado</span>
+                    <p id="paymentProviderHelp" class="payment-provider-help">Selecciona un proveedor para ver los pasos de configuracion.</p>
+                    <div class="form-grid" style="margin-top: 12px;">
+                      <div class="field">
+                        <label for="paymentProvider">Proveedor de pago</label>
+                        <select id="paymentProvider">
+                          <option value="none">Ninguno</option>
+                          <option value="stripe">Stripe</option>
+                          <option value="square">Square</option>
+                          <option value="paypal">PayPal</option>
+                          <option value="manual_link">Link manual</option>
+                          <option value="manual_transfer">Zelle / Cash App / Venmo</option>
+                        </select>
+                      </div>
+                      <div class="field">
+                        <label for="paymentType">Tipo de pago</label>
+                        <select id="paymentType">
+                          <option value="deposit">Deposito</option>
+                          <option value="full">Pago completo</option>
+                          <option value="both">Deposito y completo</option>
+                        </select>
+                      </div>
+                      <div class="field payment-link-field full">
+                        <label for="paymentLink">Payment Link</label>
+                        <input id="paymentLink" placeholder="https://...">
+                      </div>
+                      <div class="field payment-manual-field">
+                        <label for="paymentManualMethod">Metodo manual</label>
+                        <input id="paymentManualMethod" placeholder="Zelle, Cash App, Venmo">
+                      </div>
+                      <div class="field">
+                        <label for="paymentDepositPercent">Deposito %</label>
+                        <input id="paymentDepositPercent" type="number" min="0" max="100" step="1" value="20">
+                      </div>
+                      <div class="field">
+                        <label for="paymentDepositAmount">Deposito fijo</label>
+                        <input id="paymentDepositAmount" type="number" min="0" step="0.01" value="0">
+                      </div>
+                      <label class="check">
+                        <input id="paymentsEnabledPublic" type="checkbox">
+                        Mostrar este metodo en pagina de clientas
+                      </label>
+                      <label class="check">
+                        <input id="paymentAllowCash" type="checkbox" checked>
+                        Permitir pago cash/local
+                      </label>
+                      <div class="field full">
+                        <label for="paymentInstructions">Instrucciones visibles para clientas</label>
+                        <textarea id="paymentInstructions" placeholder="Mensaje que vera la clienta al elegir pagar online."></textarea>
+                      </div>
+                    </div>
+                    <div class="row-actions">
+                      <button class="btn secondary mini" type="button" id="pastePaymentLinkBtn">Pegar Payment Link</button>
+                      <button class="btn secondary mini" type="button" id="testPaymentLinkBtn">Testear link de pago</button>
+                      <a class="btn secondary mini" id="paymentProviderOfficialLink" href="#" target="_blank" rel="noopener">Ir al proveedor</a>
+                    </div>
+                  </div>
                 </div>
                 <div class="field full">
                   <label>Dias abiertos</label>
@@ -1957,6 +2028,11 @@
         $('#newUserBtn').addEventListener('click', resetUserForm);
         $('#userRole').addEventListener('change', applyRoleDefaults);
         $('#settingsForm').addEventListener('submit', saveSettings);
+        $('#paymentProvider').addEventListener('change', updatePaymentProviderUi);
+        $('#paymentsEnabledPublic').addEventListener('change', updatePaymentProviderUi);
+        $('#paymentLink').addEventListener('input', updatePaymentProviderUi);
+        $('#pastePaymentLinkBtn').addEventListener('click', pastePaymentLink);
+        $('#testPaymentLinkBtn').addEventListener('click', testPaymentLink);
         $('#developerConfigForm').addEventListener('submit', saveDeveloperConfig);
         $('#blockedDayForm').addEventListener('submit', saveBlockedDay);
         $('#passwordForm').addEventListener('submit', changePassword);
@@ -2906,9 +2982,15 @@
         $('#qrExpirationHours').value = settings.qrExpirationHours || 72;
         $('#qrStatus').value = settings.qrStatus || 'Activo';
         $('#paymentsEnabledPublic').checked = Boolean(settings.paymentsEnabledPublic);
-        $('#paymentProvider').value = settings.paymentProvider || '';
-        $('#paymentCredentials').value = settings.paymentCredentials || '';
+        $('#paymentProvider').value = settings.paymentProvider || 'none';
+        $('#paymentLink').value = settings.paymentLink || '';
+        $('#paymentType').value = settings.paymentType || 'both';
+        $('#paymentDepositPercent').value = settings.paymentDepositPercent || 20;
+        $('#paymentDepositAmount').value = settings.paymentDepositAmount || 0;
+        $('#paymentAllowCash').checked = settings.paymentAllowCash !== false;
+        $('#paymentManualMethod').value = settings.paymentManualMethod || '';
         $('#paymentInstructions').value = settings.paymentInstructions || '';
+        updatePaymentProviderUi();
         renderOpenDays(hours.openDays || [1, 2, 3, 4, 5, 6]);
         $('#currentPasswordField').hidden = authRole === 'developer';
         const security = state.data && state.data.security ? state.data.security : {};
@@ -2919,6 +3001,68 @@
         $('#newPassword').disabled = passwordLocked;
         $('#passwordForm button[type="submit"]').dataset.locked = passwordLocked ? 'true' : 'false';
         $('#passwordForm button[type="submit"]').disabled = passwordLocked;
+      }
+
+      function updatePaymentProviderUi() {
+        const provider = $('#paymentProvider') ? $('#paymentProvider').value : 'none';
+        const link = $('#paymentLink') ? $('#paymentLink').value.trim() : '';
+        const enabled = $('#paymentsEnabledPublic') ? $('#paymentsEnabledPublic').checked : false;
+        const needsLink = ['stripe', 'square', 'paypal', 'manual_link'].includes(provider);
+        const manual = provider === 'manual_transfer';
+        $$('.payment-link-field').forEach(node => node.hidden = !needsLink);
+        $$('.payment-manual-field').forEach(node => node.hidden = !manual);
+        const official = {
+          stripe: 'https://dashboard.stripe.com/payment-links',
+          square: 'https://squareup.com/dashboard/online-checkout/links',
+          paypal: 'https://www.paypal.com/business',
+          manual_link: 'https://www.google.com/search?q=create+payment+link',
+          manual_transfer: 'https://www.google.com/search?q=Zelle+Cash+App+Venmo+business+payment'
+        }[provider] || '#';
+        $('#paymentProviderOfficialLink').href = official;
+        $('#paymentProviderOfficialLink').hidden = provider === 'none';
+        const help = {
+          none: 'Pagos online desactivados. La clienta solo vera pago en local si esta permitido.',
+          stripe: 'Entra a Stripe, crea un Payment Link y pegalo aqui. No guardes claves secretas.',
+          square: 'Entra a Square, crea un Payment Link y pegalo aqui. Ideal para salones que cobran presencial y online.',
+          paypal: 'Entra a PayPal Business, copia tu link de pago o checkout y pegalo aqui.',
+          manual_link: 'Usa cualquier link externo de pago. La clienta vera un boton con este enlace.',
+          manual_transfer: 'Pago manual: escribe Zelle, Cash App o Venmo e instrucciones para la clienta.'
+        }[provider] || '';
+        $('#paymentProviderHelp').textContent = help;
+        let status = 'No configurado';
+        if (provider !== 'none') {
+          if (needsLink && !link) status = 'Error: falta Payment Link';
+          else status = enabled ? 'Activo para clientas' : 'Configurado pero oculto';
+        }
+        $('#paymentStatusPill').textContent = status;
+      }
+
+      async function pastePaymentLink() {
+        if (!navigator.clipboard || !navigator.clipboard.readText) {
+          showToast('Este navegador no permite leer el portapapeles. Pegalo manualmente.');
+          return;
+        }
+        try {
+          const text = (await navigator.clipboard.readText()).trim();
+          if (!/^https?:\/\//i.test(text)) {
+            showToast('El portapapeles no contiene un link valido.');
+            return;
+          }
+          $('#paymentLink').value = text;
+          updatePaymentProviderUi();
+          showToast('Payment Link pegado.');
+        } catch (error) {
+          showToast('No se pudo leer el portapapeles. Pegalo manualmente.');
+        }
+      }
+
+      function testPaymentLink() {
+        const link = $('#paymentLink').value.trim();
+        if (!/^https?:\/\//i.test(link)) {
+          showToast('Agrega un Payment Link valido primero.');
+          return;
+        }
+        window.open(link, '_blank', 'noopener');
       }
 
       function renderDeveloperSettings() {
@@ -3505,7 +3649,12 @@
           qrStatus: $('#qrStatus').value,
           paymentsEnabledPublic: $('#paymentsEnabledPublic').checked,
           paymentProvider: $('#paymentProvider').value,
-          paymentCredentials: $('#paymentCredentials').value,
+          paymentLink: $('#paymentLink').value,
+          paymentType: $('#paymentType').value,
+          paymentDepositPercent: $('#paymentDepositPercent').value,
+          paymentDepositAmount: $('#paymentDepositAmount').value,
+          paymentAllowCash: $('#paymentAllowCash').checked,
+          paymentManualMethod: $('#paymentManualMethod').value,
           paymentInstructions: $('#paymentInstructions').value,
           publicEnabled: $('#publicEnabled').checked,
           adminEnabled: $('#adminEnabled').checked
