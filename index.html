@@ -1417,6 +1417,32 @@
         text-transform: uppercase;
       }
 
+      .payment-choice-card {
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: #fffaf7;
+        padding: 13px;
+        margin-bottom: 12px;
+      }
+
+      .payment-choice-card p {
+        margin: 7px 0 0;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.45;
+      }
+
+      .extras-disclaimer {
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: #fff9f4;
+        color: var(--muted);
+        padding: 12px;
+        font-size: 13px;
+        line-height: 1.5;
+        margin-top: 10px;
+      }
+
       .receipt-summary strong {
         color: var(--plum);
       }
@@ -1805,6 +1831,9 @@
               <label for="coupon" data-i18n="coupon">Cupón</label>
               <input id="coupon" autocomplete="off" placeholder="Opcional" data-i18n-placeholder="optional">
             </div>
+            <div class="field full payment-field">
+              <div id="paymentChoiceCard" class="payment-choice-card"></div>
+            </div>
             <div class="field payment-field">
               <label for="tip" data-i18n="tip">Propina opcional</label>
               <input id="tip" type="number" min="0" step="0.01" value="0">
@@ -1956,6 +1985,13 @@
           coupon: 'Cupón',
           tip: 'Propina opcional',
           paymentMethod: 'Metodo de pago',
+          paymentOnlineDeposit: 'Pagar deposito online',
+          paymentOnlineFull: 'Pagar completo online',
+          paymentProviderActive: 'Proveedor activo',
+          paymentDisclaimer: 'Los servicios adicionales agregados durante la cita se incluiran en el recibo final y se pagaran en el local al finalizar.',
+          paymentStatus: 'Estado de pago',
+          balancePending: 'Balance pendiente',
+          deposit: 'Deposito',
           payInSalon: 'Pagar cash en local',
           payOnline: 'Pagar online',
           priceConsult: 'Consultar',
@@ -2074,6 +2110,13 @@
           coupon: 'Coupon',
           tip: 'Optional tip',
           paymentMethod: 'Payment method',
+          paymentOnlineDeposit: 'Pay deposit online',
+          paymentOnlineFull: 'Pay in full online',
+          paymentProviderActive: 'Active provider',
+          paymentDisclaimer: 'Additional services added during the appointment will be included in the final receipt and paid at the salon when service is completed.',
+          paymentStatus: 'Payment status',
+          balancePending: 'Balance due',
+          deposit: 'Deposit',
           payInSalon: 'Pay cash in salon',
           payOnline: 'Pay online',
           priceConsult: 'Ask for price',
@@ -2191,6 +2234,12 @@
         if (typeof data.modules.workers === 'undefined') data.modules.workers = true;
         data.paymentSettings = data.paymentSettings && typeof data.paymentSettings === 'object' ? data.paymentSettings : {};
         if (typeof data.paymentSettings.allowCash === 'undefined') data.paymentSettings.allowCash = true;
+        data.paymentSettings.provider = data.paymentSettings.provider || 'none';
+        data.paymentSettings.providerLabel = data.paymentSettings.providerLabel || data.paymentSettings.provider || '';
+        data.paymentSettings.paymentType = data.paymentSettings.paymentType || 'both';
+        data.paymentSettings.depositPercent = Number(data.paymentSettings.depositPercent || 0);
+        data.paymentSettings.depositAmount = Number(data.paymentSettings.depositAmount || 0);
+        data.paymentSettings.paymentLink = data.paymentSettings.paymentLink || '';
         data.paymentSettings.allowOnline = Boolean(data.modules.onlinePayments && data.paymentSettings.enabled !== false && data.paymentSettings.allowOnline);
         data.contact = data.contact && typeof data.contact === 'object' ? data.contact : {};
         data.siteStatus = data.siteStatus && typeof data.siteStatus === 'object' ? data.siteStatus : {};
@@ -2703,13 +2752,31 @@
         const allowOnline = Boolean(settings.allowOnline);
         const select = $('#paymentMethod');
         if (!select) return;
+        const paymentType = settings.paymentType || 'both';
+        const onlineOptions = [];
+        if (allowOnline && (paymentType === 'deposit' || paymentType === 'both')) {
+          onlineOptions.push(`<option value="online_deposit">${escapeHtml(t('paymentOnlineDeposit'))}</option>`);
+        }
+        if (allowOnline && (paymentType === 'full' || paymentType === 'both')) {
+          onlineOptions.push(`<option value="online_full">${escapeHtml(t('paymentOnlineFull'))}</option>`);
+        }
         select.innerHTML = [
-          `<option value="cash">${escapeHtml(t('payInSalon'))}</option>`,
-          allowOnline ? `<option value="online">${escapeHtml(t('payOnline'))}</option>` : ''
-        ].filter(Boolean).join('');
+          settings.allowCash !== false ? `<option value="cash">${escapeHtml(t('payInSalon'))}</option>` : '',
+          ...onlineOptions
+        ].filter(Boolean).join('') || `<option value="cash">${escapeHtml(t('payInSalon'))}</option>`;
         document.querySelectorAll('.payment-field').forEach(node => {
           node.hidden = false;
         });
+        const provider = settings.providerLabel || settings.provider || '';
+        const depositInfo = settings.depositAmount > 0
+          ? formatMoney(settings.depositAmount)
+          : (settings.depositPercent > 0 ? `${settings.depositPercent}%` : '');
+        $('#paymentChoiceCard').innerHTML = `
+          <strong>${escapeHtml(t('paymentMethod'))}</strong>
+          ${allowOnline ? `<p>${escapeHtml(t('paymentProviderActive'))}: ${escapeHtml(provider)}</p>` : `<p>${escapeHtml(t('payInSalon'))}</p>`}
+          ${depositInfo ? `<p>${escapeHtml(t('deposit'))}: ${escapeHtml(depositInfo)}</p>` : ''}
+          <p>${escapeHtml(settings.instructions || t('paymentDisclaimer'))}</p>
+        `;
       }
 
       function workerCanDoService(worker, service) {
@@ -2909,6 +2976,7 @@
           coupon: $('#coupon').value,
           tip: $('#tip') ? $('#tip').value : 0,
           paymentMethod: $('#paymentMethod') ? $('#paymentMethod').value : 'cash',
+          paymentType: ($('#paymentMethod') && $('#paymentMethod').value === 'online_full') ? 'full' : (($('#paymentMethod') && $('#paymentMethod').value === 'online_deposit') ? 'deposit' : 'cash'),
           notes: $('#notes').value,
           firstVisit: $('#firstVisit').checked,
           agreementAccepted: $('#agreementAccepted').checked,
@@ -2951,13 +3019,18 @@
               <div><span>${escapeHtml(t('receiptDate'))}</span><strong>${escapeHtml(reservation.date)} ${escapeHtml(t('at'))} ${escapeHtml(reservation.time)}</strong></div>
               <div><span>${escapeHtml(t('receiptStatus'))}</span><strong>${escapeHtml(statusLabel(reservation.status))}</strong></div>
               <div><span>${escapeHtml(t('paymentMethod'))}</span><strong>${escapeHtml(paymentLabel(reservation.paymentMethod))}</strong></div>
+              ${reservation.paymentStatus ? `<div><span>${escapeHtml(t('paymentStatus'))}</span><strong>${escapeHtml(reservation.paymentStatus)}</strong></div>` : ''}
               ${showPrices() ? `<div><span>${escapeHtml(t('receiptPrice'))}</span><strong>${formatMoney(reservation.price)}</strong></div>
               <div><span>${escapeHtml(t('receiptDiscount'))}</span><strong>${formatMoney(reservation.discount)}</strong></div>
               <div><span>${escapeHtml(t('tip'))}</span><strong>${formatMoney(reservation.tip || 0)}</strong></div>
+              ${Number(reservation.deposit || 0) > 0 ? `<div><span>${escapeHtml(t('deposit'))}</span><strong>${formatMoney(reservation.deposit)}</strong></div>` : ''}
+              <div><span>${escapeHtml(t('balancePending'))}</span><strong>${formatMoney(reservation.balancePending || reservation.total)}</strong></div>
               <div><span>${escapeHtml(t('receiptTotal'))}</span><strong>${formatMoney(reservation.total)}</strong></div>` : ''}
             </div>
+            <div class="extras-disclaimer">${escapeHtml(reservation.extrasDisclaimer || t('paymentDisclaimer'))}</div>
           </div>
           <div class="dialog-actions">
+            ${reservation.paymentLink ? `<a class="btn" href="${escapeHtml(reservation.paymentLink)}" target="_blank" rel="noopener"><i data-lucide="credit-card" aria-hidden="true"></i> ${escapeHtml(t('payOnline'))}</a>` : ''}
             ${reservation.receiptUrl ? `<a class="btn" href="${escapeHtml(reservation.receiptUrl)}" target="_blank" rel="noopener"><i data-lucide="file-down" aria-hidden="true"></i> ${escapeHtml(t('viewPdf'))}</a>` : ''}
             <button class="btn secondary" type="button" onclick="document.querySelector('#closeReceipt').click()">${escapeHtml(t('close'))}</button>
           </div>
@@ -3228,7 +3301,12 @@
           tip,
           total: roundMoney(coupon.total + tip),
           coupon: coupon.code,
-          paymentMethod: payload.paymentMethod === 'online' ? 'Online pendiente' : 'Pago en local',
+          paymentMethod: String(payload.paymentMethod || '').indexOf('online') !== -1 ? 'Online pendiente' : 'Pago en local',
+          paymentStatus: String(payload.paymentMethod || '').indexOf('online') !== -1 ? 'Pendiente de confirmacion' : 'Pendiente en local',
+          deposit: 0,
+          balancePending: total,
+          paymentLink: '',
+          extrasDisclaimer: t('paymentDisclaimer'),
           receiptUrl: ''
         };
       }
