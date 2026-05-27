@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dominican Hair Salon Admin</title>
     <link rel="preconnect" href="https://unpkg.com">
-    <script src="/dominicanhairsalon/assets/admin-config.js?v=20260527-rutas1"></script>
+    <script src="/dominicanhairsalon/assets/admin-config.js?v=20260527-hybrid1"></script>
     <script defer src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
     <style>
@@ -1813,6 +1813,10 @@
         qrReservation: null
       };
 
+      const ADMIN_BROWSER_CACHE_KEY = 'dhs_admin_fast_snapshot_v1';
+      const ADMIN_BROWSER_CACHE_MAX_MS = 5 * 60 * 1000;
+      const ADMIN_PREFETCH_TABS = ['photos', 'earnings'];
+
       const ADMIN_I18N = {
         es: {
           publicView: 'Vista clientas',
@@ -2062,27 +2066,32 @@
       async function loadAdminData() {
         if (!state.secret) return;
         setBusy(true);
+        let showedCached = false;
         try {
-          state.loadedTabs = {};
-          mergeAdminData(await gas('getAdminShellData', state.secret));
-          $('#brandName').textContent = `${state.data.appName} Admin`;
-          $('#login').classList.add('hidden');
-          $('#admin').classList.add('open');
-          $('#logoutBtn').hidden = false;
-          document.body.classList.toggle('developer-mode', false);
-          document.body.classList.toggle('staff-mode', state.data.authRole === 'staff');
-          applyAccessVisibility();
-          showLoginGreeting();
-          renderShell();
-          await loadAdminTab(state.tab || 'reservations', true);
+          const cached = loadAdminBrowserCache();
+          if (cached && cached.data) {
+            mergeAdminData(cached.data);
+            markHybridLoadedTabs(cached.loadedTabs || cached.data.loadedTabs || {});
+            openAdminInterfaceFromData(false);
+            showedCached = true;
+          }
+
+          const fresh = await gas('getAdminFastData', state.secret);
+          mergeAdminData(fresh);
+          markHybridLoadedTabs(fresh.loadedTabs || {});
+          saveAdminBrowserCache();
+          openAdminInterfaceFromData(!showedCached);
+          prefetchAdminTabs();
         } catch (error) {
-          storageRemove('sessionStorage', 'angels_admin_secret');
-          state.secret = '';
-          state.data = null;
-          state.loadedTabs = {};
-          $('#login').classList.remove('hidden');
-          $('#admin').classList.remove('open');
-          $('#logoutBtn').hidden = true;
+          if (!showedCached) {
+            storageRemove('sessionStorage', 'angels_admin_secret');
+            state.secret = '';
+            state.data = null;
+            state.loadedTabs = {};
+            $('#login').classList.remove('hidden');
+            $('#admin').classList.remove('open');
+            $('#logoutBtn').hidden = true;
+          }
           showToast(error.message || String(error));
         } finally {
           setBusy(false);
@@ -2105,7 +2114,63 @@
         state.data.settings = state.data.settings || {};
         state.data.modules = state.data.modules || {};
         state.data.permissions = state.data.permissions || {};
+        if (state.data.loadedTabs) markHybridLoadedTabs(state.data.loadedTabs);
         state.data.loadedAt = new Date().toISOString();
+      }
+
+
+      function saveAdminBrowserCache() {
+        if (!state.data) return;
+        try {
+          const snapshot = {
+            savedAt: Date.now(),
+            data: state.data,
+            loadedTabs: state.loadedTabs || {}
+          };
+          storageSet('localStorage', ADMIN_BROWSER_CACHE_KEY, JSON.stringify(snapshot));
+        } catch (error) {
+          console.warn('No se pudo guardar cache admin:', error.message);
+        }
+      }
+
+      function loadAdminBrowserCache() {
+        try {
+          const raw = storageGet('localStorage', ADMIN_BROWSER_CACHE_KEY, '');
+          if (!raw) return null;
+          const snapshot = JSON.parse(raw);
+          if (!snapshot || !snapshot.data || !snapshot.savedAt) return null;
+          if (Date.now() - Number(snapshot.savedAt) > ADMIN_BROWSER_CACHE_MAX_MS) return null;
+          return snapshot;
+        } catch (error) {
+          return null;
+        }
+      }
+
+      function openAdminInterfaceFromData(useGreeting) {
+        $('#brandName').textContent = `${state.data.appName} Admin`;
+        $('#login').classList.add('hidden');
+        $('#admin').classList.add('open');
+        $('#logoutBtn').hidden = false;
+        document.body.classList.toggle('developer-mode', false);
+        document.body.classList.toggle('staff-mode', state.data.authRole === 'staff');
+        applyAccessVisibility();
+        if (useGreeting) showLoginGreeting();
+        renderAll();
+      }
+
+      function markHybridLoadedTabs(loadedTabs) {
+        state.loadedTabs = Object.assign({}, state.loadedTabs || {}, loadedTabs || {});
+        ['reservations', 'services', 'timeoff', 'discounts', 'events', 'qr', 'users', 'settings', 'photos', 'help'].forEach(tab => {
+          if (tab !== 'earnings') state.loadedTabs[tab] = Boolean(state.loadedTabs[tab] || (state.data && state.data.loadedTabs && state.data.loadedTabs[tab]));
+        });
+      }
+
+      function prefetchAdminTabs() {
+        if (!state.secret || !state.data) return;
+        ADMIN_PREFETCH_TABS.forEach((tab, index) => {
+          if (state.loadedTabs && state.loadedTabs[tab]) return;
+          setTimeout(() => loadAdminTab(tab, false, true), 700 + index * 900);
+        });
       }
 
       function renderShell() {
@@ -2117,7 +2182,7 @@
         refreshIcons();
       }
 
-      async function loadAdminTab(tabName, force) {
+      async function loadAdminTab(tabName, force, quiet) {
         if (!state.secret || !state.data) return;
         const tab = tabName || state.tab || 'reservations';
         state.loadedTabs = state.loadedTabs || {};
@@ -2125,16 +2190,20 @@
           renderCurrentTab(tab);
           return;
         }
-        setBusy(true);
+        if (!quiet) {
+          renderCurrentTab(tab);
+          setBusy(true);
+        }
         try {
           const partial = await gas('getAdminTabData', state.secret, tab, getTabOptions(tab));
           mergeAdminData(partial);
           state.loadedTabs[tab] = true;
-          renderCurrentTab(tab);
+          saveAdminBrowserCache();
+          if (!quiet || tab === state.tab) renderCurrentTab(tab);
         } catch (error) {
-          showToast(error.message || String(error));
+          if (!quiet) showToast(error.message || String(error));
         } finally {
-          setBusy(false);
+          if (!quiet) setBusy(false);
         }
       }
 
@@ -2192,6 +2261,7 @@
 
       function logoutAdmin() {
         storageRemove('sessionStorage', 'angels_admin_secret');
+        storageRemove('localStorage', ADMIN_BROWSER_CACHE_KEY);
         state.secret = '';
         state.data = null;
         state.loadedTabs = {};
@@ -4300,7 +4370,11 @@
             result = await gas(functionName, state.secret, payloadOrRow);
             showToast(maybeMessage || statusOrExtra);
           }
-          if (result && typeof result === 'object') mergeAdminData(result);
+          if (result && typeof result === 'object') {
+            mergeAdminData(result);
+            markHybridLoadedTabs(result.loadedTabs || {});
+            saveAdminBrowserCache();
+          }
           const affectedTab = mutationTabFor(functionName);
           state.loadedTabs[affectedTab] = false;
           if (affectedTab !== state.tab && (affectedTab === 'services' || affectedTab === 'users')) {
