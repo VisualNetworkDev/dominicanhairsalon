@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cancelar o reprogramar cita | Dominican Hair Salon</title>
+  <script src="/dominicanhairsalon/assets/client-actions-config.js?v=20260527-phase7e1"></script>
+  <style>
+    :root{--ink:#2b2226;--muted:#75666b;--line:#eadde1;--paper:#fffaf7;--panel:#fff;--plum:#432233;--rose:#b76e79;--gold:#c28d55;--danger:#ad3f4b;--radius:10px;--shadow:0 16px 42px rgba(67,34,51,.14)}
+    *{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:linear-gradient(135deg,#fffaf7,#f3e8e1);color:var(--ink);min-height:100vh;padding:18px}.card{width:min(920px,100%);margin:0 auto;background:var(--panel);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:hidden}.hero{padding:24px;color:#fff;background:linear-gradient(135deg,var(--plum),var(--rose) 72%,var(--gold))}.hero h1{margin:0;font-family:Georgia,"Times New Roman",serif;font-size:clamp(30px,5vw,48px)}.hero p{margin:8px 0 0;color:rgba(255,255,255,.88);line-height:1.55}.content{padding:22px}.muted{color:var(--muted);line-height:1.55}.box,.alert{border:1px solid var(--line);border-radius:var(--radius);padding:14px;margin:14px 0;background:#fffaf7}.alert{background:#fff4f1}.alert.danger{color:var(--danger);background:rgba(173,63,75,.1)}.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}.summary div{border:1px solid var(--line);border-radius:var(--radius);padding:12px;background:#fff}.summary span{display:block;color:var(--muted);font-size:12px;font-weight:800;text-transform:uppercase}.summary strong{display:block;margin-top:6px;color:var(--plum)}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}label{display:block;font-weight:800;color:var(--muted);margin:10px 0 6px}input,textarea{width:100%;border:1px solid var(--line);border-radius:var(--radius);padding:12px;font:inherit;background:#fff}textarea{min-height:90px;resize:vertical}button{border:0;border-radius:999px;background:var(--plum);color:#fff;font-weight:900;padding:12px 16px;cursor:pointer}button.secondary{background:#fff;color:var(--plum);border:1px solid var(--line)}button.danger{background:var(--danger)}button:disabled{opacity:.55;cursor:not-allowed}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%) translateY(140%);max-width:min(560px,calc(100% - 24px));background:var(--plum);color:#fff;border-radius:var(--radius);padding:12px 14px;box-shadow:var(--shadow);transition:.2s}.toast.show{transform:translateX(-50%) translateY(0)}@media(max-width:760px){.grid{grid-template-columns:1fr}.content{padding:16px}}
+  </style>
+</head>
+<body>
+  <main class="card">
+    <section class="hero">
+      <h1>Cancelar o reprogramar cita</h1>
+      <p>Revisa la política de 24 horas antes de enviar tu solicitud. La reprogramación queda pendiente hasta confirmación del salón.</p>
+    </section>
+    <section class="content" id="app">
+      <div class="box">Cargando información de la cita...</div>
+    </section>
+  </main>
+  <div class="toast" id="toast"></div>
+  <script>
+    const $=s=>document.querySelector(s);
+    const CONFIG=Object.assign({apiBaseUrl:''}, window.DHS_CLIENT_ACTIONS_CONFIG||{});
+    const state={id:'', token:'', appointment:null};
+    document.addEventListener('DOMContentLoaded', init);
+    function init(){const params=new URLSearchParams(location.search||'');state.id=params.get('id')||'';state.token=params.get('token')||'';if(!state.id||!state.token){renderError('Este enlace no contiene una cita válida. Comunícate directamente con el salón.');return;} if(!CONFIG.apiBaseUrl||CONFIG.apiBaseUrl.indexOf('REPLACE_WITH_')!==-1){renderError('Falta configurar Client Actions API. Revisa assets/client-actions-config.js.');return;} loadAppointment();}
+    async function loadAppointment(){try{setLoading('Cargando información de la cita...');state.appointment=await gas('getAppointmentManageData',{id:state.id,token:state.token});renderAppointment(state.appointment);}catch(e){renderError(e.message||String(e));}}
+    function renderAppointment(data){$('#app').innerHTML=`
+      <div class="summary">
+        <div><span>ID</span><strong>${escapeHtml(data.id||'')}</strong></div>
+        <div><span>Clienta</span><strong>${escapeHtml(data.clientName||'')}</strong></div>
+        <div><span>Servicio</span><strong>${escapeHtml(data.service||'')}</strong></div>
+        <div><span>Fecha</span><strong>${escapeHtml(data.date||'')} ${escapeHtml(data.time||'')}</strong></div>
+        <div><span>Estado</span><strong>${escapeHtml(data.status||'')}</strong></div>
+      </div>
+      <div class="alert"><strong>Política de 24 horas</strong><p>${escapeHtml(data.feeMessage||data.policy||'')}</p><p>Fee estimado de cancelación: ${escapeHtml(data.cancelFee||'')}<br>Fee estimado de reprogramación: ${escapeHtml(data.rescheduleFee||'')}</p></div>
+      <div class="grid">
+        <form id="cancelForm" class="box"><h2>Cancelar cita</h2><p class="muted">Envía una solicitud de cancelación. El salón revisará si aplica algún cargo según la política aceptada.</p><button class="danger" type="submit">Solicitar cancelación</button></form>
+        <form id="rescheduleForm" class="box"><h2>Reprogramar cita</h2><label>Nueva fecha solicitada<input id="newDate" type="date" required></label><label>Nueva hora solicitada<input id="newTime" type="time" required></label><label>Motivo o nota<textarea id="reason" placeholder="Opcional"></textarea></label><button type="submit">Solicitar reprogramación</button></form>
+      </div>
+      <p class="muted">La reprogramación no queda confirmada hasta que el salón la apruebe.</p>`;
+      $('#cancelForm').addEventListener('submit', e=>{e.preventDefault();submitRequest({action:'cancel'});});
+      $('#rescheduleForm').addEventListener('submit', e=>{e.preventDefault();submitRequest({action:'reschedule',newDate:$('#newDate').value,newTime:$('#newTime').value,reason:$('#reason').value});});}
+    async function submitRequest(payload){try{setLoading('Enviando solicitud...');const result=await gas('submitAppointmentManageRequest',Object.assign({id:state.id,token:state.token},payload));$('#app').innerHTML=`<div class="alert"><strong>${escapeHtml(result.title||'Solicitud recibida')}</strong><p>${escapeHtml(result.message||'')}</p></div><div class="box"><strong>Política</strong><p>${escapeHtml(result.feeMessage||'')}</p></div><div class="actions"><button class="secondary" type="button" onclick="location.href='https://visualnetworkdev.github.io/dominicanhairsalon/index.html'">Volver a la página</button></div>`;toast('Solicitud recibida.');}catch(e){renderError(e.message||String(e));}}
+    function setLoading(text){$('#app').innerHTML=`<div class="box">${escapeHtml(text)}</div>`}
+    function renderError(message){$('#app').innerHTML=`<div class="alert danger"><strong>No se pudo abrir la cita</strong><p>${escapeHtml(message)}</p></div><p class="muted">Comunícate directamente con el salón si necesitas ayuda.</p>`}
+    function gas(fn,arg){return new Promise((resolve,reject)=>{const endpoint=CONFIG.apiBaseUrl;if(!endpoint)return reject(new Error('Falta URL del Client Actions API.'));const requestId='client_'+Date.now()+'_'+Math.random().toString(16).slice(2);const iframe=document.createElement('iframe');const form=document.createElement('form');const timer=setTimeout(()=>finish(null,new Error('La conexión tardó demasiado.')),45000);iframe.name='frame_'+requestId;iframe.hidden=true;form.method='POST';form.action=endpoint;form.target=iframe.name;form.style.display='none';add(form,'requestId',requestId);add(form,'fn',fn);add(form,'args',JSON.stringify([arg]));function onMessage(event){const msg=event.data||{};if(!msg.angelsApi||msg.requestId!==requestId)return;msg.ok?finish(msg.data):finish(null,new Error(msg.error||'Error API'));}function finish(data,error){clearTimeout(timer);window.removeEventListener('message',onMessage);form.remove();iframe.remove();error?reject(error):resolve(data)}window.addEventListener('message',onMessage);document.body.appendChild(iframe);document.body.appendChild(form);form.submit();});}
+    function add(form,name,value){const input=document.createElement('input');input.type='hidden';input.name=name;input.value=value;form.appendChild(input)}
+    function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.remove('show'),3200)}
+    function escapeHtml(v){return String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+  </script>
+</body>
+</html>
