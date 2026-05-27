@@ -1813,7 +1813,7 @@
         qrReservation: null
       };
 
-      const ADMIN_BROWSER_CACHE_KEY = 'dhs_admin_fast_snapshot_v1';
+      const ADMIN_BROWSER_CACHE_KEY = 'dhs_admin_fast_snapshot_v2';
       const ADMIN_BROWSER_CACHE_MAX_MS = 5 * 60 * 1000;
       const ADMIN_PREFETCH_TABS = ['photos', 'earnings'];
 
@@ -1942,7 +1942,7 @@
             showToast('Configura publicUrl en assets/admin-config.js.');
           }
         });
-        $('#refreshBtn').addEventListener('click', loadAdminData);
+        $('#refreshBtn').addEventListener('click', () => loadAdminData(true));
         $('#logoutBtn').addEventListener('click', logoutAdmin);
         $('#closeWelcomeBtn').addEventListener('click', closeWelcomeModal);
         $$('[data-admin-lang]').forEach(button => {
@@ -2063,17 +2063,22 @@
         if (helpCopy) helpCopy.textContent = adminText('helpCopy');
       }
 
-      async function loadAdminData() {
+      async function loadAdminData(forceFresh) {
         if (!state.secret) return;
         setBusy(true);
         let showedCached = false;
         try {
-          const cached = loadAdminBrowserCache();
+          if (forceFresh) {
+            storageRemove('localStorage', ADMIN_BROWSER_CACHE_KEY);
+            showToast('Actualizando informacion desde el servidor...');
+          }
+          const cached = forceFresh ? null : loadAdminBrowserCache();
           if (cached && cached.data) {
             mergeAdminData(cached.data);
             markHybridLoadedTabs(cached.loadedTabs || cached.data.loadedTabs || {});
             openAdminInterfaceFromData(false);
             showedCached = true;
+            showToast('Mostrando datos guardados. Actualizando informacion...');
           }
 
           const fresh = await loadAdminFastOrLegacyData();
@@ -2081,6 +2086,7 @@
           markHybridLoadedTabs(fresh.loadedTabs || {});
           saveAdminBrowserCache();
           openAdminInterfaceFromData(!showedCached);
+          if (showedCached) showToast('Informacion actualizada.');
           if (!fresh.legacyFallback) prefetchAdminTabs();
         } catch (error) {
           if (!showedCached) {
@@ -2223,6 +2229,7 @@
         if (!quiet) {
           renderCurrentTab(tab);
           setBusy(true);
+          showToast('Actualizando ' + readableTabName_(tab) + '...');
         }
         try {
           let partial;
@@ -2256,6 +2263,23 @@
         } finally {
           if (!quiet) setBusy(false);
         }
+      }
+
+      function readableTabName_(tab) {
+        const names = {
+          reservations: 'reservas',
+          earnings: 'ganancias',
+          timeoff: 'dias libres',
+          services: 'servicios',
+          photos: 'fotos',
+          discounts: 'descuentos',
+          events: 'eventos',
+          qr: 'QR',
+          users: 'usuarios',
+          settings: 'ajustes',
+          help: 'ayuda'
+        };
+        return names[tab] || 'seccion';
       }
 
       function getTabOptions(tab) {
@@ -4836,7 +4860,7 @@
 
       function apiTimeoutFor(functionName) {
         if (['saveAdminPhoto', 'saveBeforeAfter', 'createReservation', 'exportReportPdf'].indexOf(functionName) !== -1) return 120000;
-        if (['getAdminData', 'runAdminReminders', 'installReminderTrigger'].indexOf(functionName) !== -1) return 60000;
+        if (['getAdminData', 'getAdminFastData', 'getAdminTabData', 'runAdminReminders', 'installReminderTrigger'].indexOf(functionName) !== -1) return 60000;
         return 40000;
       }
 
