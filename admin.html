@@ -2076,12 +2076,12 @@
             showedCached = true;
           }
 
-          const fresh = await gas('getAdminFastData', state.secret);
+          const fresh = await loadAdminFastOrLegacyData();
           mergeAdminData(fresh);
           markHybridLoadedTabs(fresh.loadedTabs || {});
           saveAdminBrowserCache();
           openAdminInterfaceFromData(!showedCached);
-          prefetchAdminTabs();
+          if (!fresh.legacyFallback) prefetchAdminTabs();
         } catch (error) {
           if (!showedCached) {
             storageRemove('sessionStorage', 'angels_admin_secret');
@@ -2101,6 +2101,36 @@
       function renderAll() {
         renderShell();
         renderCurrentTab(state.tab || 'reservations');
+      }
+
+      async function loadAdminFastOrLegacyData() {
+        try {
+          return await gas('getAdminFastData', state.secret);
+        } catch (fastError) {
+          const message = fastError && fastError.message ? fastError.message : String(fastError || '');
+          if (!/no permitida|not allowed|not permitted/i.test(message)) throw fastError;
+          const legacy = await gas('getAdminData', state.secret);
+          legacy.legacyFallback = true;
+          legacy.loadedTabs = Object.assign({
+            reservations: true,
+            earnings: true,
+            timeoff: true,
+            services: true,
+            photos: true,
+            discounts: true,
+            events: true,
+            qr: true,
+            users: true,
+            settings: true,
+            help: true
+          }, legacy.loadedTabs || {});
+          return legacy;
+        }
+      }
+
+      function isApiFunctionNotAllowed_(error) {
+        const message = error && error.message ? error.message : String(error || '');
+        return /no permitida|not allowed|not permitted/i.test(message);
       }
 
       function mergeAdminData(partial) {
@@ -2195,8 +2225,29 @@
           setBusy(true);
         }
         try {
-          const partial = await gas('getAdminTabData', state.secret, tab, getTabOptions(tab));
+          let partial;
+          try {
+            partial = await gas('getAdminTabData', state.secret, tab, getTabOptions(tab));
+          } catch (tabError) {
+            if (!isApiFunctionNotAllowed_(tabError)) throw tabError;
+            partial = await gas('getAdminData', state.secret);
+            partial.legacyFallback = true;
+            partial.loadedTabs = Object.assign({
+              reservations: true,
+              earnings: true,
+              timeoff: true,
+              services: true,
+              photos: true,
+              discounts: true,
+              events: true,
+              qr: true,
+              users: true,
+              settings: true,
+              help: true
+            }, partial.loadedTabs || {});
+          }
           mergeAdminData(partial);
+          if (partial.loadedTabs) markHybridLoadedTabs(partial.loadedTabs);
           state.loadedTabs[tab] = true;
           saveAdminBrowserCache();
           if (!quiet || tab === state.tab) renderCurrentTab(tab);
