@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dominican Hair Salon Admin</title>
     <link rel="preconnect" href="https://unpkg.com">
-    <script src="assets/admin-config.js?v=20260527-api1"></script>
+    <script src="/dominicanhairsalon/assets/admin-config.js?v=20260527-rutas1"></script>
     <script defer src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
     <style>
@@ -563,9 +563,6 @@
         display: none;
       }
 
-      .developer-mode .developer-only {
-        display: block;
-      }
 
       .hidden-by-permission,
       .staff-mode .admin-timeoff-only,
@@ -876,7 +873,6 @@
           <button class="tab" type="button" data-tab="qr" data-admin-i18n="tabQr">Escanear QR</button>
           <button class="tab" type="button" data-tab="users" data-admin-i18n="tabUsers">Usuarios</button>
           <button class="tab" type="button" data-tab="settings" data-admin-i18n="tabSettings">Ajustes</button>
-          <button class="tab developer-only" type="button" data-tab="developer" data-admin-i18n="tabDeveloper">Developer</button>
           <button class="tab" type="button" data-tab="help" data-admin-i18n="tabHelp">Ayuda</button>
         </nav>
 
@@ -1698,14 +1694,6 @@
                 </div>
                 <button class="btn" type="submit"><i data-lucide="key-round" aria-hidden="true"></i>Cambiar contrasena</button>
               </form>
-
-              <form id="developerPinForm" class="developer-only" style="margin-top: 18px;">
-                <div class="field">
-                  <label for="newDeveloperPin">Nuevo PIN developer</label>
-                  <input id="newDeveloperPin" type="password">
-                </div>
-                <button class="btn secondary" type="submit"><i data-lucide="shield" aria-hidden="true"></i>Cambiar PIN developer</button>
-              </form>
             </div>
 
             <div class="panel">
@@ -1737,61 +1725,6 @@
           </div>
         </section>
 
-        <section id="developer" class="tab-panel developer-only" hidden>
-          <div class="grid">
-            <form id="developerConfigForm" class="panel">
-              <div class="panel-head">
-                <div>
-                  <h2>Developer Settings</h2>
-                  <div class="muted">Panel interno privado para modulos, version y preparacion de migracion.</div>
-                </div>
-              </div>
-              <div class="form-grid">
-                <div class="field">
-                  <label for="developerLocalName">Nombre del local</label>
-                  <input id="developerLocalName" placeholder="Dominican Hair Salon">
-                </div>
-                <div class="field">
-                  <label for="systemVersion">Version del sistema</label>
-                  <input id="systemVersion" readonly>
-                </div>
-              </div>
-              <div id="developerModuleGrid" class="module-grid" style="margin: 14px 0;"></div>
-              <div class="compact-list">
-                <article class="blocked-card">
-                  <strong>Acceso general</strong>
-                  <p class="muted">Puedes desactivar todos los usuarios staff sin tocar Admin ni Developer.</p>
-                  <button class="btn danger" type="button" id="disableAllStaffBtn"><i data-lucide="user-x" aria-hidden="true"></i>Quitar acceso a staff</button>
-                </article>
-                <article class="blocked-card">
-                  <strong>Paginas</strong>
-                  <p class="muted">Control rapido del modo mantenimiento y acceso interno.</p>
-                  <div class="row-actions">
-                    <button class="btn secondary" type="button" id="developerDisablePublicBtn">Deshabilitar clientas</button>
-                    <button class="btn secondary" type="button" id="developerDisableAdminBtn">Deshabilitar usuarios</button>
-                  </div>
-                </article>
-                <article class="blocked-card">
-                  <strong>Contrasenas y cuentas</strong>
-                  <p class="muted">Las contrasenas, bloqueos y estados se gestionan desde Usuarios. Las cuentas bloqueadas muestran intentos fallidos.</p>
-                  <button class="btn secondary" type="button" onclick="document.querySelector('[data-tab=users]').click()">Ir a usuarios</button>
-                </article>
-              </div>
-              <div class="row-actions" style="margin-top: 16px;">
-                <button class="btn" type="submit"><i data-lucide="save" aria-hidden="true"></i>Guardar Developer Settings</button>
-                <button class="btn secondary" type="button" data-reset-form="developer"><i data-lucide="x" aria-hidden="true"></i>Cancelar</button>
-              </div>
-            </form>
-            <div class="panel">
-              <div class="panel-head">
-                <h2>Logs tecnicos</h2>
-              </div>
-              <p class="muted">Los cambios internos se guardan en la hoja privada Developer. Esta informacion no se muestra a Admin ni staff.</p>
-              <div id="developerLogs" class="compact-list"></div>
-            </div>
-          </div>
-        </section>
-
         <section id="help" class="tab-panel" hidden>
           <div class="panel">
             <div class="panel-head">
@@ -1800,7 +1733,8 @@
                 <div class="muted">Pasos cortos para mantener Dominican Hair Salon actualizada desde el telefono.</div>
               </div>
             </div>
-            <div id="helpGrid" class="help-grid"></div>
+            <div class="note-box" id="developerSupportNotice">Para activar funciones adicionales, cambiar de plan o agregar módulos premium, contacta con el developer.</div>
+              <div id="helpGrid" class="help-grid"></div>
           </div>
         </section>
       </section>
@@ -1867,6 +1801,7 @@
       const state = {
         secret: storageGet('sessionStorage', 'angels_admin_secret', ''),
         data: null,
+        loadedTabs: {},
         tab: 'reservations',
         language: storageGet('localStorage', 'dhs_admin_language', 'es'),
         photoFile: null,
@@ -1897,12 +1832,12 @@
           tabQr: 'Escanear QR',
           tabUsers: 'Usuarios',
           tabSettings: 'Ajustes',
-          tabDeveloper: 'Developer',
+          
           tabHelp: 'Ayuda',
           helpTitle: 'Guia rapida',
           helpCopy: 'Paso a paso segun tu rol y permisos.',
           welcome: 'Bienvenido',
-          developerWelcome: 'Developer Settings activo',
+          
           role: 'Rol',
           noUsers: 'No hay usuarios.',
           user: 'Usuario',
@@ -1941,12 +1876,12 @@
           tabQr: 'Scan QR',
           tabUsers: 'Users',
           tabSettings: 'Settings',
-          tabDeveloper: 'Developer',
+          
           tabHelp: 'Help',
           helpTitle: 'Quick guide',
           helpCopy: 'Step by step based on your role and permissions.',
           welcome: 'Welcome',
-          developerWelcome: 'Developer Settings active',
+          
           role: 'Role',
           noUsers: 'No users found.',
           user: 'User',
@@ -2033,10 +1968,9 @@
         $('#paymentLink').addEventListener('input', updatePaymentProviderUi);
         $('#pastePaymentLinkBtn').addEventListener('click', pastePaymentLink);
         $('#testPaymentLinkBtn').addEventListener('click', testPaymentLink);
-        $('#developerConfigForm').addEventListener('submit', saveDeveloperConfig);
         $('#blockedDayForm').addEventListener('submit', saveBlockedDay);
         $('#passwordForm').addEventListener('submit', changePassword);
-        $('#developerPinForm').addEventListener('submit', changeDeveloperPin);
+        if ($('#developerPinForm')) $('#developerPinForm').addEventListener('submit', changeDeveloperPin);
         $('#newServiceBtn').addEventListener('click', resetServiceForm);
         $('#newDiscountBtn').addEventListener('click', resetDiscountForm);
         $('#newEventBtn').addEventListener('click', resetEventForm);
@@ -2052,9 +1986,7 @@
         $('#validateQrBtn').addEventListener('click', validateQrFromInput);
         $('#qrImageFile').addEventListener('change', scanQrImageFile);
         $('#openExternalQrBtn').addEventListener('click', openExternalQrScanner);
-        $('#disableAllStaffBtn').addEventListener('click', disableAllStaffUsers);
-        $('#developerDisablePublicBtn').addEventListener('click', () => setDeveloperPageState('public', false));
-        $('#developerDisableAdminBtn').addEventListener('click', () => setDeveloperPageState('admin', false));
+        if ($('#disableAllStaffBtn')) $('#disableAllStaffBtn').addEventListener('click', disableAllStaffUsers);
         $$('[data-report-range]').forEach(button => button.addEventListener('click', () => setReportRange(button.dataset.reportRange)));
         $$('[data-reset-form]').forEach(button => button.addEventListener('click', () => resetNamedForm(button.dataset.resetForm)));
         $('#photoFile').addEventListener('change', handlePhotoFile);
@@ -2131,19 +2063,23 @@
         if (!state.secret) return;
         setBusy(true);
         try {
-          state.data = await gas('getAdminData', state.secret);
+          state.loadedTabs = {};
+          mergeAdminData(await gas('getAdminShellData', state.secret));
           $('#brandName').textContent = `${state.data.appName} Admin`;
           $('#login').classList.add('hidden');
           $('#admin').classList.add('open');
           $('#logoutBtn').hidden = false;
-          document.body.classList.toggle('developer-mode', state.data.authRole === 'developer');
+          document.body.classList.toggle('developer-mode', false);
           document.body.classList.toggle('staff-mode', state.data.authRole === 'staff');
           applyAccessVisibility();
           showLoginGreeting();
-          renderAll();
+          renderShell();
+          await loadAdminTab(state.tab || 'reservations', true);
         } catch (error) {
           storageRemove('sessionStorage', 'angels_admin_secret');
           state.secret = '';
+          state.data = null;
+          state.loadedTabs = {};
           $('#login').classList.remove('hidden');
           $('#admin').classList.remove('open');
           $('#logoutBtn').hidden = true;
@@ -2154,26 +2090,102 @@
       }
 
       function renderAll() {
+        renderShell();
+        renderCurrentTab(state.tab || 'reservations');
+      }
+
+      function mergeAdminData(partial) {
+        state.data = Object.assign({}, state.data || {}, partial || {});
+        ['categories', 'services', 'photos', 'beforeAfter', 'discounts', 'users', 'timeOffRequests', 'events', 'blockedDays', 'clientHistory', 'reservations'].forEach(key => {
+          if (!Array.isArray(state.data[key])) state.data[key] = [];
+        });
+        state.data.dashboard = state.data.dashboard || {};
+        state.data.earnings = state.data.earnings || {};
+        state.data.reports = state.data.reports || {};
+        state.data.settings = state.data.settings || {};
+        state.data.modules = state.data.modules || {};
+        state.data.permissions = state.data.permissions || {};
+        state.data.loadedAt = new Date().toISOString();
+      }
+
+      function renderShell() {
         applyAccessVisibility();
-        renderCategoryList();
-        renderManualReservationOptions();
-        renderDashboard();
-        renderReservations();
-        renderEarnings();
-        renderServices();
-        renderPhotos();
-        renderBeforeAfter();
-        renderDiscounts();
-        renderEvents();
-        renderTimeOff();
-        renderUsers();
         renderSettings();
         renderBlockedDays();
-        renderReportControls();
-        renderUserServiceChecks();
-        renderUserAvailability();
-        renderDeveloperSettings();
         renderRoleHelp();
+        applyAdminLanguage();
+        refreshIcons();
+      }
+
+      async function loadAdminTab(tabName, force) {
+        if (!state.secret || !state.data) return;
+        const tab = tabName || state.tab || 'reservations';
+        state.loadedTabs = state.loadedTabs || {};
+        if (!force && state.loadedTabs[tab]) {
+          renderCurrentTab(tab);
+          return;
+        }
+        setBusy(true);
+        try {
+          const partial = await gas('getAdminTabData', state.secret, tab, getTabOptions(tab));
+          mergeAdminData(partial);
+          state.loadedTabs[tab] = true;
+          renderCurrentTab(tab);
+        } catch (error) {
+          showToast(error.message || String(error));
+        } finally {
+          setBusy(false);
+        }
+      }
+
+      function getTabOptions(tab) {
+        if (tab !== 'earnings') return {};
+        return {
+          from: $('#reportFrom') ? $('#reportFrom').value : '',
+          to: $('#reportTo') ? $('#reportTo').value : '',
+          worker: $('#reportWorker') ? $('#reportWorker').value : '',
+          service: $('#reportService') ? $('#reportService').value : ''
+        };
+      }
+
+      function renderCurrentTab(tabName) {
+        applyAccessVisibility();
+        const tab = tabName || state.tab || 'reservations';
+        if (tab === 'reservations') {
+          renderCategoryList();
+          renderManualReservationOptions();
+          renderDashboard();
+          renderReservations();
+        } else if (tab === 'earnings') {
+          renderEarnings();
+          renderReportControls();
+        } else if (tab === 'timeoff') {
+          renderTimeOff();
+        } else if (tab === 'services') {
+          renderCategoryList();
+          renderServices();
+          renderManualReservationOptions();
+        } else if (tab === 'photos') {
+          renderCategoryList();
+          renderPhotos();
+          renderBeforeAfter();
+        } else if (tab === 'discounts') {
+          renderCategoryList();
+          renderDiscounts();
+        } else if (tab === 'events') {
+          renderEvents();
+        } else if (tab === 'qr') {
+          renderCategoryList();
+        } else if (tab === 'users') {
+          renderUsers();
+          renderUserServiceChecks();
+          renderUserAvailability();
+        } else if (tab === 'settings') {
+          renderSettings();
+          renderBlockedDays();
+        } else if (tab === 'help') {
+          renderRoleHelp();
+        }
         applyAdminLanguage();
         refreshIcons();
       }
@@ -2182,6 +2194,7 @@
         storageRemove('sessionStorage', 'angels_admin_secret');
         state.secret = '';
         state.data = null;
+        state.loadedTabs = {};
         $('#secret').value = '';
         $('#login').classList.remove('hidden');
         $('#admin').classList.remove('open');
@@ -2196,7 +2209,7 @@
         showLoginGreeting.done = true;
         const user = currentUser();
         const role = (state.data.authRole || '').toUpperCase();
-        $('#welcomeTitle').textContent = state.data.authRole === 'developer' ? adminText('developerWelcome') : adminText('welcome');
+        $('#welcomeTitle').textContent = adminText('welcome');
         $('#welcomeName').textContent = user.displayName || user.email || user.username || 'Usuario';
         $('#welcomeRole').textContent = `${adminText('role')}: ${role}`;
         $('#welcomeModal').classList.add('open');
@@ -2287,6 +2300,7 @@
         $$('.tab-panel').forEach(panel => {
           panel.hidden = panel.id !== tabName;
         });
+        if (state.data) loadAdminTab(tabName, false);
       }
 
       function renderDashboard() {
@@ -3583,9 +3597,10 @@
         const response = prompt(`Respuesta para marcar como ${status}:`, '');
         setBusy(true);
         try {
-          state.data = await gas('updateTimeOffRequestStatus', state.secret, rowNumber, status, response || '');
+          mergeAdminData(await gas('updateTimeOffRequestStatus', state.secret, rowNumber, status, response || ''));
+          state.loadedTabs.timeoff = false;
           showToast(`Solicitud marcada como ${status}.`);
-          renderAll();
+          await loadAdminTab('timeoff', true);
         } catch (error) {
           showToast(error.message || String(error));
         } finally {
@@ -3659,21 +3674,6 @@
           publicEnabled: $('#publicEnabled').checked,
           adminEnabled: $('#adminEnabled').checked
         }, 'Ajustes guardados.');
-      }
-
-      async function saveDeveloperConfig(event) {
-        event.preventDefault();
-        const modules = {};
-        $$('[data-dev-module]').forEach(input => {
-          const key = input.dataset.devModule;
-          const field = input.dataset.devField;
-          if (!modules[key]) modules[key] = {};
-          modules[key][field] = input.checked;
-        });
-        await mutate('saveDeveloperConfig', {
-          localName: $('#developerLocalName').value,
-          modules
-        }, 'Developer Settings guardado.');
       }
 
       async function changePassword(event) {
@@ -3788,9 +3788,10 @@
         if (!input) return;
         setBusy(true);
         try {
-          state.data = await gas('saveAdminReservationNote', state.secret, rowNumber, input.value);
+          mergeAdminData(await gas('saveAdminReservationNote', state.secret, rowNumber, input.value));
+          state.loadedTabs.reservations = false;
           showToast('Nota interna guardada.');
-          renderAll();
+          await loadAdminTab('reservations', true);
         } catch (error) {
           showToast(error.message || String(error));
         } finally {
@@ -3817,9 +3818,10 @@
         setBusy(true);
         try {
           const result = await gas('runAdminReminders', state.secret);
-          state.data = result.data;
+          if (result && result.data) mergeAdminData(result.data);
+          state.loadedTabs.reservations = false;
           showToast(result.message || 'Recordatorios procesados.');
-          renderAll();
+          await loadAdminTab(state.tab || 'reservations', true);
         } catch (error) {
           showToast(error.message || String(error));
         } finally {
@@ -4019,10 +4021,12 @@
         if (!state.qrReservation) return;
         setBusy(true);
         try {
-          state.data = await gas('updateQrReservationStage', state.secret, state.qrReservation.rowNumber, stage);
+          mergeAdminData(await gas('updateQrReservationStage', state.secret, state.qrReservation.rowNumber, stage));
+          state.loadedTabs.qr = false;
+          state.loadedTabs.reservations = false;
           showToast(`Cita marcada: ${stage}.`);
           await validateQr($('#qrText').value.trim());
-          renderAll();
+          renderCurrentTab('qr');
         } catch (error) {
           showToast(error.message || String(error));
         } finally {
@@ -4041,10 +4045,12 @@
         };
         setBusy(true);
         try {
-          state.data = await gas('saveQrAppointmentExtra', state.secret, state.qrReservation.rowNumber, payload);
+          mergeAdminData(await gas('saveQrAppointmentExtra', state.secret, state.qrReservation.rowNumber, payload));
+          state.loadedTabs.qr = false;
+          state.loadedTabs.reservations = false;
           showToast('Extra agregado al recibo como pago local.');
           await validateQr($('#qrText').value.trim());
-          renderAll();
+          renderCurrentTab('qr');
         } catch (error) {
           showToast(error.message || String(error));
         } finally {
@@ -4056,12 +4062,14 @@
         if (!state.qrReservation) return;
         setBusy(true);
         try {
-          state.data = await gas('finishQrAppointment', state.secret, state.qrReservation.rowNumber);
+          mergeAdminData(await gas('finishQrAppointment', state.secret, state.qrReservation.rowNumber));
+          state.loadedTabs.qr = false;
+          state.loadedTabs.reservations = false;
           showToast('Cita finalizada. Recibo actualizado y extras marcados como pago local.');
           $('#qrResult').innerHTML = '';
           $('#qrText').value = '';
           state.qrReservation = null;
-          renderAll();
+          renderCurrentTab('qr');
         } catch (error) {
           showToast(error.message || String(error));
         } finally {
@@ -4251,17 +4259,55 @@
         setQrStatus('Camara cerrada. Tambien puedes subir una foto del QR o pegar el token.');
       }
 
+      function mutationTabFor(functionName) {
+        const map = {
+          saveAdminService: 'services',
+          saveAdminDiscount: 'discounts',
+          saveAdminPhoto: 'photos',
+          reorderAdminPhotos: 'photos',
+          saveBeforeAfter: 'photos',
+          deleteBeforeAfter: 'photos',
+          saveManualReservation: 'reservations',
+          updateAdminReservationStatus: 'reservations',
+          saveAdminReservationNote: 'reservations',
+          saveBlockedDay: 'settings',
+          deleteBlockedDay: 'settings',
+          saveTimeOffRequest: 'timeoff',
+          updateTimeOffRequestStatus: 'timeoff',
+          saveSpecialEvent: 'events',
+          deleteSpecialEvent: 'events',
+          saveAdminUser: 'users',
+          deleteAdminUser: 'users',
+          resetUserLoginLock: 'users',
+          disableAllStaffUsers: 'users',
+          deleteAdminPhoto: 'photos',
+          saveAdminSettings: 'settings',
+          saveQrAppointmentExtra: 'qr',
+          finishQrAppointment: 'qr',
+          updateQrReservationStage: 'qr'
+        };
+        return map[functionName] || state.tab || 'reservations';
+      }
+
       async function mutate(functionName, payloadOrRow, statusOrExtra, maybeMessage) {
         setBusy(true);
         try {
+          let result;
           if (functionName === 'updateAdminReservationStatus' || functionName === 'updateQrReservationStage') {
-            state.data = await gas(functionName, state.secret, payloadOrRow, statusOrExtra);
+            result = await gas(functionName, state.secret, payloadOrRow, statusOrExtra);
             showToast(maybeMessage);
           } else {
-            state.data = await gas(functionName, state.secret, payloadOrRow);
+            result = await gas(functionName, state.secret, payloadOrRow);
             showToast(maybeMessage || statusOrExtra);
           }
-          renderAll();
+          if (result && typeof result === 'object') mergeAdminData(result);
+          const affectedTab = mutationTabFor(functionName);
+          state.loadedTabs[affectedTab] = false;
+          if (affectedTab !== state.tab && (affectedTab === 'services' || affectedTab === 'users')) {
+            state.loadedTabs.reservations = false;
+            state.loadedTabs.qr = false;
+          }
+          await loadAdminTab(state.tab || affectedTab, true);
           return true;
         } catch (error) {
           showToast(error.message || String(error));
@@ -4425,8 +4471,7 @@
           beforeAfter: resetBeforeAfterForm,
           blocked: resetBlockedDayForm,
           event: resetEventForm,
-          settings: renderSettings,
-          developer: renderDeveloperSettings
+          settings: renderSettings
         };
         if (map[name]) map[name]();
       }
