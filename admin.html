@@ -2544,34 +2544,49 @@
         `;
       }
 
+      function serviceStageLabel(value) {
+        const text = String(value || 'Pendiente');
+        const key = normalizeText(text);
+        if (key === 'cliente_llego' || key === 'cliente llego' || key === 'llegada') return 'Cliente llego';
+        if (key === 'en_servicio' || key === 'en servicio') return 'En servicio';
+        if (key === 'completada' || key === 'completado') return 'Completada';
+        return text || 'Pendiente';
+      }
+
       function renderEarnings() {
         const earnings = (state.data && state.data.earnings) || {};
         const totals = earnings.totals || {};
+        const stages = earnings.serviceStages || {};
+        const appointments = earnings.appointments || [];
         $('#earningsHint').textContent = earnings.canViewGeneral
-          ? 'Vista general con propinas, descuentos y cobros.'
-          : 'Tu vista muestra solo tu produccion por servicios, sin propinas ni descuentos.';
+          ? 'Vista general con propinas, descuentos, cobros y estados del QR.'
+          : 'Tu vista muestra tu produccion y el estado de tus citas asignadas.';
         $('#earningsGrid').innerHTML = `
           <article class="metric-card"><span>Citas</span><strong>${totals.count || 0}</strong></article>
           <article class="metric-card"><span>Servicios</span><strong>${formatMoney(totals.serviceEarnings || 0)}</strong></article>
+          <article class="metric-card"><span>Cliente llego</span><strong>${stages.arrived || 0}</strong></article>
+          <article class="metric-card"><span>En servicio</span><strong>${stages.inService || 0}</strong></article>
+          <article class="metric-card"><span>Completadas</span><strong>${stages.completed || 0}</strong></article>
+          <article class="metric-card"><span>Extras local</span><strong>${formatMoney(stages.extrasLocal || 0)}</strong></article>
           <article class="metric-card ${earnings.canViewGeneral ? '' : 'hidden-by-permission'}"><span>Propinas</span><strong>${formatMoney(totals.tips || 0)}</strong></article>
           <article class="metric-card ${earnings.canViewGeneral ? '' : 'hidden-by-permission'}"><span>Descuentos</span><strong>${formatMoney(totals.discounts || 0)}</strong></article>
           <article class="metric-card ${earnings.canViewGeneral ? '' : 'hidden-by-permission'}"><span>Cobrado</span><strong>${formatMoney(totals.collected || 0)}</strong></article>
         `;
         const rows = earnings.byUser || [];
-        if (!rows.length) {
-          $('#earningsTable').innerHTML = '<div class="empty">No hay ganancias para mostrar.</div>';
-          return;
-        }
-        $('#earningsTable').innerHTML = `
+        const userTable = rows.length ? `
+          <h3 style="margin:14px 0 10px;">Resumen por trabajadora</h3>
           <div class="table-wrap">
             <table>
-              <thead><tr><th>Usuario</th><th>Citas</th><th>Servicios</th><th>Propinas</th><th>Descuentos</th><th>Cobrado</th></tr></thead>
+              <thead><tr><th>Usuario</th><th>Citas</th><th>Servicios</th><th>Llego</th><th>En servicio</th><th>Completadas</th><th>Propinas</th><th>Descuentos</th><th>Cobrado</th></tr></thead>
               <tbody>
                 ${rows.map(row => `
                   <tr>
                     <td><strong>${escapeHtml(row.displayName || row.username)}</strong><br><span class="muted">${escapeHtml(row.username)}</span></td>
                     <td>${row.count || 0}</td>
                     <td>${formatMoney(row.serviceEarnings || 0)}</td>
+                    <td>${row.arrived || 0}</td>
+                    <td>${row.inService || 0}</td>
+                    <td>${row.completed || 0}</td>
                     <td>${earnings.canViewGeneral ? formatMoney(row.tips || 0) : 'Privado'}</td>
                     <td>${earnings.canViewGeneral ? formatMoney(row.discounts || 0) : 'Privado'}</td>
                     <td>${earnings.canViewGeneral ? formatMoney(row.collected || 0) : 'Privado'}</td>
@@ -2579,8 +2594,28 @@
                 `).join('')}
               </tbody>
             </table>
-          </div>
-        `;
+          </div>` : '<div class="empty">No hay ganancias para mostrar.</div>';
+        const stageTable = appointments.length ? `
+          <h3 style="margin:18px 0 10px;">Estado de citas por QR</h3>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Cita</th><th>Servicio</th><th>Staff</th><th>Estado QR</th><th>Inicio / Fin</th><th>Extras local</th><th>Total</th></tr></thead>
+              <tbody>
+                ${appointments.map(item => `
+                  <tr>
+                    <td><strong>${escapeHtml(item.clientName || '')}</strong><br><span class="muted">${escapeHtml(item.id || '')}<br>${escapeHtml(item.date || '')} ${escapeHtml(item.time || '')}</span></td>
+                    <td>${escapeHtml(item.service || '')}</td>
+                    <td>${escapeHtml(item.assignedName || item.assignedUser || 'Sin asignar')}</td>
+                    <td><span class="status ${slug(serviceStageLabel(item.serviceStatus))}">${escapeHtml(serviceStageLabel(item.serviceStatus))}</span></td>
+                    <td><span class="muted">Inicio: ${escapeHtml(item.serviceStart || '—')}<br>Fin: ${escapeHtml(item.serviceEnd || '—')}</span></td>
+                    <td>${formatMoney(item.extraTotal || 0)}<br><span class="muted">Pago local</span></td>
+                    <td>${formatMoney(item.totalUpdated || 0)}<br><span class="muted">Balance ${formatMoney(item.balancePending || 0)}</span></td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>` : '';
+        $('#earningsTable').innerHTML = userTable + stageTable;
       }
 
       function renderServices() {
@@ -4024,6 +4059,7 @@
           mergeAdminData(await gas('updateQrReservationStage', state.secret, state.qrReservation.rowNumber, stage));
           state.loadedTabs.qr = false;
           state.loadedTabs.reservations = false;
+          state.loadedTabs.earnings = false;
           showToast(`Cita marcada: ${stage}.`);
           await validateQr($('#qrText').value.trim());
           renderCurrentTab('qr');
@@ -4048,6 +4084,7 @@
           mergeAdminData(await gas('saveQrAppointmentExtra', state.secret, state.qrReservation.rowNumber, payload));
           state.loadedTabs.qr = false;
           state.loadedTabs.reservations = false;
+          state.loadedTabs.earnings = false;
           showToast('Extra agregado al recibo como pago local.');
           await validateQr($('#qrText').value.trim());
           renderCurrentTab('qr');
@@ -4065,8 +4102,9 @@
           mergeAdminData(await gas('finishQrAppointment', state.secret, state.qrReservation.rowNumber));
           state.loadedTabs.qr = false;
           state.loadedTabs.reservations = false;
-          showToast('Cita finalizada. Recibo actualizado y extras marcados como pago local.');
-          $('#qrResult').innerHTML = '';
+          state.loadedTabs.earnings = false;
+          showToast('Cita finalizada. Recibo actualizado. Si no hubo extras, se envio correo de agradecimiento.');
+          $('#qrResult').innerHTML = '<div class="empty">Cita finalizada. Esta seccion se cerro. Puedes escanear otra cita cuando la necesites.</div>';
           $('#qrText').value = '';
           state.qrReservation = null;
           renderCurrentTab('qr');
