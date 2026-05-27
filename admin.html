@@ -3928,27 +3928,145 @@
           $('#qrResult').innerHTML = '';
           return;
         }
+        const extras = Array.isArray(reservation.extras) ? reservation.extras : [];
+        const extraTotal = Number(reservation.extraTotal || extras.reduce((sum, item) => sum + Number(item.price || 0), 0));
+        const totalUpdated = Number(reservation.totalUpdated || reservation.total || 0);
+        const balance = Number(reservation.balancePending || totalUpdated || 0);
+        const serviceOptions = (state.data.services || [])
+          .filter(service => service.visible !== false)
+          .map(service => {
+            const key = `${service.category} - ${service.service}`;
+            return `<option value="${escapeHtml(key)}" data-price="${Number(service.price || 0)}">${escapeHtml(key)} - ${money(service.price || 0)}</option>`;
+          })
+          .join('');
+        const extrasRows = extras.length
+          ? `<table><thead><tr><th>Extra</th><th>Pago</th><th>Precio</th></tr></thead><tbody>${extras.map(extra => `
+              <tr>
+                <td>${escapeHtml(extra.name || '')}${extra.notes ? `<br><span class="muted">${escapeHtml(extra.notes)}</span>` : ''}</td>
+                <td>${escapeHtml(extra.paymentMethod || 'Pago local')}</td>
+                <td>${money(extra.price || 0)}</td>
+              </tr>`).join('')}</tbody></table>`
+          : '<div class="empty">No hay servicios extras agregados.</div>';
+        const canAddExtras = moduleEnabled('EXTRAS_IN_APPOINTMENT') || moduleEnabled('QR_ADVANCED');
         $('#qrResult').innerHTML = `
           <article class="stage-card">
-            <h3>${escapeHtml(reservation.clientName || 'Clienta')}</h3>
-            <p class="muted">${escapeHtml(reservation.service)} - ${escapeHtml(reservation.date)} ${escapeHtml(reservation.time)}</p>
-            <p>Asignada: ${escapeHtml(reservation.assignedUser || '')}</p>
+            <div class="panel-head">
+              <div>
+                <h3>${escapeHtml(reservation.clientName || 'Clienta')}</h3>
+                <div class="muted">${escapeHtml(reservation.service || '')} - ${escapeHtml(reservation.date || '')} ${escapeHtml(reservation.time || '')}</div>
+              </div>
+              <span class="status confirmada">${escapeHtml(reservation.serviceStatus || reservation.arrivalStatus || reservation.status || 'Pendiente')}</span>
+            </div>
+            <div class="dashboard-grid">
+              <div class="metric-card"><span>Trabajadora</span><strong>${escapeHtml(reservation.assignedName || reservation.assignedUser || 'Sin asignar')}</strong></div>
+              <div class="metric-card"><span>Total actual</span><strong>${money(totalUpdated || reservation.total || 0)}</strong></div>
+              <div class="metric-card"><span>Extras local</span><strong>${money(extraTotal)}</strong></div>
+              <div class="metric-card"><span>Balance</span><strong>${money(balance)}</strong></div>
+            </div>
+            <p class="muted">Metodo de pago: ${escapeHtml(reservation.paymentMethod || 'Pago en local')} | Estado: ${escapeHtml(reservation.paymentStatus || 'Pendiente')}</p>
             <div class="row-actions">
               <button class="btn soft mini" data-qr-stage="Cliente llego" type="button">Cliente llego</button>
-              <button class="btn secondary mini" data-qr-stage="En proceso" type="button">En proceso</button>
-              <button class="btn mini" data-qr-stage="Completada" type="button">Completada</button>
+              <button class="btn secondary mini" data-qr-stage="En servicio" type="button">Empezar servicio</button>
+              <button class="btn mini" id="qrFinishBtn" type="button">Finalizar cita</button>
             </div>
+            <div class="stage-card">
+              <h3>Servicios extras</h3>
+              <p class="muted">Todo extra agregado durante la cita se marca como pago local y se suma al recibo final.</p>
+              ${extrasRows}
+              ${canAddExtras ? `
+                <div class="form-grid" style="margin-top:12px;">
+                  <div class="field full">
+                    <label for="qrExtraService">Servicio extra activo</label>
+                    <select id="qrExtraService">
+                      <option value="other">Otros / escribir manual</option>
+                      ${serviceOptions}
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label for="qrExtraName">Nombre extra</label>
+                    <input id="qrExtraName" placeholder="Ej. Tratamiento profundo">
+                  </div>
+                  <div class="field">
+                    <label for="qrExtraPrice">Precio</label>
+                    <input id="qrExtraPrice" type="number" min="0" step="0.01" value="0">
+                  </div>
+                  <div class="field full">
+                    <label for="qrExtraNotes">Notas</label>
+                    <textarea id="qrExtraNotes" placeholder="Notas del extra agregado"></textarea>
+                  </div>
+                </div>
+                <button class="btn secondary" id="qrAddExtraBtn" type="button"><i data-lucide="plus" aria-hidden="true"></i>Agregar extra al recibo</button>
+              ` : `<div class="empty">El modulo de extras durante cita esta desactivado.</div>`}
+            </div>
+            <div class="policy muted">${escapeHtml(reservation.extrasDisclaimer || 'Los servicios adicionales agregados durante la cita se incluiran en el recibo final y deberan pagarse en el local al finalizar.')}</div>
           </article>`;
         $$('[data-qr-stage]').forEach(button => button.addEventListener('click', () => updateQrStage(button.dataset.qrStage)));
+        const serviceSelect = $('#qrExtraService');
+        if (serviceSelect) {
+          serviceSelect.addEventListener('change', () => {
+            const option = serviceSelect.options[serviceSelect.selectedIndex];
+            if (!option || serviceSelect.value === 'other') return;
+            $('#qrExtraName').value = serviceSelect.value.split(' - ').slice(1).join(' - ') || serviceSelect.value;
+            $('#qrExtraPrice').value = option.dataset.price || '0';
+          });
+        }
+        if ($('#qrAddExtraBtn')) $('#qrAddExtraBtn').addEventListener('click', saveQrExtra);
+        if ($('#qrFinishBtn')) $('#qrFinishBtn').addEventListener('click', finishQrAppointment);
         refreshIcons();
       }
 
       async function updateQrStage(stage) {
         if (!state.qrReservation) return;
-        await mutate('updateQrReservationStage', state.qrReservation.rowNumber, stage, `Cita marcada: ${stage}.`);
-        $('#qrResult').innerHTML = '';
-        $('#qrText').value = '';
-        state.qrReservation = null;
+        setBusy(true);
+        try {
+          state.data = await gas('updateQrReservationStage', state.secret, state.qrReservation.rowNumber, stage);
+          showToast(`Cita marcada: ${stage}.`);
+          await validateQr($('#qrText').value.trim());
+          renderAll();
+        } catch (error) {
+          showToast(error.message || String(error));
+        } finally {
+          setBusy(false);
+        }
+      }
+
+      async function saveQrExtra() {
+        if (!state.qrReservation) return;
+        const serviceValue = $('#qrExtraService') ? $('#qrExtraService').value : 'other';
+        const payload = {
+          serviceKey: serviceValue,
+          name: $('#qrExtraName') ? $('#qrExtraName').value : '',
+          price: $('#qrExtraPrice') ? $('#qrExtraPrice').value : 0,
+          notes: $('#qrExtraNotes') ? $('#qrExtraNotes').value : ''
+        };
+        setBusy(true);
+        try {
+          state.data = await gas('saveQrAppointmentExtra', state.secret, state.qrReservation.rowNumber, payload);
+          showToast('Extra agregado al recibo como pago local.');
+          await validateQr($('#qrText').value.trim());
+          renderAll();
+        } catch (error) {
+          showToast(error.message || String(error));
+        } finally {
+          setBusy(false);
+        }
+      }
+
+      async function finishQrAppointment() {
+        if (!state.qrReservation) return;
+        setBusy(true);
+        try {
+          state.data = await gas('finishQrAppointment', state.secret, state.qrReservation.rowNumber);
+          showToast('Cita finalizada. Recibo actualizado y extras marcados como pago local.');
+          $('#qrResult').innerHTML = '';
+          $('#qrText').value = '';
+          state.qrReservation = null;
+          renderAll();
+        } catch (error) {
+          showToast(error.message || String(error));
+        } finally {
+          setBusy(false);
+        }
       }
 
       async function startQrScanner() {
