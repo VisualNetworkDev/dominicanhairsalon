@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dominican Hair Salon Admin</title>
     <link rel="preconnect" href="https://unpkg.com">
-    <script src="/dominicanhairsalon/assets/admin-config.js?v=20260527-hybrid1"></script>
+    <script src="/dominicanhairsalon/assets/admin-config.js?v=20260527-rutas1"></script>
     <script defer src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
     <style>
@@ -1813,10 +1813,6 @@
         qrReservation: null
       };
 
-      const ADMIN_BROWSER_CACHE_KEY = 'dhs_admin_fast_snapshot_v2';
-      const ADMIN_BROWSER_CACHE_MAX_MS = 5 * 60 * 1000;
-      const ADMIN_PREFETCH_TABS = ['photos', 'earnings'];
-
       const ADMIN_I18N = {
         es: {
           publicView: 'Vista clientas',
@@ -1942,7 +1938,7 @@
             showToast('Configura publicUrl en assets/admin-config.js.');
           }
         });
-        $('#refreshBtn').addEventListener('click', () => loadAdminData(true));
+        $('#refreshBtn').addEventListener('click', loadAdminData);
         $('#logoutBtn').addEventListener('click', logoutAdmin);
         $('#closeWelcomeBtn').addEventListener('click', closeWelcomeModal);
         $$('[data-admin-lang]').forEach(button => {
@@ -2063,41 +2059,30 @@
         if (helpCopy) helpCopy.textContent = adminText('helpCopy');
       }
 
-      async function loadAdminData(forceFresh) {
+      async function loadAdminData() {
         if (!state.secret) return;
         setBusy(true);
-        let showedCached = false;
         try {
-          if (forceFresh) {
-            storageRemove('localStorage', ADMIN_BROWSER_CACHE_KEY);
-            showToast('Actualizando informacion desde el servidor...');
-          }
-          const cached = forceFresh ? null : loadAdminBrowserCache();
-          if (cached && cached.data) {
-            mergeAdminData(cached.data);
-            markHybridLoadedTabs(cached.loadedTabs || cached.data.loadedTabs || {});
-            openAdminInterfaceFromData(false);
-            showedCached = true;
-            showToast('Mostrando datos guardados. Actualizando informacion...');
-          }
-
-          const fresh = await loadAdminFastOrLegacyData();
-          mergeAdminData(fresh);
-          markHybridLoadedTabs(fresh.loadedTabs || {});
-          saveAdminBrowserCache();
-          openAdminInterfaceFromData(!showedCached);
-          if (showedCached) showToast('Informacion actualizada.');
-          if (!fresh.legacyFallback) prefetchAdminTabs();
+          state.loadedTabs = {};
+          mergeAdminData(await gas('getAdminShellData', state.secret));
+          $('#brandName').textContent = `${state.data.appName} Admin`;
+          $('#login').classList.add('hidden');
+          $('#admin').classList.add('open');
+          $('#logoutBtn').hidden = false;
+          document.body.classList.toggle('developer-mode', false);
+          document.body.classList.toggle('staff-mode', state.data.authRole === 'staff');
+          applyAccessVisibility();
+          showLoginGreeting();
+          renderShell();
+          await loadAdminTab(state.tab || 'reservations', true);
         } catch (error) {
-          if (!showedCached) {
-            storageRemove('sessionStorage', 'angels_admin_secret');
-            state.secret = '';
-            state.data = null;
-            state.loadedTabs = {};
-            $('#login').classList.remove('hidden');
-            $('#admin').classList.remove('open');
-            $('#logoutBtn').hidden = true;
-          }
+          storageRemove('sessionStorage', 'angels_admin_secret');
+          state.secret = '';
+          state.data = null;
+          state.loadedTabs = {};
+          $('#login').classList.remove('hidden');
+          $('#admin').classList.remove('open');
+          $('#logoutBtn').hidden = true;
           showToast(error.message || String(error));
         } finally {
           setBusy(false);
@@ -2107,36 +2092,6 @@
       function renderAll() {
         renderShell();
         renderCurrentTab(state.tab || 'reservations');
-      }
-
-      async function loadAdminFastOrLegacyData() {
-        try {
-          return await gas('getAdminFastData', state.secret);
-        } catch (fastError) {
-          const message = fastError && fastError.message ? fastError.message : String(fastError || '');
-          if (!/no permitida|not allowed|not permitted/i.test(message)) throw fastError;
-          const legacy = await gas('getAdminData', state.secret);
-          legacy.legacyFallback = true;
-          legacy.loadedTabs = Object.assign({
-            reservations: true,
-            earnings: true,
-            timeoff: true,
-            services: true,
-            photos: true,
-            discounts: true,
-            events: true,
-            qr: true,
-            users: true,
-            settings: true,
-            help: true
-          }, legacy.loadedTabs || {});
-          return legacy;
-        }
-      }
-
-      function isApiFunctionNotAllowed_(error) {
-        const message = error && error.message ? error.message : String(error || '');
-        return /no permitida|not allowed|not permitted/i.test(message);
       }
 
       function mergeAdminData(partial) {
@@ -2150,63 +2105,7 @@
         state.data.settings = state.data.settings || {};
         state.data.modules = state.data.modules || {};
         state.data.permissions = state.data.permissions || {};
-        if (state.data.loadedTabs) markHybridLoadedTabs(state.data.loadedTabs);
         state.data.loadedAt = new Date().toISOString();
-      }
-
-
-      function saveAdminBrowserCache() {
-        if (!state.data) return;
-        try {
-          const snapshot = {
-            savedAt: Date.now(),
-            data: state.data,
-            loadedTabs: state.loadedTabs || {}
-          };
-          storageSet('localStorage', ADMIN_BROWSER_CACHE_KEY, JSON.stringify(snapshot));
-        } catch (error) {
-          console.warn('No se pudo guardar cache admin:', error.message);
-        }
-      }
-
-      function loadAdminBrowserCache() {
-        try {
-          const raw = storageGet('localStorage', ADMIN_BROWSER_CACHE_KEY, '');
-          if (!raw) return null;
-          const snapshot = JSON.parse(raw);
-          if (!snapshot || !snapshot.data || !snapshot.savedAt) return null;
-          if (Date.now() - Number(snapshot.savedAt) > ADMIN_BROWSER_CACHE_MAX_MS) return null;
-          return snapshot;
-        } catch (error) {
-          return null;
-        }
-      }
-
-      function openAdminInterfaceFromData(useGreeting) {
-        $('#brandName').textContent = `${state.data.appName} Admin`;
-        $('#login').classList.add('hidden');
-        $('#admin').classList.add('open');
-        $('#logoutBtn').hidden = false;
-        document.body.classList.toggle('developer-mode', false);
-        document.body.classList.toggle('staff-mode', state.data.authRole === 'staff');
-        applyAccessVisibility();
-        if (useGreeting) showLoginGreeting();
-        renderAll();
-      }
-
-      function markHybridLoadedTabs(loadedTabs) {
-        state.loadedTabs = Object.assign({}, state.loadedTabs || {}, loadedTabs || {});
-        ['reservations', 'services', 'timeoff', 'discounts', 'events', 'qr', 'users', 'settings', 'photos', 'help'].forEach(tab => {
-          if (tab !== 'earnings') state.loadedTabs[tab] = Boolean(state.loadedTabs[tab] || (state.data && state.data.loadedTabs && state.data.loadedTabs[tab]));
-        });
-      }
-
-      function prefetchAdminTabs() {
-        if (!state.secret || !state.data) return;
-        ADMIN_PREFETCH_TABS.forEach((tab, index) => {
-          if (state.loadedTabs && state.loadedTabs[tab]) return;
-          setTimeout(() => loadAdminTab(tab, false, true), 700 + index * 900);
-        });
       }
 
       function renderShell() {
@@ -2218,7 +2117,7 @@
         refreshIcons();
       }
 
-      async function loadAdminTab(tabName, force, quiet) {
+      async function loadAdminTab(tabName, force) {
         if (!state.secret || !state.data) return;
         const tab = tabName || state.tab || 'reservations';
         state.loadedTabs = state.loadedTabs || {};
@@ -2226,60 +2125,17 @@
           renderCurrentTab(tab);
           return;
         }
-        if (!quiet) {
-          renderCurrentTab(tab);
-          setBusy(true);
-          showToast('Actualizando ' + readableTabName_(tab) + '...');
-        }
+        setBusy(true);
         try {
-          let partial;
-          try {
-            partial = await gas('getAdminTabData', state.secret, tab, getTabOptions(tab));
-          } catch (tabError) {
-            if (!isApiFunctionNotAllowed_(tabError)) throw tabError;
-            partial = await gas('getAdminData', state.secret);
-            partial.legacyFallback = true;
-            partial.loadedTabs = Object.assign({
-              reservations: true,
-              earnings: true,
-              timeoff: true,
-              services: true,
-              photos: true,
-              discounts: true,
-              events: true,
-              qr: true,
-              users: true,
-              settings: true,
-              help: true
-            }, partial.loadedTabs || {});
-          }
+          const partial = await gas('getAdminTabData', state.secret, tab, getTabOptions(tab));
           mergeAdminData(partial);
-          if (partial.loadedTabs) markHybridLoadedTabs(partial.loadedTabs);
           state.loadedTabs[tab] = true;
-          saveAdminBrowserCache();
-          if (!quiet || tab === state.tab) renderCurrentTab(tab);
+          renderCurrentTab(tab);
         } catch (error) {
-          if (!quiet) showToast(error.message || String(error));
+          showToast(error.message || String(error));
         } finally {
-          if (!quiet) setBusy(false);
+          setBusy(false);
         }
-      }
-
-      function readableTabName_(tab) {
-        const names = {
-          reservations: 'reservas',
-          earnings: 'ganancias',
-          timeoff: 'dias libres',
-          services: 'servicios',
-          photos: 'fotos',
-          discounts: 'descuentos',
-          events: 'eventos',
-          qr: 'QR',
-          users: 'usuarios',
-          settings: 'ajustes',
-          help: 'ayuda'
-        };
-        return names[tab] || 'seccion';
       }
 
       function getTabOptions(tab) {
@@ -2336,7 +2192,6 @@
 
       function logoutAdmin() {
         storageRemove('sessionStorage', 'angels_admin_secret');
-        storageRemove('localStorage', ADMIN_BROWSER_CACHE_KEY);
         state.secret = '';
         state.data = null;
         state.loadedTabs = {};
@@ -4083,7 +3938,7 @@
           .filter(service => service.visible !== false)
           .map(service => {
             const key = `${service.category} - ${service.service}`;
-            return `<option value="${escapeHtml(key)}" data-price="${Number(service.price || 0)}">${escapeHtml(key)} - ${money(service.price || 0)}</option>`;
+            return `<option value="${escapeHtml(key)}" data-price="${Number(service.price || 0)}">${escapeHtml(key)} - ${formatMoney(service.price || 0)}</option>`;
           })
           .join('');
         const extrasRows = extras.length
@@ -4091,7 +3946,7 @@
               <tr>
                 <td>${escapeHtml(extra.name || '')}${extra.notes ? `<br><span class="muted">${escapeHtml(extra.notes)}</span>` : ''}</td>
                 <td>${escapeHtml(extra.paymentMethod || 'Pago local')}</td>
-                <td>${money(extra.price || 0)}</td>
+                <td>${formatMoney(extra.price || 0)}</td>
               </tr>`).join('')}</tbody></table>`
           : '<div class="empty">No hay servicios extras agregados.</div>';
         const canAddExtras = moduleEnabled('EXTRAS_IN_APPOINTMENT') || moduleEnabled('QR_ADVANCED');
@@ -4106,9 +3961,9 @@
             </div>
             <div class="dashboard-grid">
               <div class="metric-card"><span>Trabajadora</span><strong>${escapeHtml(reservation.assignedName || reservation.assignedUser || 'Sin asignar')}</strong></div>
-              <div class="metric-card"><span>Total actual</span><strong>${money(totalUpdated || reservation.total || 0)}</strong></div>
-              <div class="metric-card"><span>Extras local</span><strong>${money(extraTotal)}</strong></div>
-              <div class="metric-card"><span>Balance</span><strong>${money(balance)}</strong></div>
+              <div class="metric-card"><span>Total actual</span><strong>${formatMoney(totalUpdated || reservation.total || 0)}</strong></div>
+              <div class="metric-card"><span>Extras local</span><strong>${formatMoney(extraTotal)}</strong></div>
+              <div class="metric-card"><span>Balance</span><strong>${formatMoney(balance)}</strong></div>
             </div>
             <p class="muted">Metodo de pago: ${escapeHtml(reservation.paymentMethod || 'Pago en local')} | Estado: ${escapeHtml(reservation.paymentStatus || 'Pendiente')}</p>
             <div class="row-actions">
@@ -4445,11 +4300,7 @@
             result = await gas(functionName, state.secret, payloadOrRow);
             showToast(maybeMessage || statusOrExtra);
           }
-          if (result && typeof result === 'object') {
-            mergeAdminData(result);
-            markHybridLoadedTabs(result.loadedTabs || {});
-            saveAdminBrowserCache();
-          }
+          if (result && typeof result === 'object') mergeAdminData(result);
           const affectedTab = mutationTabFor(functionName);
           state.loadedTabs[affectedTab] = false;
           if (affectedTab !== state.tab && (affectedTab === 'services' || affectedTab === 'users')) {
@@ -4860,7 +4711,7 @@
 
       function apiTimeoutFor(functionName) {
         if (['saveAdminPhoto', 'saveBeforeAfter', 'createReservation', 'exportReportPdf'].indexOf(functionName) !== -1) return 120000;
-        if (['getAdminData', 'getAdminFastData', 'getAdminTabData', 'runAdminReminders', 'installReminderTrigger'].indexOf(functionName) !== -1) return 60000;
+        if (['getAdminData', 'runAdminReminders', 'installReminderTrigger'].indexOf(functionName) !== -1) return 60000;
         return 40000;
       }
 
