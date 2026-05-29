@@ -1,5 +1,5 @@
 window.ANGELS_ADMIN_CONFIG = {
-  "apiBaseUrl": "https://script.google.com/macros/s/AKfycbyYMymwom__yETjqFgYZWyRCxe5md7YVG6m2uPLwwHrh4zGmFnehl9XHmiQFJkuzVqS_Q/exec",
+  "apiBaseUrl": "https://script.google.com/macros/s/AKfycbzJ2S8OEOaosU6nqBk6PHhMdYOavjnFqqVxvLi7DJTVtYh1A4HSj1N31PWwv5LLQLDXwQ/exec",
   "adminApiUrl": "https://script.google.com/macros/s/AKfycbzJ2S8OEOaosU6nqBk6PHhMdYOavjnFqqVxvLi7DJTVtYh1A4HSj1N31PWwv5LLQLDXwQ/exec",
   "publicApiUrl": "https://script.google.com/macros/s/AKfycbyQBO8JDgFThgEGhkK9-4jW0jsaMP2u4TbHuya5FyUreKrB4CBkV2MA0lfWFlx6aVMTLw/exec",
   "developerApiUrl": "https://script.google.com/macros/s/AKfycbx4xPvQJG1mhylxqTZ5Kl6YcYCaU2mohbAoYJco8tDWLg2qDnoFsxZZQzRCuSKoUTD7/exec",
