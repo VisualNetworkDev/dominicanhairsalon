@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dominican Hair Salon Admin</title>
     <link rel="preconnect" href="https://unpkg.com">
-    <script src="/dominicanhairsalon/assets/admin-config.js?v=20260529-transfer3"></script>
+    <script src="/dominicanhairsalon/assets/admin-config.js?v=20260529-admin-restore-oldlogic1"></script>
     <script defer src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
     <style>
@@ -1756,7 +1756,11 @@
       const $ = selector => document.querySelector(selector);
       const $$ = selector => Array.prototype.slice.call(document.querySelectorAll(selector));
       const ADMIN_CONFIG = Object.assign({
-        apiBaseUrl: 'https://script.google.com/macros/s/AKfycbwDAoJA_Hf8AIOtymBCJO3mlrkx7OWXeQIlhHVNlunaX162cnJtj6ZhBKJw8Di5XXq7-w/exec',
+        apiBaseUrl: 'https://script.google.com/macros/s/AKfycbzJ2S8OEOaosU6nqBk6PHhMdYOavjnFqqVxvLi7DJTVtYh1A4HSj1N31PWwv5LLQLDXwQ/exec',
+        adminApiUrl: 'https://script.google.com/macros/s/AKfycbzJ2S8OEOaosU6nqBk6PHhMdYOavjnFqqVxvLi7DJTVtYh1A4HSj1N31PWwv5LLQLDXwQ/exec',
+        publicApiUrl: 'https://script.google.com/macros/s/AKfycbwFGn869QEqkSHH-iS99Nx5mJqANgFCFv9qUtjyF0SdaM2tfKq3PGL32TsWyYJnWUIy/exec',
+        developerApiUrl: 'https://script.google.com/macros/s/AKfycbx4xPvQJG1mhylxqTZ5Kl6YcYCaU2mohbAoYJco8tDWLg2qDnoFsxZZQzRCuSKoUTD7/exec',
+        developerDashboardUrl: 'https://visualnetworkdev.github.io/developer/index.html',
         publicUrl: 'https://visualnetworkdev.github.io/dominicanhairsalon/',
         qrScannerUrl: 'https://visualnetworkdev.github.io/dominicanhairsalon/qr-scanner.html'
       }, window.ANGELS_ADMIN_CONFIG || {});
@@ -3016,7 +3020,7 @@
         $('#instagramVisible').checked = Boolean(settings.instagramVisible);
         $('#instagramUrl').value = settings.instagramUrl || '';
         $('#contactPhone').value = settings.contactPhone || '9044223600';
-        $('#contactEmail').value = settings.contactEmail || 'dominicanhairsalon3@gmail.com';
+        $('#contactEmail').value = settings.contactEmail || 'yaleixi20@gmail.com';
         $('#publicEnabled').checked = settings.publicEnabled !== false;
         $('#adminEnabled').checked = settings.adminEnabled !== false;
         const hours = state.data && state.data.businessHours ? state.data.businessHours : {};
@@ -4697,7 +4701,7 @@
           const iframeName = `frame_${requestId}`;
           const iframe = document.createElement('iframe');
           const form = document.createElement('form');
-          const timeout = setTimeout(() => finish(null, new Error('La conexion esta tardando mas de lo normal.')), apiTimeoutFor(functionName));
+          const timeout = setTimeout(() => finish(null, new Error('La conexion esta tardando mas de lo normal. Endpoint usado: ' + endpoint)), apiTimeoutFor(functionName));
 
           iframe.name = iframeName;
           iframe.hidden = true;
