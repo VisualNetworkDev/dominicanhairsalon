@@ -3,25 +3,25 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dominican Hair Salon</title>
+    <title>RESET by Yaleixi</title>
     <link rel="preconnect" href="https://unpkg.com">
-    <script src="/dominicanhairsalon/assets/site-data.js?v=20260527-rutas1"></script>
+    <script src="assets/site-data.js?v=20260824-reset6"></script>
     <script defer src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
     <style>
       :root {
-        --ink: #2b2226;
-        --muted: #7c6b70;
-        --rose: #b76e79;
-        --rose-dark: #78364b;
-        --plum: #432233;
-        --champagne: #f4d8bf;
-        --blush: #fff4f1;
-        --cream: #fffaf7;
-        --sage: #8b9a83;
-        --line: rgba(67, 34, 51, 0.14);
-        --shadow: 0 18px 50px rgba(67, 34, 51, 0.14);
-        --radius: 8px;
-        --hero-image: url("https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=2200&q=82");
+        --ink: #31452f;
+        --muted: #5c6a52;
+        --rose: #c89b2d;
+        --rose-dark: #8b6919;
+        --plum: #344a34;
+        --champagne: #f0d98e;
+        --blush: #fff7dc;
+        --cream: #fffcf0;
+        --sage: #607255;
+        --line: rgba(156, 119, 29, 0.24);
+        --shadow: 0 24px 66px rgba(79, 61, 20, 0.18);
+        --radius: 18px;
+        --hero-image: url("assets/hair-salon-reset-logo.jpeg");
       }
 
       * {
@@ -68,8 +68,8 @@
         position: sticky;
         z-index: 30;
         top: 0;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.5);
-        background: rgba(255, 250, 247, 0.86);
+        border-bottom: 1px solid rgba(188, 145, 43, 0.28);
+        background: rgba(255, 251, 235, 0.88);
         backdrop-filter: blur(18px);
       }
 
@@ -121,7 +121,7 @@
         display: grid;
         place-items: center;
         overflow: hidden;
-        background: linear-gradient(135deg, var(--rose), var(--champagne));
+        background: linear-gradient(135deg, var(--plum), var(--rose));
         color: #fff;
         box-shadow: 0 10px 28px rgba(183, 110, 121, 0.32);
       }
@@ -210,7 +210,7 @@
         inset: 0;
         z-index: -2;
         background:
-          linear-gradient(115deg, rgba(43, 34, 38, 0.92) 0%, rgba(120, 54, 75, 0.72) 42%, rgba(194, 141, 85, 0.28) 100%),
+          linear-gradient(108deg, rgba(255, 252, 235, 0.98) 0%, rgba(248, 228, 165, 0.9) 47%, rgba(191, 145, 35, 0.34) 100%),
           var(--hero-image);
         background-size: cover;
         background-position: center;
@@ -233,7 +233,7 @@
       }
 
       .hero-copy {
-        color: #fff;
+        color: var(--plum);
         padding: 24px 0;
       }
 
@@ -246,7 +246,7 @@
         font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 0.12em;
-        color: #ffe8dc;
+        color: var(--rose-dark);
       }
 
       .hero h1 {
@@ -256,12 +256,14 @@
         font-size: clamp(44px, 8vw, 94px);
         line-height: 0.9;
         letter-spacing: 0;
+        color: var(--plum);
+        text-shadow: 0 2px 0 rgba(255, 255, 255, 0.72), 0 18px 42px rgba(104, 78, 18, 0.2);
       }
 
       .hero p {
         max-width: 590px;
         margin: 22px 0 0;
-        color: rgba(255, 255, 255, 0.84);
+        color: var(--plum);
         font-size: 18px;
         line-height: 1.65;
       }
@@ -271,17 +273,34 @@
         align-items: center;
         gap: 7px;
         margin-top: 14px;
-        color: #ffe8dc;
+        color: var(--rose-dark);
         font-family: Georgia, "Times New Roman", serif;
         font-size: clamp(22px, 3vw, 34px);
         font-style: italic;
         font-weight: 700;
       }
 
+      .hero-manifesto {
+        display: grid;
+        gap: 5px;
+        margin-top: 24px;
+        padding-left: 17px;
+        border-left: 2px solid rgba(184, 134, 45, 0.72);
+        color: var(--plum);
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(17px, 2vw, 22px);
+        line-height: 1.38;
+      }
+
+      .hero-manifesto span:nth-child(2) {
+        color: var(--rose-dark);
+        font-style: italic;
+      }
+
       .quick-book {
-        border: 1px solid rgba(255, 255, 255, 0.36);
+        border: 1px solid rgba(180, 135, 28, 0.38);
         border-radius: var(--radius);
-        background: rgba(255, 250, 247, 0.9);
+        background: linear-gradient(145deg, rgba(255, 254, 247, 0.96), rgba(250, 237, 193, 0.94));
         box-shadow: var(--shadow);
         backdrop-filter: blur(20px);
         padding: 18px;
@@ -318,6 +337,29 @@
         outline: none;
       }
 
+      select {
+        appearance: none;
+        -webkit-appearance: none;
+        cursor: pointer;
+        padding-right: 44px;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%2342513a' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 14px center;
+        background-size: 18px;
+      }
+
+      select option {
+        color: var(--ink);
+        background:
+          radial-gradient(circle at 12% 4%, rgba(241, 213, 122, 0.34), transparent 30%),
+          linear-gradient(180deg, #fffdf5 0%, #fbf3d8 48%, #fffdf5 100%);
+      }
+
+      select option:checked {
+        color: #fff;
+        background: var(--plum) linear-gradient(0deg, var(--plum), var(--plum));
+      }
+
       input:not([type="checkbox"]),
       select {
         min-height: 46px;
@@ -340,6 +382,200 @@
         box-shadow: 0 0 0 4px rgba(183, 110, 121, 0.14);
       }
 
+      select.salon-select-native {
+        position: absolute !important;
+        width: 1px !important;
+        height: 1px !important;
+        min-height: 0 !important;
+        margin: -1px !important;
+        padding: 0 !important;
+        overflow: hidden !important;
+        clip: rect(0 0 0 0) !important;
+        clip-path: inset(50%) !important;
+        white-space: nowrap !important;
+        border: 0 !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+      }
+
+      .salon-select-control {
+        position: relative;
+        width: 100%;
+      }
+
+      .salon-select-control.is-open {
+        z-index: 35;
+      }
+
+      .salon-select-trigger {
+        width: 100%;
+        min-height: 50px;
+        border: 1px solid rgba(143, 122, 70, 0.32);
+        border-radius: 17px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        padding: 8px 9px 8px 16px;
+        color: var(--ink);
+        background:
+          linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(250, 246, 229, 0.96));
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.9),
+          0 7px 20px rgba(66, 81, 58, 0.08);
+        text-align: left;
+        cursor: pointer;
+        transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+      }
+
+      .salon-select-trigger:hover {
+        border-color: rgba(183, 146, 66, 0.68);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.95),
+          0 10px 26px rgba(66, 81, 58, 0.12);
+      }
+
+      .salon-select-trigger:focus-visible,
+      .salon-select-control.is-open .salon-select-trigger {
+        outline: none;
+        border-color: rgba(183, 146, 66, 0.86);
+        box-shadow:
+          0 0 0 4px rgba(203, 174, 101, 0.18),
+          0 12px 30px rgba(66, 81, 58, 0.14);
+      }
+
+      .salon-select-value {
+        min-width: 0;
+        overflow: hidden;
+        color: var(--ink);
+        font-weight: 700;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .salon-select-chevron {
+        width: 34px;
+        height: 34px;
+        flex: 0 0 34px;
+        border: 1px solid rgba(183, 146, 66, 0.34);
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        color: var(--sage);
+        background: rgba(218, 199, 145, 0.18);
+        transition: color 180ms ease, background 180ms ease, transform 220ms ease;
+      }
+
+      .salon-select-chevron svg {
+        width: 16px;
+        height: 16px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 2.25;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .salon-select-control.is-open .salon-select-chevron {
+        color: #fff;
+        background: linear-gradient(135deg, var(--sage), #66735d);
+        transform: rotate(180deg);
+      }
+
+      .salon-select-menu {
+        position: absolute;
+        top: calc(100% + 9px);
+        left: 0;
+        right: 0;
+        z-index: 36;
+        max-height: 270px;
+        overflow: auto;
+        border: 1px solid rgba(183, 146, 66, 0.4);
+        border-radius: 19px;
+        padding: 7px;
+        background: rgba(255, 253, 245, 0.99);
+        box-shadow:
+          0 22px 48px rgba(43, 52, 38, 0.2),
+          inset 0 1px 0 rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(18px);
+        animation: salonSelectOpen 170ms ease both;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(66, 81, 58, 0.34) transparent;
+      }
+
+      .salon-select-option {
+        width: 100%;
+        min-height: 43px;
+        border: 0;
+        border-radius: 13px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 9px 11px 9px 13px;
+        color: var(--ink);
+        background: transparent;
+        font-weight: 700;
+        text-align: left;
+        cursor: pointer;
+        transition: color 150ms ease, background 150ms ease, transform 150ms ease;
+      }
+
+      .salon-select-option + .salon-select-option {
+        margin-top: 3px;
+      }
+
+      .salon-select-option:hover,
+      .salon-select-option:focus-visible {
+        outline: none;
+        color: var(--sage);
+        background: rgba(204, 178, 104, 0.14);
+        transform: translateX(2px);
+      }
+
+      .salon-select-option.is-selected {
+        color: #fff;
+        background: linear-gradient(135deg, var(--sage), #66735d);
+        box-shadow: 0 8px 18px rgba(66, 81, 58, 0.2);
+      }
+
+      .salon-select-option.is-selected:hover,
+      .salon-select-option.is-selected:focus-visible {
+        color: #fff;
+        background: linear-gradient(135deg, #506248, var(--sage));
+      }
+
+      .salon-select-check {
+        width: 23px;
+        height: 23px;
+        flex: 0 0 23px;
+        border: 1px solid rgba(183, 146, 66, 0.3);
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        color: transparent;
+        background: rgba(255, 255, 255, 0.48);
+        font-size: 13px;
+        font-weight: 900;
+      }
+
+      .salon-select-option.is-selected .salon-select-check {
+        color: #70591f;
+        border-color: rgba(255, 234, 174, 0.78);
+        background: linear-gradient(135deg, #fff6cf, #d6b45f);
+      }
+
+      @keyframes salonSelectOpen {
+        from {
+          opacity: 0;
+          transform: translateY(-7px) scale(0.98);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
       .btn {
         min-height: 46px;
         border: 0;
@@ -350,10 +586,10 @@
         gap: 9px;
         padding: 12px 16px;
         color: #fff;
-        background: linear-gradient(135deg, var(--rose-dark), var(--rose));
+        background: linear-gradient(135deg, #9b741c, #d2ad4c 52%, #8f6a17);
         font-weight: 800;
         text-decoration: none;
-        box-shadow: 0 14px 30px rgba(120, 54, 75, 0.24);
+        box-shadow: 0 14px 30px rgba(122, 91, 20, 0.25);
       }
 
       .btn:hover {
@@ -412,6 +648,202 @@
         margin: 10px 0 0;
       }
 
+      .story-band {
+        position: relative;
+        overflow: hidden;
+        background:
+          radial-gradient(circle at 12% 18%, rgba(215, 174, 76, 0.18), transparent 28%),
+          radial-gradient(circle at 88% 82%, rgba(92, 112, 82, 0.12), transparent 31%),
+          linear-gradient(145deg, #fffdf4 0%, #fbf3d8 52%, #fffaf0 100%);
+      }
+
+      .story-band::before {
+        content: "";
+        position: absolute;
+        width: 360px;
+        height: 360px;
+        right: -190px;
+        top: -190px;
+        border: 1px solid rgba(181, 134, 32, 0.18);
+        border-radius: 50%;
+        box-shadow: 0 0 0 34px rgba(181, 134, 32, 0.035);
+        pointer-events: none;
+      }
+
+      .story-layout {
+        position: relative;
+        display: grid;
+        grid-template-columns: minmax(320px, 0.92fr) minmax(0, 1.08fr);
+        gap: clamp(42px, 6vw, 88px);
+        align-items: center;
+      }
+
+      .story-image {
+        position: relative;
+        margin: 0;
+        padding: 13px;
+        border: 1px solid rgba(181, 134, 32, 0.38);
+        border-radius: 30px;
+        background: rgba(255, 253, 245, 0.78);
+        box-shadow:
+          0 30px 70px rgba(49, 69, 47, 0.17),
+          inset 0 0 0 1px rgba(255, 255, 255, 0.9);
+      }
+
+      .story-image::before {
+        content: "";
+        position: absolute;
+        inset: -10px 18px 18px -10px;
+        z-index: -1;
+        border: 1px solid rgba(181, 134, 32, 0.2);
+        border-radius: 34px;
+      }
+
+      .story-image img {
+        display: block;
+        width: 100%;
+        min-height: 0;
+        aspect-ratio: 1;
+        object-fit: cover;
+        border-radius: 21px;
+      }
+
+      .story-content {
+        position: relative;
+        padding: 12px 0;
+      }
+
+      .story-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 14px;
+        color: #8b6818;
+        font-size: 12px;
+        font-weight: 900;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+
+      .story-eyebrow i {
+        width: 16px;
+        height: 16px;
+      }
+
+      .story-content .section-title {
+        max-width: 640px;
+        font-size: clamp(44px, 5.2vw, 72px);
+        letter-spacing: -0.035em;
+      }
+
+      .about-copy {
+        display: grid;
+        gap: 16px;
+        max-width: 690px;
+        margin-top: 24px;
+      }
+
+      .about-copy p,
+      .about-copy blockquote {
+        margin: 0;
+      }
+
+      .about-copy p {
+        color: #52604b;
+        font-size: 16px;
+        line-height: 1.78;
+      }
+
+      .about-copy .about-lead {
+        color: var(--plum);
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(20px, 2vw, 25px);
+        line-height: 1.52;
+      }
+
+      .about-renewal {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 2px 0;
+      }
+
+      .about-renewal span {
+        display: inline-flex;
+        align-items: center;
+        min-height: 36px;
+        padding: 7px 13px;
+        border: 1px solid rgba(181, 134, 32, 0.28);
+        border-radius: 999px;
+        color: #6f5314;
+        background: rgba(255, 253, 245, 0.82);
+        font-family: Georgia, "Times New Roman", serif;
+        font-weight: 800;
+        box-shadow: 0 8px 20px rgba(181, 134, 32, 0.07);
+      }
+
+      .about-mantra {
+        position: relative;
+        display: grid;
+        gap: 4px;
+        padding: 19px 22px 19px 28px;
+        border-left: 3px solid #c99a2e;
+        border-radius: 0 16px 16px 0;
+        background: rgba(255, 253, 245, 0.68);
+        color: var(--plum);
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 18px;
+        font-weight: 700;
+        line-height: 1.45;
+      }
+
+      .about-mantra span:last-child {
+        color: #8b6818;
+      }
+
+      .about-welcome {
+        color: #7d5d16 !important;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 18px !important;
+        font-style: italic;
+        font-weight: 700;
+      }
+
+      .about-values {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+        margin-top: 26px;
+      }
+
+      .about-value {
+        display: grid;
+        gap: 7px;
+        min-height: 112px;
+        padding: 15px;
+        border: 1px solid rgba(181, 134, 32, 0.22);
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.58);
+      }
+
+      .about-value i {
+        width: 20px;
+        height: 20px;
+        color: #9d741c;
+      }
+
+      .about-value strong {
+        color: var(--plum);
+        font-size: 13px;
+        line-height: 1.3;
+      }
+
+      .about-value span {
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.45;
+      }
+
       .discounts {
         padding: 34px 0 0;
       }
@@ -425,7 +857,6 @@
         border-top: 1px solid var(--line);
       }
 
-      .story-layout,
       .tour-layout {
         display: grid;
         grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
@@ -433,7 +864,6 @@
         align-items: center;
       }
 
-      .story-image,
       .tour-frame {
         border-radius: var(--radius);
         overflow: hidden;
@@ -512,7 +942,6 @@
         text-decoration: none;
       }
 
-      .story-image img,
       .tour-frame iframe {
         width: 100%;
         min-height: 460px;
@@ -553,38 +982,159 @@
         margin: 0 auto 10px;
       }
 
-      .event-grid,
-      .testimonial-grid,
-      .faq-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-        gap: 14px;
+      .event-band,
+      .testimonial-band,
+      .faq-band {
+        position: relative;
+        overflow: hidden;
       }
 
-      .event-card,
-      .testimonial-card,
-      .faq-card {
-        border: 1px solid var(--line);
-        border-radius: var(--radius);
-        background: #fff;
-        padding: 18px;
-        box-shadow: 0 14px 36px rgba(67, 34, 51, 0.08);
+      .event-band {
+        background: linear-gradient(145deg, #fffdf4 0%, #f7e8b5 52%, #fffaf0 100%);
       }
 
-      .event-card span,
-      .faq-card span {
+      .testimonial-band {
+        background:
+          radial-gradient(circle at 14% 15%, rgba(240, 217, 142, .42), transparent 28%),
+          linear-gradient(150deg, #31452f 0%, #405b3d 100%);
+      }
+
+      .faq-band {
+        background:
+          radial-gradient(circle at 88% 22%, rgba(200, 155, 45, .18), transparent 28%),
+          #fffcf0;
+      }
+
+      .experience-head {
+        display: block;
+        max-width: 760px;
+        margin: 0 auto 38px;
+        text-align: center;
+      }
+
+      .section-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 13px;
         color: var(--rose-dark);
-        font-size: 12px;
-        font-weight: 900;
+        font-size: 11px;
+        font-weight: 950;
+        letter-spacing: .18em;
         text-transform: uppercase;
       }
 
-      .testimonial-card p,
-      .faq-card p,
-      .event-card p {
-        color: var(--muted);
-        line-height: 1.65;
+      .section-eyebrow i { width: 17px; height: 17px; }
+      .testimonial-band .section-title,
+      .testimonial-band .section-copy { color: #fffdf4; }
+      .testimonial-band .section-eyebrow { color: var(--champagne); }
+
+      .event-grid,
+      .testimonial-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 20px;
       }
+
+      .event-card,
+      .testimonial-card {
+        position: relative;
+        overflow: hidden;
+        border: 1px solid rgba(181, 134, 32, .34);
+        border-radius: 24px;
+        padding: 24px;
+        transition: transform 240ms ease, box-shadow 240ms ease;
+      }
+
+      .event-card:hover,
+      .testimonial-card:hover { transform: translateY(-5px); }
+
+      .event-card {
+        background: rgba(255, 253, 244, .92);
+        box-shadow: 0 20px 52px rgba(79, 61, 20, .13);
+      }
+
+      .event-card::after {
+        content: '';
+        position: absolute;
+        width: 110px;
+        height: 110px;
+        right: -48px;
+        top: -48px;
+        border: 1px solid rgba(181, 134, 32, .25);
+        border-radius: 50%;
+      }
+
+      .event-icon,
+      .contact-icon {
+        width: 44px;
+        height: 44px;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        color: var(--plum);
+        background: linear-gradient(145deg, #f5df9b, #fff9e3);
+        box-shadow: inset 0 0 0 1px rgba(181, 134, 32, .25);
+      }
+
+      .event-icon i,
+      .contact-icon i { width: 20px; height: 20px; }
+      .event-card .event-type {
+        display: block;
+        margin-top: 18px;
+        color: var(--rose-dark);
+        font-size: 11px;
+        font-weight: 950;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+      }
+      .event-card h3 { margin: 8px 0 10px; font: 700 25px/1.18 Georgia, serif; color: var(--plum); }
+      .event-card p { margin: 8px 0 0; color: var(--muted); line-height: 1.65; }
+      .event-date { font-weight: 850; color: var(--plum) !important; }
+
+      .testimonial-card {
+        border-color: rgba(240, 217, 142, .36);
+        background: rgba(255, 253, 244, .98);
+        box-shadow: 0 22px 56px rgba(17, 29, 18, .28);
+      }
+      .testimonial-card::before {
+        content: '“';
+        position: absolute;
+        top: -20px;
+        right: 16px;
+        color: rgba(197, 151, 39, .17);
+        font: 110px/1 Georgia, serif;
+      }
+      .testimonial-stars { color: #b88718; font-size: 19px; letter-spacing: 3px; }
+      .testimonial-card blockquote { position: relative; margin: 17px 0 22px; color: var(--plum); font: 17px/1.7 Georgia, serif; }
+      .testimonial-card footer { display: flex; align-items: center; gap: 9px; color: var(--plum); font-size: 13px; font-weight: 900; }
+      .testimonial-card footer::before { content: ''; width: 26px; height: 1px; background: var(--rose); }
+
+      .faq-grid { display: grid; gap: 12px; max-width: 900px; margin: 0 auto; }
+      .faq-card {
+        border: 1px solid rgba(181, 134, 32, .28);
+        border-radius: 18px;
+        background: rgba(255, 255, 255, .92);
+        box-shadow: 0 12px 34px rgba(79, 61, 20, .08);
+        overflow: hidden;
+      }
+      .faq-card summary {
+        list-style: none;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        padding: 20px 22px;
+        color: var(--plum);
+        font-family: Georgia, serif;
+        font-size: 18px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      .faq-card summary::-webkit-details-marker { display: none; }
+      .faq-plus { flex: 0 0 auto; width: 31px; height: 31px; display: grid; place-items: center; border-radius: 50%; color: var(--plum); background: #f8e8b6; transition: transform 220ms ease; }
+      .faq-card[open] .faq-plus { transform: rotate(45deg); }
+      .faq-answer { margin: 0; padding: 0 68px 22px 22px; color: var(--muted); line-height: 1.72; }
 
       .trust-band {
         padding: 42px 0 18px;
@@ -1147,6 +1697,84 @@
         margin-top: 2px;
       }
 
+      .check-row input[type="checkbox"] {
+        appearance: none;
+        -webkit-appearance: none;
+        display: grid;
+        place-content: center;
+        border: 1.5px solid rgba(66, 81, 58, 0.42);
+        border-radius: 5px;
+        background: var(--cream);
+        cursor: pointer;
+        transition: border-color 160ms ease, background 160ms ease, box-shadow 160ms ease;
+      }
+
+      .check-row input[type="checkbox"]::before {
+        content: "";
+        width: 9px;
+        height: 5px;
+        border-left: 2px solid #fff;
+        border-bottom: 2px solid #fff;
+        transform: rotate(-45deg) scale(0);
+        transform-origin: center;
+        transition: transform 130ms ease;
+      }
+
+      .check-row input[type="checkbox"]:checked {
+        border-color: var(--plum);
+        background: var(--plum);
+        box-shadow: 0 0 0 3px rgba(66, 81, 58, 0.13);
+      }
+
+      .check-row input[type="checkbox"]:checked::before {
+        transform: rotate(-45deg) scale(1);
+      }
+
+      .check-row input[type="checkbox"]:focus-visible {
+        outline: 3px solid rgba(184, 134, 45, 0.24);
+        outline-offset: 2px;
+      }
+
+      .verification-note {
+        margin: 2px 0 0 28px;
+        padding: 9px 11px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        color: var(--muted);
+        background: rgba(255, 253, 245, 0.88);
+        font-size: 12px;
+        line-height: 1.4;
+      }
+
+      .verification-note.success {
+        border-color: rgba(113, 128, 100, 0.38);
+        color: var(--plum);
+        background: rgba(113, 128, 100, 0.11);
+      }
+
+      .verification-note.error {
+        border-color: rgba(184, 134, 45, 0.42);
+        color: var(--rose-dark);
+        background: rgba(244, 235, 210, 0.72);
+      }
+
+      .fixed-payment-choice {
+        min-height: 46px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        padding: 11px 13px;
+        color: var(--plum);
+        background: linear-gradient(135deg, rgba(255, 253, 245, 0.96), rgba(244, 235, 210, 0.64));
+        font-weight: 800;
+      }
+
+      .fixed-payment-choice svg {
+        color: var(--rose-dark);
+      }
+
       .signature-box {
         border: 1px solid var(--line);
         border-radius: var(--radius);
@@ -1193,9 +1821,8 @@
       }
 
       .contact-section {
-        border-top: 1px solid var(--line);
-        padding: 54px 0 70px;
-        background: #fff;
+        padding: 72px 0;
+        background: linear-gradient(150deg, #fff8df, #fffdf5);
       }
 
       .before-after-grid {
@@ -1448,21 +2075,41 @@
       }
 
       .contact-card {
-        display: flex;
+        display: grid;
+        grid-template-columns: minmax(0, .82fr) minmax(340px, 1.18fr);
         align-items: center;
-        justify-content: space-between;
-        gap: 18px;
-        border: 1px solid var(--line);
-        border-radius: var(--radius);
-        padding: 20px;
-        background: var(--cream);
+        gap: 42px;
+        border: 1px solid rgba(181, 134, 32, .36);
+        border-radius: 28px;
+        padding: clamp(28px, 5vw, 54px);
+        background:
+          radial-gradient(circle at 92% 12%, rgba(240, 217, 142, .34), transparent 28%),
+          #fffef9;
+        box-shadow: 0 28px 72px rgba(79, 61, 20, .14);
       }
 
       .contact-links {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
       }
+
+      .contact-link {
+        min-height: 88px;
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        border: 1px solid rgba(181, 134, 32, .24);
+        border-radius: 18px;
+        padding: 14px;
+        color: var(--plum);
+        background: rgba(255, 252, 240, .82);
+        text-decoration: none;
+        transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
+      }
+      .contact-link:hover { transform: translateY(-3px); border-color: rgba(181, 134, 32, .52); box-shadow: 0 14px 30px rgba(79, 61, 20, .1); }
+      .contact-link small { display: block; margin-bottom: 3px; color: var(--rose-dark); font-size: 10px; font-weight: 950; letter-spacing: .1em; text-transform: uppercase; }
+      .contact-link strong { display: block; overflow-wrap: anywhere; }
 
       .reveal {
         opacity: 0;
@@ -1502,8 +2149,22 @@
         .category-layout,
         .story-layout,
         .tour-layout,
-        .vip-panel {
+        .vip-panel,
+        .contact-card {
           grid-template-columns: 1fr;
+        }
+
+        .story-layout {
+          gap: 38px;
+        }
+
+        .story-image {
+          width: min(100%, 620px);
+          margin-inline: auto;
+        }
+
+        .story-content {
+          padding-inline: 4px;
         }
 
         .category-section.is-reverse .photo-grid,
@@ -1540,10 +2201,25 @@
           display: block;
         }
 
+        .about-values {
+          grid-template-columns: 1fr;
+        }
+
+        .about-value {
+          min-height: 0;
+        }
+
         .contact-card {
           align-items: stretch;
-          flex-direction: column;
+          gap: 26px;
         }
+
+        .contact-links { grid-template-columns: 1fr; }
+
+        .experience-head { margin-bottom: 28px; }
+
+        .faq-card summary { padding: 18px; font-size: 17px; }
+        .faq-answer { padding: 0 58px 18px 18px; }
 
         .photo-grid {
           grid-template-columns: 1fr;
@@ -1587,10 +2263,10 @@
     <header class="topbar">
       <div class="shell topbar-inner">
         <a href="#inicio" class="brand" aria-label="Inicio" data-i18n-aria="home">
-          <span class="brand-mark"><i data-lucide="sparkles" aria-hidden="true"></i></span>
+          <span class="brand-mark has-logo" data-fallback-logo="assets/hair-salon-reset-logo.jpeg"><img src="assets/hair-salon-reset-logo.jpeg" alt="Hair Salon Reset By Yaleixi"></span>
           <span class="brand-text">
-            <span id="brandName">Dominican Hair Salon</span>
-            <span class="brand-subtitle"><span id="brandSubtitle">By Yaleixi Paula Parra</span><span class="brand-heart">&hearts;</span></span>
+            <span id="brandName">RESET</span>
+            <span class="brand-subtitle"><span id="brandSubtitle">by Yaleixi</span><span class="brand-heart">&hearts;</span></span>
           </span>
         </a>
         <nav id="nav" class="nav" aria-label="Secciones" data-i18n-aria="sections"></nav>
@@ -1605,10 +2281,14 @@
       <section id="inicio" class="hero">
         <div class="shell hero-layout">
           <div class="hero-copy reveal">
-            <div class="eyebrow"><i data-lucide="flower-2" aria-hidden="true"></i><span data-i18n="eyebrow">Cabello, color y blower</span></div>
-            <h1 id="heroTitle">Dominican Hair Salon</h1>
-            <div class="hero-subtitle"><span id="heroSubtitle">By Yaleixi Paula Parra</span><span class="brand-heart">&hearts;</span></div>
-            <p data-i18n="heroCopy">Servicios de cabello con acabado dominicano, brillo, movimiento y cuidado personalizado.</p>
+            <div class="eyebrow"><i data-lucide="sparkles" aria-hidden="true"></i><span data-i18n="eyebrow">Welcome to RESET by Yaleixi</span></div>
+            <h1 id="heroTitle">RESET</h1>
+            <div class="hero-subtitle"><span id="heroSubtitle" data-i18n="heroCopy">Your hair deserves a RESET.</span><span class="brand-heart">&hearts;</span></div>
+            <div class="hero-manifesto">
+              <span data-i18n="manifestoOne">Reconectar con tu cabello, sin prisa</span>
+              <span data-i18n="manifestoTwo">Procesos reales, con amor</span>
+              <span data-i18n="manifestoThree">Florida 🤍</span>
+            </div>
           </div>
 
           <form id="quickBook" class="quick-book reveal">
@@ -1656,29 +2336,32 @@
 
       <section id="acerca" class="section story-band">
         <div class="shell story-layout">
-          <div class="story-image reveal">
-            <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1400&q=82" alt="Salon Dominican Hair Salon" loading="lazy" decoding="async">
-          </div>
-          <div class="reveal">
-            <h2 class="section-title" data-i18n="aboutTitle">Acerca</h2>
-            <p id="aboutCopy" class="section-copy"></p>
-          </div>
-        </div>
-      </section>
-
-      <section id="vip" class="section vip-band">
-        <div class="shell">
-          <div class="vip-panel reveal">
-            <div>
-              <h2 class="section-title" data-i18n="vipTitle">Join Our VIP Club!</h2>
-              <p id="vipCopy" class="section-copy"></p>
-              <span class="vip-status"><i data-lucide="clock-3" aria-hidden="true"></i><span data-i18n="comingSoon">Disponible proximamente</span></span>
+          <figure class="story-image reveal">
+            <img src="assets/hair-salon-reset-logo.jpeg" alt="Logo Hair Salon Reset By Yaleixi" loading="lazy" decoding="async">
+          </figure>
+          <div class="story-content reveal">
+            <div class="story-eyebrow">
+              <i data-lucide="sparkles" aria-hidden="true"></i>
+              <span data-i18n="aboutEyebrow">Nuestra filosofía</span>
             </div>
-            <div class="vip-photo-slot">
-              <div>
-                <i data-lucide="image-plus" aria-hidden="true">+</i>
-                <strong data-i18n="vipPhotoSoon">Foto VIP disponible proximamente</strong>
-              </div>
+            <h2 class="section-title" data-i18n="aboutTitle">Acerca</h2>
+            <div id="aboutCopy" class="about-copy"></div>
+            <div class="about-values">
+              <article class="about-value">
+                <i data-lucide="leaf" aria-hidden="true"></i>
+                <strong data-i18n="aboutHealthy">Cabello saludable</strong>
+                <span data-i18n="aboutHealthyCopy">La salud de tu cabello guía cada decisión.</span>
+              </article>
+              <article class="about-value">
+                <i data-lucide="heart-handshake" aria-hidden="true"></i>
+                <strong data-i18n="aboutPersonal">Cuidado personalizado</strong>
+                <span data-i18n="aboutPersonalCopy">Procesos pensados para ti y tu cabello.</span>
+              </article>
+              <article class="about-value">
+                <i data-lucide="sparkles" aria-hidden="true"></i>
+                <strong data-i18n="aboutPause">Sin prisa</strong>
+                <span data-i18n="aboutPauseCopy">Una experiencia para pausar y volver a ti.</span>
+              </article>
             </div>
           </div>
         </div>
@@ -1696,10 +2379,11 @@
 
       <section id="eventSection" class="section event-band" hidden>
         <div class="shell">
-          <div class="section-head reveal">
+          <div class="section-head experience-head reveal">
             <div>
-              <h2 class="section-title" data-i18n="eventsTitle">Eventos</h2>
-              <p class="section-copy" data-i18n="eventsCopy">Holidays, avisos y fechas especiales del salon.</p>
+              <div class="section-eyebrow"><i data-lucide="calendar-heart" aria-hidden="true"></i><span data-i18n="eventsEyebrow">Agenda RESET</span></div>
+              <h2 class="section-title" data-i18n="eventsTitle">Momentos especiales</h2>
+              <p class="section-copy" data-i18n="eventsCopy">Descubre experiencias, novedades y fechas preparadas con intención para nuestra comunidad.</p>
             </div>
           </div>
           <div id="eventGrid" class="event-grid"></div>
@@ -1731,38 +2415,26 @@
         </div>
       </section>
 
-      <section id="testimonials" class="section testimonial-band">
+      <section id="testimonials" class="section testimonial-band" hidden>
         <div class="shell">
-          <div class="section-head reveal">
+          <div class="section-head experience-head reveal">
             <div>
-              <h2 class="section-title" data-i18n="testimonialsTitle">Testimonials</h2>
-              <p class="section-copy" data-i18n="testimonialsCopy">Experiencias de clientas con nuestros servicios.</p>
+              <div class="section-eyebrow"><i data-lucide="message-circle-heart" aria-hidden="true"></i><span data-i18n="testimonialsEyebrow">Voces de RESET</span></div>
+              <h2 class="section-title" data-i18n="testimonialsTitle">Experiencias que inspiran</h2>
+              <p class="section-copy" data-i18n="testimonialsCopy">Historias reales de clientas que hicieron una pausa, cuidaron su cabello y volvieron a sentirse ellas.</p>
             </div>
           </div>
           <div id="testimonialGrid" class="testimonial-grid"></div>
         </div>
       </section>
 
-      <section id="tour360" class="section tour-band">
-        <div class="shell tour-layout">
-          <div class="tour-copy reveal">
-            <h2 class="section-title" data-i18n="tourTitle">360 Tour</h2>
-            <p class="section-copy" data-i18n="tourCopy">Explora el espacio antes de tu cita.</p>
-            <div class="tour-badges">
-              <span><i data-lucide="badge-check" aria-hidden="true"></i><span data-i18n="tourBadgeOne">Vista interactiva</span></span>
-              <span><i data-lucide="map-pin" aria-hidden="true"></i><span data-i18n="tourBadgeTwo">Ubicacion en Maps</span></span>
-            </div>
-          </div>
-          <div id="tourFrame" class="tour-frame reveal"></div>
-        </div>
-      </section>
-
-      <section id="faq" class="section faq-band">
+      <section id="faq" class="section faq-band" hidden>
         <div class="shell">
-          <div class="section-head reveal">
+          <div class="section-head experience-head reveal">
             <div>
-              <h2 class="section-title" data-i18n="faqTitle">FAQ</h2>
-              <p class="section-copy" data-i18n="faqCopy">Respuestas rapidas antes de reservar.</p>
+              <div class="section-eyebrow"><i data-lucide="circle-help" aria-hidden="true"></i><span data-i18n="faqEyebrow">Antes de tu visita</span></div>
+              <h2 class="section-title" data-i18n="faqTitle">Todo lo que deseas saber</h2>
+              <p class="section-copy" data-i18n="faqCopy">Respuestas claras para reservar con tranquilidad y disfrutar cada momento de tu experiencia RESET.</p>
             </div>
           </div>
           <div id="faqGrid" class="faq-grid"></div>
@@ -1770,15 +2442,17 @@
       </section>
 
       <section id="contactSection" class="contact-section" hidden>
-        <div class="shell contact-card">
+        <div class="shell contact-card reveal">
           <div>
-            <h2 class="section-title" data-i18n="contactTitle">Contactame</h2>
-            <p class="section-copy" data-i18n="contactCopy">Para preguntas o ayuda con tu cita.</p>
+            <div class="section-eyebrow"><i data-lucide="sparkles" aria-hidden="true"></i><span data-i18n="contactEyebrow">Tu momento RESET</span></div>
+            <h2 class="section-title" data-i18n="contactTitle">Estamos aquí para ti</h2>
+            <p class="section-copy" data-i18n="contactCopy">¿Lista para comenzar? Escríbenos, llámanos o encuentra el salón. Será un placer recibirte.</p>
           </div>
           <div class="contact-links">
-            <a id="phoneLink" class="btn secondary" href="#"><i data-lucide="phone" aria-hidden="true"></i><span id="contactPhoneText"></span></a>
-            <a id="emailLink" class="btn secondary" href="#"><i data-lucide="mail" aria-hidden="true"></i><span id="contactEmailText"></span></a>
-            <a id="instagramLink" class="btn" href="#" target="_blank" rel="noopener" hidden><i data-lucide="instagram" aria-hidden="true"></i>Instagram</a>
+            <a id="phoneLink" class="contact-link" href="#"><span class="contact-icon"><i data-lucide="phone" aria-hidden="true"></i></span><span><small data-i18n="contactCall">Llámanos</small><strong id="contactPhoneText"></strong></span></a>
+            <a id="emailLink" class="contact-link" href="#"><span class="contact-icon"><i data-lucide="mail" aria-hidden="true"></i></span><span><small data-i18n="contactWrite">Escríbenos</small><strong id="contactEmailText"></strong></span></a>
+            <a id="addressLink" class="contact-link" href="#" target="_blank" rel="noopener" hidden><span class="contact-icon"><i data-lucide="map-pin" aria-hidden="true"></i></span><span><small data-i18n="contactVisit">Visítanos</small><strong id="contactAddressText"></strong></span></a>
+            <a id="instagramLink" class="contact-link" href="#" target="_blank" rel="noopener" hidden><span class="contact-icon"><i data-lucide="camera" aria-hidden="true"></i></span><span><small data-i18n="contactFollow">Síguenos</small><strong>Instagram</strong></span></a>
           </div>
         </div>
       </section>
@@ -1840,12 +2514,16 @@
             </div>
             <div class="field payment-field">
               <label for="paymentMethod" data-i18n="paymentMethod">Metodo de pago</label>
-              <select id="paymentMethod"></select>
+              <input id="paymentMethod" type="hidden" value="cash">
+              <div class="fixed-payment-choice"><i data-lucide="store" aria-hidden="true"></i><span data-i18n="payInSalon">Pagar cash en local</span></div>
             </div>
-            <label class="check-row">
-              <input id="firstVisit" type="checkbox">
-              <span data-i18n="firstVisit">Es mi primera cita</span>
-            </label>
+            <div class="field first-visit-field">
+              <label class="check-row">
+                <input id="firstVisit" type="checkbox">
+                <span data-i18n="firstVisit">Es mi primera cita</span>
+              </label>
+              <div id="firstVisitStatus" class="verification-note" hidden></div>
+            </div>
             <div class="field full">
               <label for="notes" data-i18n="notes">Notas</label>
               <textarea id="notes" placeholder="Preferencias, alergias o detalles importantes" data-i18n-placeholder="notesPlaceholder"></textarea>
@@ -1933,10 +2611,10 @@
       }
 
       const INITIAL_APP_DATA = readJsonElement('initialAppData', null);
-      const APP_VERSION = '20260525-2';
+      const APP_VERSION = '20260824-reset6';
       const APP_CONFIG = Object.assign({
-        apiBaseUrl: 'https://script.google.com/macros/s/AKfycbwFGn869QEqkSHH-iS99Nx5mJqANgFCFv9qUtjyF0SdaM2tfKq3PGL32TsWyYJnWUIy/exec',
-        dataUrl: 'data/site-data.json',
+        apiBaseUrl: 'https://script.google.com/macros/s/AKfycbzunUZqlntWZWulmE3ORRnrJszzaIWv4nfZX0-ZnXdZx2V7N_gCpSUwn7lXIZXH5t0K/exec',
+        dataUrl: '/data/site-data.json',
         mode: 'api'
       }, window.ANGELS_SITE_DATA || {});
 
@@ -1944,35 +2622,58 @@
         data: null,
         selectedTime: '',
         signatureDrawn: false,
+        firstVisitVerified: false,
+        firstVisitChecking: false,
+        userInteracted: false,
+        slotRequestSequence: 0,
+        slotAbortController: null,
+        availabilityMatrix: null,
         language: storageGet('localStorage', 'lumina_language', 'es'),
         calendarDate: new Date()
       };
 
+      const salonSelectRegistry = new Map();
+      let activeSalonSelect = null;
+
       const I18N = {
         es: {
-          eyebrow: 'Cabello, color y blower',
-          heroCopy: 'Servicios de cabello con acabado dominicano, brillo, movimiento y cuidado personalizado.',
+          eyebrow: 'Welcome to RESET by Yaleixi',
+          heroCopy: 'Your hair deserves a RESET.',
+          manifestoOne: 'Reconectar con tu cabello, sin prisa',
+          manifestoTwo: 'Procesos reales, con amor',
+          manifestoThree: 'Florida 🤍',
           quickBook: 'Reserva rápida',
           category: 'Categoría',
           service: 'Servicio',
           worker: 'Trabajadora',
           anyWorker: 'Cualquiera disponible',
+          unavailableNow: 'No disponible por el momento',
           book: 'Reservar',
           aboutTitle: 'Acerca',
+          aboutEyebrow: 'Nuestra filosofía',
+          aboutHealthy: 'Cabello saludable',
+          aboutHealthyCopy: 'La salud de tu cabello guía cada decisión.',
+          aboutPersonal: 'Cuidado personalizado',
+          aboutPersonalCopy: 'Procesos pensados para ti y tu cabello.',
+          aboutPause: 'Sin prisa',
+          aboutPauseCopy: 'Una experiencia para pausar y volver a ti.',
           vipTitle: 'Join Our VIP Club!',
           joinVip: 'Unirme',
           comingSoon: 'Disponible proximamente',
           vipPhotoSoon: 'Foto VIP disponible proximamente',
-          eventsTitle: 'Eventos',
-          eventsCopy: 'Holidays, avisos y fechas especiales del salon.',
-          testimonialsTitle: 'Testimonials',
-          testimonialsCopy: 'Experiencias de clientas con nuestros servicios.',
+          eventsEyebrow: 'Agenda RESET',
+          eventsTitle: 'Momentos especiales',
+          eventsCopy: 'Descubre experiencias, novedades y fechas preparadas con intención para nuestra comunidad.',
+          testimonialsEyebrow: 'Voces de RESET',
+          testimonialsTitle: 'Experiencias que inspiran',
+          testimonialsCopy: 'Historias reales de clientas que hicieron una pausa, cuidaron su cabello y volvieron a sentirse ellas.',
           tourTitle: '360 Tour',
           tourCopy: 'Explora el salon con una vista mas inmersiva antes de tu cita.',
           tourBadgeOne: 'Vista interactiva',
           tourBadgeTwo: 'Ubicacion en Maps',
-          faqTitle: 'FAQ',
-          faqCopy: 'Respuestas rapidas antes de reservar.',
+          faqEyebrow: 'Antes de tu visita',
+          faqTitle: 'Todo lo que deseas saber',
+          faqCopy: 'Respuestas claras para reservar con tranquilidad y disfrutar cada momento de tu experiencia RESET.',
           activePromos: 'Promos activas',
           promosCopy: 'Cupones disponibles para reservas elegibles.',
           loadingServices: 'Cargando servicios...',
@@ -1997,6 +2698,11 @@
           priceConsult: 'Consultar',
           optional: 'Opcional',
           firstVisit: 'Es mi primera cita',
+          firstVisitNeedsContact: 'Escribe tu telefono y un email valido para verificar el descuento.',
+          firstVisitChecking: 'Verificando tu historial de citas...',
+          firstVisitApplied: 'Primera cita verificada. Descuento BIENVENIDA10 aplicado automaticamente.',
+          firstVisitNotEligible: 'Ya existe historial con estos datos. El descuento de bienvenida no se puede repetir.',
+          firstVisitVerifyError: 'No pudimos verificar el descuento. Revisa tus datos e intenta nuevamente.',
           notes: 'Notas',
           notesPlaceholder: 'Preferencias, alergias o detalles importantes',
           agreement: 'Acuerdo',
@@ -2009,8 +2715,13 @@
           home: 'Inicio',
           sections: 'Secciones',
           languageLabel: 'Idioma',
-          contactTitle: 'Contactame',
-          contactCopy: 'Para preguntas o ayuda con tu cita.',
+          contactEyebrow: 'Tu momento RESET',
+          contactTitle: 'Estamos aquí para ti',
+          contactCopy: '¿Lista para comenzar? Escríbenos, llámanos o encuentra el salón. Será un placer recibirte.',
+          contactCall: 'Llámanos',
+          contactWrite: 'Escríbenos',
+          contactVisit: 'Visítanos',
+          contactFollow: 'Síguenos',
           trustPersonal: 'Atencion personalizada',
           trustPersonalCopy: 'Cada servicio se adapta a tu estilo y rasgos naturales.',
           trustAppointment: 'Servicios por cita',
@@ -2027,7 +2738,8 @@
           prevMonth: 'Mes anterior',
           nextMonth: 'Mes siguiente',
           successTitle: 'Solicitud recibida',
-          successCopy: "Gracias por reservar. Tu cita queda pendiente hasta ser confirmada por Dominican Hair Salon.",
+          successCopy: "Gracias por reservar. Tu cita queda pendiente hasta ser confirmada por RESET by Yaleixi.",
+          emailReceiptCopy: 'Enviamos a tu correo el recibo de la reserva y el QR de la cita.',
           emptyServices: 'Todavía no hay servicios visibles. Agrega servicios en la hoja Servicios y marca Visible como TRUE.',
           bookCategory: 'Reservar {category}',
           customService: 'Servicio personalizado.',
@@ -2046,7 +2758,6 @@
           receiptTotal: 'Total',
           receiptStatus: 'Estado',
           at: 'a las',
-          viewPdf: 'Ver PDF',
           categories: {
             todas: 'Todas',
             todos: 'Todos',
@@ -2075,29 +2786,43 @@
           defaultSectionCopy: 'Servicios personalizados con detalle y acabado elegante.'
         },
         en: {
-          eyebrow: 'Hair, color and blowouts',
-          heroCopy: 'Hair services with Dominican polish, shine, movement and personalized care.',
+          eyebrow: 'Welcome to RESET by Yaleixi',
+          heroCopy: 'Your hair deserves a RESET.',
+          manifestoOne: 'Reconnect with your hair, without rushing',
+          manifestoTwo: 'Real processes, made with love',
+          manifestoThree: 'Florida 🤍',
           quickBook: 'Quick booking',
           category: 'Category',
           service: 'Service',
           worker: 'Staff member',
           anyWorker: 'Anyone available',
+          unavailableNow: 'Not available at the moment',
           book: 'Book',
           aboutTitle: 'About',
+          aboutEyebrow: 'Our philosophy',
+          aboutHealthy: 'Healthy hair',
+          aboutHealthyCopy: 'Your hair health guides every decision.',
+          aboutPersonal: 'Personalized care',
+          aboutPersonalCopy: 'Processes designed for you and your hair.',
+          aboutPause: 'Unhurried',
+          aboutPauseCopy: 'An experience to pause and reconnect with yourself.',
           vipTitle: 'Join Our VIP Club!',
           joinVip: 'Join',
           comingSoon: 'Coming soon',
           vipPhotoSoon: 'VIP photo coming soon',
-          eventsTitle: 'Events',
-          eventsCopy: 'Holidays, notices and special salon dates.',
-          testimonialsTitle: 'Testimonials',
-          testimonialsCopy: 'Client experiences with our services.',
+          eventsEyebrow: 'RESET agenda',
+          eventsTitle: 'Special moments',
+          eventsCopy: 'Discover experiences, news and dates prepared with intention for our community.',
+          testimonialsEyebrow: 'RESET voices',
+          testimonialsTitle: 'Experiences that inspire',
+          testimonialsCopy: 'Real stories from clients who paused, cared for their hair and felt like themselves again.',
           tourTitle: '360 Tour',
           tourCopy: 'Explore the salon in a more immersive view before your appointment.',
           tourBadgeOne: 'Interactive view',
           tourBadgeTwo: 'Maps location',
-          faqTitle: 'FAQ',
-          faqCopy: 'Quick answers before booking.',
+          faqEyebrow: 'Before your visit',
+          faqTitle: 'Everything you want to know',
+          faqCopy: 'Clear answers so you can book with confidence and enjoy every moment of your RESET experience.',
           activePromos: 'Active promos',
           promosCopy: 'Coupons available for eligible bookings.',
           loadingServices: 'Loading services...',
@@ -2122,6 +2847,11 @@
           priceConsult: 'Ask for price',
           optional: 'Optional',
           firstVisit: 'This is my first visit',
+          firstVisitNeedsContact: 'Enter your phone number and a valid email to verify the discount.',
+          firstVisitChecking: 'Checking your appointment history...',
+          firstVisitApplied: 'First visit verified. BIENVENIDA10 was applied automatically.',
+          firstVisitNotEligible: 'Appointment history already exists for these details. The welcome discount cannot be repeated.',
+          firstVisitVerifyError: 'We could not verify the discount. Check your details and try again.',
           notes: 'Notes',
           notesPlaceholder: 'Preferences, allergies or important details',
           agreement: 'Agreement',
@@ -2134,8 +2864,13 @@
           home: 'Home',
           sections: 'Sections',
           languageLabel: 'Language',
-          contactTitle: 'Contact me',
-          contactCopy: 'For questions or help with your appointment.',
+          contactEyebrow: 'Your RESET moment',
+          contactTitle: 'We are here for you',
+          contactCopy: 'Ready to begin? Message us, call us or find the salon. We look forward to welcoming you.',
+          contactCall: 'Call us',
+          contactWrite: 'Email us',
+          contactVisit: 'Visit us',
+          contactFollow: 'Follow us',
           trustPersonal: 'Personalized care',
           trustPersonalCopy: 'Each service is adapted to your style and natural features.',
           trustAppointment: 'Appointment based',
@@ -2152,7 +2887,8 @@
           prevMonth: 'Previous month',
           nextMonth: 'Next month',
           successTitle: 'Request received',
-          successCopy: "Thank you for booking. Your appointment remains pending until confirmed by Dominican Hair Salon.",
+          successCopy: "Thank you for booking. Your appointment remains pending until confirmed by RESET by Yaleixi.",
+          emailReceiptCopy: 'We sent your appointment receipt and QR code to your email.',
           emptyServices: 'There are no visible services yet. Add services in the Servicios sheet and mark Visible as TRUE.',
           bookCategory: 'Book {category}',
           customService: 'Personalized service.',
@@ -2171,7 +2907,6 @@
           receiptTotal: 'Total',
           receiptStatus: 'Status',
           at: 'at',
-          viewPdf: 'View PDF',
           categories: {
             todas: 'All',
             todos: 'All',
@@ -2207,12 +2942,41 @@
         bindEvents();
         applyTranslations();
         setupReveal();
+        document.addEventListener('pointerdown', () => {
+          state.userInteracted = true;
+        }, { capture: true, once: true });
+        let renderedSnapshot = false;
         try {
           const initialData = INITIAL_APP_DATA && typeof INITIAL_APP_DATA === 'object' ? INITIAL_APP_DATA : null;
-          state.data = normalizeAppData(hasUsableAppData(initialData) ? initialData : await loadAppData());
+          const snapshot = hasUsableAppData(initialData) ? initialData : await loadLocalAppData();
+          state.data = normalizeAppData(snapshot);
           renderApp();
-        } catch (error) {
-          $('#content').innerHTML = `<div class="shell empty">${escapeHtml(error.message || error)}</div>`;
+          renderedSnapshot = true;
+        } catch (snapshotError) {
+          console.warn('No se pudo abrir la copia rápida del catálogo:', snapshotError.message || snapshotError);
+        }
+
+        try {
+          const previousVersion = state.data && state.data.catalogVersion;
+          const liveData = normalizeAppData(await loadAppData());
+          const catalogChanged = Boolean(previousVersion && liveData.catalogVersion && previousVersion !== liveData.catalogVersion);
+          state.data = liveData;
+          if (!renderedSnapshot || !state.userInteracted || catalogChanged) {
+            if (catalogChanged) {
+              state.availabilityMatrix = null;
+              closeBooking();
+            }
+            renderApp();
+          }
+          if (catalogChanged) {
+            showToast(state.language === 'en'
+              ? 'The service list was updated before booking.'
+              : 'La lista de servicios se actualizó antes de reservar.');
+          }
+        } catch (backendError) {
+          if (!renderedSnapshot) {
+            $('#content').innerHTML = `<div class="shell empty">${escapeHtml(backendError.message || backendError)}</div>`;
+          }
         }
       }
 
@@ -2222,8 +2986,8 @@
 
       function normalizeAppData(data) {
         data = data && typeof data === 'object' ? data : {};
-        data.appName = data.appName || 'Dominican Hair Salon';
-        data.appSubtitle = data.appSubtitle || 'By Yaleixi Paula Parra';
+        data.appName = data.appName || 'RESET';
+        data.appSubtitle = data.appSubtitle || 'by Yaleixi';
         data.currency = data.currency || 'USD';
         data.localName = data.localName || data.appName;
         data.logoUrl = data.logoUrl || '';
@@ -2258,19 +3022,24 @@
         data.staff = Array.isArray(data.staff) ? data.staff : [];
         data.specialEvents = Array.isArray(data.specialEvents) ? data.specialEvents : [];
         data.pageSections = data.pageSections && typeof data.pageSections === 'object' ? data.pageSections : {};
-        data.mapLink = data.mapLink || 'https://maps.app.goo.gl/ufwrqkr2N7gmLXUZ6';
+        data.mapLink = data.mapLink || '';
         data.mapIframeSrc = data.mapIframeSrc || '';
         data.tourIframeSrc = data.tourIframeSrc || '';
         data.today = data.today || toIsoDate(new Date());
+        data.catalogVersion = data.catalogVersion || '';
         return data;
       }
 
       async function loadAppData() {
         if (shouldUseApiBackend()) {
           try {
-            return await callBackend('getAppData', []);
-          } catch (error) {
-            console.warn('API no disponible, usando datos locales:', error.message || error);
+            return await fetchPublicDataFast(false);
+          } catch (edgeError) {
+            try {
+              return await postToAppsScript('getAppData', []);
+            } catch (error) {
+              console.warn('API no disponible, usando modo seguro:', error.message || error);
+            }
             const fallback = await loadLocalAppData();
             fallback.siteStatus = Object.assign({}, fallback.siteStatus || {}, {
               publicEnabled: false,
@@ -2319,14 +3088,32 @@
         $('#preferredWorker').addEventListener('change', loadSlots);
         $('#date').addEventListener('change', () => {
           renderCalendar();
+          fillWorkerSelect();
           loadSlots();
         });
         $('#bookingForm').addEventListener('submit', submitReservation);
+        $('#firstVisit').addEventListener('change', handleFirstVisitChange);
+        $('#phone').addEventListener('input', invalidateFirstVisitVerification);
+        $('#email').addEventListener('input', invalidateFirstVisitVerification);
+        $('#phone').addEventListener('blur', verifyFirstVisitIfSelected);
+        $('#email').addEventListener('blur', verifyFirstVisitIfSelected);
         $('#closeBooking').addEventListener('click', closeBooking);
         $('#cancelBooking').addEventListener('click', closeBooking);
         $('#closeReceipt').addEventListener('click', closeReceipt);
         $('#clearSignature').addEventListener('click', clearSignature);
         document.addEventListener('click', handleInternalNav);
+        document.addEventListener('pointerdown', event => {
+          if (activeSalonSelect && !activeSalonSelect.control.contains(event.target)) {
+            closeSalonSelect(activeSalonSelect);
+          }
+        });
+        document.addEventListener('keydown', event => {
+          if (event.key === 'Escape' && activeSalonSelect) {
+            const current = activeSalonSelect;
+            closeSalonSelect(current);
+            current.trigger.focus();
+          }
+        });
         document.querySelectorAll('[data-lang]').forEach(button => {
           button.addEventListener('click', () => setLanguage(button.dataset.lang));
         });
@@ -2350,10 +3137,9 @@
 
       function renderApp() {
         applyBrandAssets();
-        $('#brandName').textContent = state.data.localName || state.data.appName;
-        $('#heroTitle').textContent = state.data.localName || state.data.appName;
-        $('#brandSubtitle').textContent = state.data.appSubtitle || '';
-        $('#heroSubtitle').textContent = state.data.appSubtitle || '';
+        $('#brandName').textContent = 'RESET';
+        $('#heroTitle').textContent = 'RESET';
+        $('#brandSubtitle').textContent = 'by Yaleixi';
         applyTranslations();
         if (state.data.siteStatus && state.data.siteStatus.publicEnabled === false) {
           renderMaintenanceMode();
@@ -2365,7 +3151,7 @@
         const policySection = document.querySelector('.policy-section');
         if (trustBand) trustBand.hidden = false;
         if (policySection) policySection.hidden = false;
-        ['#acerca', '#vip', '#testimonials', '#tour360', '#faq'].forEach(selector => {
+        ['#acerca', '#testimonials', '#faq'].forEach(selector => {
           const node = document.querySelector(selector);
           if (node) node.hidden = false;
         });
@@ -2377,6 +3163,7 @@
         fillCategorySelect($('#modalCategory'));
         fillServiceSelect($('#modalService'), $('#modalCategory').value);
         fillWorkerSelect();
+        setupSalonSelects();
         renderPaymentOptions();
         renderStorySections();
         renderEvents();
@@ -2385,11 +3172,11 @@
         renderBeforeAfter();
         renderPolicy();
         renderTestimonials();
-        renderTour();
         renderFaq();
         renderContact();
         renderCalendar();
         refreshIcons();
+        setupReveal();
       }
 
       function renderMaintenanceMode() {
@@ -2401,7 +3188,7 @@
         $('#contactSection').hidden = true;
         const trustBand = document.querySelector('.trust-band');
         const policySection = document.querySelector('.policy-section');
-        ['#acerca', '#vip', '#testimonials', '#tour360', '#faq'].forEach(selector => {
+        ['#acerca', '#testimonials', '#faq'].forEach(selector => {
           const node = document.querySelector(selector);
           if (node) node.hidden = true;
         });
@@ -2431,67 +3218,106 @@
         if (state.data.logoUrl) {
           mark.classList.add('has-logo');
           mark.innerHTML = `<img src="${escapeHtml(state.data.logoUrl)}" alt="${escapeHtml(state.data.localName || state.data.appName)}">`;
-        } else if (mark.classList.contains('has-logo')) {
-          mark.classList.remove('has-logo');
-          mark.innerHTML = '<i data-lucide="sparkles" aria-hidden="true"></i>';
+        } else {
+          const fallbackLogo = mark.dataset.fallbackLogo || 'assets/hair-salon-reset-logo.jpeg';
+          mark.classList.add('has-logo');
+          mark.innerHTML = `<img src="${escapeHtml(fallbackLogo)}" alt="${escapeHtml(state.data.localName || state.data.appName)}">`;
         }
       }
 
       function renderStorySections() {
         const sections = state.data.pageSections || {};
         const about = sections.about || {};
-        const vip = sections.vip || {};
-        $('#aboutCopy').textContent = about[state.language] || about.es || '';
-        $('#vipCopy').textContent = vip[state.language] || vip.es || '';
+        const source = normalizeEditorialCopy(about[state.language] || about.es || '');
+        const blocks = source.split(/\n\s*\n/).map(block => block.trim()).filter(Boolean);
+        $('#aboutCopy').innerHTML = blocks.map((block, index) => {
+          const lines = block.split('\n').map(line => line.trim()).filter(Boolean);
+          const plain = lines.join(' ');
+          if (/^restore\s*\./i.test(plain)) {
+            const words = plain.split(/\s*\.\s*/).map(word => word.trim()).filter(Boolean);
+            return `<div class="about-renewal">${words.map(word => `<span>${escapeHtml(word)}.</span>`).join('')}</div>`;
+          }
+          if (lines.length >= 3 && /reset/i.test(plain)) {
+            return `<blockquote class="about-mantra">${lines.map(line => `<span>${escapeHtml(line)}</span>`).join('')}</blockquote>`;
+          }
+          const welcome = /welcome/i.test(plain) || /^✨/.test(plain);
+          const className = welcome ? 'about-welcome' : (index === 0 ? 'about-lead' : '');
+          return `<p${className ? ` class="${className}"` : ''}>${escapeHtml(plain)}</p>`;
+        }).join('');
+      }
+
+      function normalizeEditorialCopy(value) {
+        return String(value || '')
+          .replace(/\\r\\n/g, '\n')
+          .replace(/\\n/g, '\n')
+          .replace(/\r\n?/g, '\n')
+          .trim();
       }
 
       function renderEvents() {
         const events = (state.data.specialEvents || []).filter(event => event.visibility === 'clientes' || event.visibility === 'ambos');
         $('#eventSection').hidden = !events.length;
-        if (!events.length) return;
+        if (!events.length) {
+          $('#eventGrid').innerHTML = '';
+          return;
+        }
         $('#eventGrid').innerHTML = events.map(event => `
           <article class="event-card reveal">
-            <span>${escapeHtml(event.type || 'Evento')}</span>
+            <div class="event-icon"><i data-lucide="${event.blocksBooking ? 'calendar-off' : 'calendar-heart'}" aria-hidden="true"></i></div>
+            <span class="event-type">${escapeHtml(event.type || (state.language === 'en' ? 'Special date' : 'Fecha especial'))}</span>
             <h3>${escapeHtml(state.language === 'en' && event.titleEn ? event.titleEn : event.title)}</h3>
-            <p>${escapeHtml(event.startDate)}${event.endDate && event.endDate !== event.startDate ? ` - ${escapeHtml(event.endDate)}` : ''}</p>
+            <p class="event-date">${escapeHtml(formatEventDateRange(event.startDate, event.endDate))}</p>
             <p>${escapeHtml(state.language === 'en' && event.descriptionEn ? event.descriptionEn : event.description || '')}</p>
           </article>
         `).join('');
+        refreshIcons();
+      }
+
+      function formatEventDateRange(startDate, endDate) {
+        const format = value => {
+          const date = new Date(`${value}T12:00:00`);
+          if (Number.isNaN(date.getTime())) return value || '';
+          return new Intl.DateTimeFormat(state.language === 'en' ? 'en-US' : 'es-US', { month: 'long', day: 'numeric', year: 'numeric' }).format(date);
+        };
+        const start = format(startDate);
+        const end = endDate && endDate !== startDate ? format(endDate) : '';
+        return end ? `${start} — ${end}` : start;
       }
 
       function renderTestimonials() {
         const testimonials = (state.data.pageSections && state.data.pageSections.testimonials) || [];
+        const section = $('#testimonials');
+        section.hidden = !testimonials.length;
+        if (!testimonials.length) {
+          $('#testimonialGrid').innerHTML = '';
+          return;
+        }
         $('#testimonialGrid').innerHTML = testimonials.map(item => `
           <article class="testimonial-card reveal">
-            <i data-lucide="quote" aria-hidden="true"></i>
-            <p>${escapeHtml(item[state.language] || item.es || '')}</p>
+            <div class="testimonial-stars" aria-label="${Math.max(1, Math.min(5, Number(item.rating) || 5))} de 5 estrellas">${'★'.repeat(Math.max(1, Math.min(5, Number(item.rating) || 5)))}</div>
+            <blockquote>${escapeHtml(item.comment || item[state.language] || item.es || '')}</blockquote>
+            <footer>${escapeHtml(item.name || (state.language === 'en' ? 'RESET client' : 'Clienta RESET'))}</footer>
           </article>
         `).join('');
-      }
-
-      function renderTour() {
-        const src = state.data.tourIframeSrc || '';
-        $('#tourFrame').innerHTML = src
-          ? `
-            <div class="tour-toolbar">
-              <strong>Dominican Hair Salon</strong>
-              <a href="${escapeHtml(state.data.mapLink || 'https://maps.app.goo.gl/ufwrqkr2N7gmLXUZ6')}" target="_blank" rel="noopener">${escapeHtml(state.language === 'en' ? 'Open Maps' : 'Abrir Maps')}</a>
-            </div>
-            <iframe src="${escapeHtml(src)}" width="600" height="450" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>`
-          : `<div class="empty">${escapeHtml(state.language === 'en' ? 'Tour coming soon.' : 'Tour disponible pronto.')}</div>`;
+        refreshIcons();
       }
 
       function renderFaq() {
         const items = (state.data.pageSections && state.data.pageSections.faq) || [];
+        const section = $('#faq');
+        section.hidden = !items.length;
+        if (!items.length) {
+          $('#faqGrid').innerHTML = '';
+          return;
+        }
         $('#faqGrid').innerHTML = items.map(item => {
           const question = state.language === 'en' ? item.en : item.es;
           const answer = state.language === 'en' ? item.answerEn : item.answerEs;
           return `
-            <article class="faq-card reveal">
-              <span>${escapeHtml(state.language === 'en' ? 'Question' : 'Pregunta')}</span>
-              <h3>${escapeHtml(question || '')}</h3>
-              <p>${escapeHtml(answer || '')}</p>
-            </article>`;
+            <details class="faq-card reveal">
+              <summary><span>${escapeHtml(question || '')}</span><span class="faq-plus" aria-hidden="true">+</span></summary>
+              <p class="faq-answer">${escapeHtml(answer || '')}</p>
+            </details>`;
         }).join('');
       }
 
@@ -2506,8 +3332,11 @@
         $('#contactEmailText').textContent = contact.email || '';
         $('#phoneLink').href = contact.phone ? `tel:${contact.phone}` : '#';
         $('#emailLink').href = contact.email ? `mailto:${contact.email}` : '#';
+        $('#contactAddressText').textContent = contact.address || '';
+        $('#addressLink').href = contact.address && state.data.mapLink ? state.data.mapLink : '#';
         $('#phoneLink').hidden = !contact.phone || !contact.showContact;
         $('#emailLink').hidden = !contact.email || !contact.showContact;
+        $('#addressLink').hidden = !contact.address || !state.data.mapLink || !contact.showContact;
         $('#instagramLink').hidden = !contact.showInstagram || !instagramUrl;
         $('#instagramLink').href = instagramUrl || '#';
       }
@@ -2586,8 +3415,6 @@
         ));
         links.unshift(`<a href="#inicio">${escapeHtml(t('home'))}</a>`);
         links.splice(1, 0, `<a href="#acerca">${escapeHtml(t('aboutTitle'))}</a>`);
-        links.push(`<a href="#vip">${escapeHtml(t('vipTitle'))}</a>`);
-        links.push(`<a href="#tour360">${escapeHtml(t('tourTitle'))}</a>`);
         links.push(`<a href="#faq">${escapeHtml(t('faqTitle'))}</a>`);
         $('#nav').innerHTML = links.join('');
       }
@@ -2729,6 +3556,7 @@
         select.innerHTML = state.data.categories.map(category => (
           `<option value="${escapeHtml(category)}">${escapeHtml(categoryLabel(category))}</option>`
         )).join('');
+        syncSalonSelect(select);
       }
 
       function fillServiceSelect(select, category) {
@@ -2736,46 +3564,176 @@
         select.innerHTML = services.map(service => (
           `<option value="${escapeHtml(service.name)}">${escapeHtml(serviceName(service))}${showPrices() ? ` - ${formatMoney(service.price)}` : ''}</option>`
         )).join('');
+        syncSalonSelect(select);
       }
 
       function fillWorkerSelect() {
         const service = findService($('#modalCategory').value, $('#modalService').value);
         const workers = state.data.modules.workers === false ? [] : (state.data.staff || []).filter(worker => workerCanDoService(worker, service));
+        const selectedDate = $('#date').value || state.data.today;
+        const selectedDay = makeLocalDate(selectedDate).getDay();
         $('#preferredWorker').closest('.field').hidden = state.data.modules.workers === false;
         $('#preferredWorker').innerHTML = [`<option value="">${escapeHtml(t('anyWorker'))}</option>`]
-          .concat(workers.map(worker => `<option value="${escapeHtml(worker.username)}">${escapeHtml(worker.displayName || worker.username)}</option>`))
+          .concat(workers.map(worker => {
+            const blocks = (worker.availability || {})[String(selectedDay)] || [];
+            const unavailable = !blocks.length || (selectedDate === state.data.today && worker.temporarilyUnavailable);
+            const label = `${worker.displayName || worker.username}${unavailable ? ` — ${t('unavailableNow')}` : ''}`;
+            return `<option value="${escapeHtml(worker.username)}" ${unavailable ? 'disabled' : ''}>${escapeHtml(label)}</option>`;
+          }))
           .join('');
+        syncSalonSelect($('#preferredWorker'));
+      }
+
+      function setupSalonSelects() {
+        ['quickCategory', 'quickService', 'modalCategory', 'modalService', 'preferredWorker'].forEach(id => {
+          enhanceSalonSelect(document.getElementById(id));
+        });
+      }
+
+      function enhanceSalonSelect(select) {
+        if (!select) return;
+        if (salonSelectRegistry.has(select)) {
+          syncSalonSelect(select);
+          return;
+        }
+
+        const control = document.createElement('div');
+        const triggerId = `${select.id}SalonTrigger`;
+        const menuId = `${select.id}SalonMenu`;
+        control.className = 'salon-select-control';
+        control.innerHTML = `
+          <button class="salon-select-trigger" id="${triggerId}" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="${menuId}">
+            <span class="salon-select-value"></span>
+            <span class="salon-select-chevron" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="m7 10 5 5 5-5"></path></svg>
+            </span>
+          </button>
+          <div class="salon-select-menu" id="${menuId}" role="listbox" hidden></div>`;
+
+        select.classList.add('salon-select-native');
+        select.setAttribute('aria-hidden', 'true');
+        select.tabIndex = -1;
+        select.insertAdjacentElement('afterend', control);
+
+        const trigger = control.querySelector('.salon-select-trigger');
+        const menu = control.querySelector('.salon-select-menu');
+        const label = document.querySelector(`label[for="${select.id}"]`);
+        if (label) label.htmlFor = triggerId;
+
+        const record = { select, control, trigger, menu, label };
+        salonSelectRegistry.set(select, record);
+
+        trigger.addEventListener('click', () => {
+          if (control.classList.contains('is-open')) closeSalonSelect(record);
+          else openSalonSelect(record);
+        });
+
+        trigger.addEventListener('keydown', event => {
+          if (['ArrowDown', 'ArrowUp', 'Enter', ' '].indexOf(event.key) === -1) return;
+          event.preventDefault();
+          openSalonSelect(record);
+          const selectedIndex = Math.max(select.selectedIndex, 0);
+          focusSalonOption(record, event.key === 'ArrowUp' ? Math.max(select.options.length - 1, 0) : selectedIndex);
+        });
+
+        menu.addEventListener('click', event => {
+          const optionButton = event.target.closest('.salon-select-option');
+          if (!optionButton) return;
+          chooseSalonOption(record, Number(optionButton.dataset.index));
+        });
+
+        menu.addEventListener('keydown', event => {
+          const buttons = Array.from(menu.querySelectorAll('.salon-select-option'));
+          const currentIndex = buttons.indexOf(document.activeElement);
+          if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+            event.preventDefault();
+            const direction = event.key === 'ArrowDown' ? 1 : -1;
+            const nextIndex = currentIndex < 0
+              ? Math.max(select.selectedIndex, 0)
+              : (currentIndex + direction + buttons.length) % buttons.length;
+            if (buttons[nextIndex]) buttons[nextIndex].focus();
+          } else if (event.key === 'Home' || event.key === 'End') {
+            event.preventDefault();
+            const destination = event.key === 'Home' ? buttons[0] : buttons[buttons.length - 1];
+            if (destination) destination.focus();
+          } else if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            if (document.activeElement && document.activeElement.classList.contains('salon-select-option')) {
+              document.activeElement.click();
+            }
+          } else if (event.key === 'Tab') {
+            closeSalonSelect(record);
+          }
+        });
+
+        select.addEventListener('change', () => syncSalonSelect(select));
+        syncSalonSelect(select);
+      }
+
+      function syncSalonSelect(select) {
+        const record = salonSelectRegistry.get(select);
+        if (!record) return;
+        const selected = select.options[select.selectedIndex] || select.options[0];
+        record.trigger.disabled = select.disabled;
+        record.trigger.querySelector('.salon-select-value').textContent = selected ? selected.textContent : '';
+        record.trigger.setAttribute('aria-label', `${record.label ? record.label.textContent.trim() : ''}: ${selected ? selected.textContent : ''}`);
+        record.menu.innerHTML = Array.from(select.options).map((option, index) => {
+          const isSelected = index === select.selectedIndex;
+          return `
+            <button class="salon-select-option${isSelected ? ' is-selected' : ''}" type="button" role="option" aria-selected="${isSelected}" data-index="${index}"${option.disabled ? ' disabled' : ''}>
+              <span>${escapeHtml(option.textContent)}</span>
+              <span class="salon-select-check" aria-hidden="true">✓</span>
+            </button>`;
+        }).join('');
+      }
+
+      function openSalonSelect(record) {
+        if (!record || record.trigger.disabled) return;
+        if (activeSalonSelect && activeSalonSelect !== record) closeSalonSelect(activeSalonSelect);
+        activeSalonSelect = record;
+        record.control.classList.add('is-open');
+        record.trigger.setAttribute('aria-expanded', 'true');
+        record.menu.hidden = false;
+      }
+
+      function closeSalonSelect(record) {
+        if (!record) return;
+        record.control.classList.remove('is-open');
+        record.trigger.setAttribute('aria-expanded', 'false');
+        record.menu.hidden = true;
+        if (activeSalonSelect === record) activeSalonSelect = null;
+      }
+
+      function focusSalonOption(record, index) {
+        window.requestAnimationFrame(() => {
+          const option = record.menu.querySelector(`[data-index="${index}"]`);
+          if (option) option.focus();
+        });
+      }
+
+      function chooseSalonOption(record, index) {
+        const option = record.select.options[index];
+        if (!option || option.disabled) return;
+        const changed = record.select.selectedIndex !== index;
+        record.select.selectedIndex = index;
+        syncSalonSelect(record.select);
+        closeSalonSelect(record);
+        record.trigger.focus();
+        if (changed) record.select.dispatchEvent(new Event('change', { bubbles: true }));
       }
 
       function renderPaymentOptions() {
         const settings = state.data.paymentSettings || {};
-        const allowOnline = Boolean(settings.allowOnline);
-        const select = $('#paymentMethod');
-        if (!select) return;
-        const paymentType = settings.paymentType || 'both';
-        const onlineOptions = [];
-        if (allowOnline && (paymentType === 'deposit' || paymentType === 'both')) {
-          onlineOptions.push(`<option value="online_deposit">${escapeHtml(t('paymentOnlineDeposit'))}</option>`);
-        }
-        if (allowOnline && (paymentType === 'full' || paymentType === 'both')) {
-          onlineOptions.push(`<option value="online_full">${escapeHtml(t('paymentOnlineFull'))}</option>`);
-        }
-        select.innerHTML = [
-          settings.allowCash !== false ? `<option value="cash">${escapeHtml(t('payInSalon'))}</option>` : '',
-          ...onlineOptions
-        ].filter(Boolean).join('') || `<option value="cash">${escapeHtml(t('payInSalon'))}</option>`;
+        const input = $('#paymentMethod');
+        if (!input) return;
+        input.value = 'cash';
         document.querySelectorAll('.payment-field').forEach(node => {
           node.hidden = false;
         });
-        const provider = settings.providerLabel || settings.provider || '';
-        const depositInfo = settings.depositAmount > 0
-          ? formatMoney(settings.depositAmount)
-          : (settings.depositPercent > 0 ? `${settings.depositPercent}%` : '');
         $('#paymentChoiceCard').innerHTML = `
           <strong>${escapeHtml(t('paymentMethod'))}</strong>
-          ${allowOnline ? `<p>${escapeHtml(t('paymentProviderActive'))}: ${escapeHtml(provider)}</p>` : `<p>${escapeHtml(t('payInSalon'))}</p>`}
-          ${depositInfo ? `<p>${escapeHtml(t('deposit'))}: ${escapeHtml(depositInfo)}</p>` : ''}
-          <p>${escapeHtml(settings.instructions || t('paymentDisclaimer'))}</p>
+          <p>${escapeHtml(t('payInSalon'))}</p>
+          <p>${escapeHtml(settings.instructions || 'Todos los pagos se realizan presencialmente en el salon.')}</p>
         `;
       }
 
@@ -2811,8 +3769,10 @@
         }
 
         $('#modalCategory').value = service.category;
+        syncSalonSelect($('#modalCategory'));
         fillServiceSelect($('#modalService'), service.category);
         $('#modalService').value = service.name;
+        syncSalonSelect($('#modalService'));
         fillWorkerSelect();
         renderPaymentOptions();
         $('#date').value = $('#date').value || state.data.today;
@@ -2843,33 +3803,123 @@
         const service = $('#modalService').value;
         const slotGrid = $('#slotGrid');
 
+        const requestSequence = ++state.slotRequestSequence;
         state.selectedTime = '';
         if (!date || !category || !service) {
           slotGrid.innerHTML = `<div class="empty">${escapeHtml(t('chooseServiceDate'))}</div>`;
           return;
         }
 
+        if (state.slotAbortController) state.slotAbortController.abort();
+        const slotAbortController = typeof AbortController !== 'undefined' ? new AbortController() : null;
+        state.slotAbortController = slotAbortController;
         slotGrid.innerHTML = `<div class="empty">${escapeHtml(t('searchingSlots'))}</div>`;
         try {
-          const slots = await gas('getAvailableSlots', category, service, date, state.language, $('#preferredWorker').value);
+          const selectedService = findService(category, service);
+          if (!selectedService) throw new Error(t('noServicesInCategory'));
+          const preferredWorker = $('#preferredWorker').value;
+          const matrixFresh = state.availabilityMatrix &&
+            Date.now() - Date.parse(state.availabilityMatrix.generatedAt || 0) < 360000;
+          const matrixDate = matrixFresh && state.availabilityMatrix.dates
+            ? state.availabilityMatrix.dates[date]
+            : null;
+          let availability;
+          let usedMatrix = false;
+          const availabilityPayload = {
+            serviceId: selectedService.id,
+            category,
+            service,
+            date,
+            language: state.language,
+            preferredWorker,
+            catalogVersion: state.data.catalogVersion || ''
+          };
+          if (matrixDate && Object.prototype.hasOwnProperty.call(matrixDate, selectedService.id)) {
+            const matrixSlots = matrixDate[selectedService.id] || [];
+            usedMatrix = true;
+            availability = {
+              staleCatalog: false,
+              catalogVersion: state.availabilityMatrix.catalogVersion,
+              slots: preferredWorker
+                ? matrixSlots.filter(slot => {
+                    const workerIds = Array.isArray(slot.workerIds)
+                      ? slot.workerIds
+                      : (slot.workers || []).map(worker => worker.username);
+                    return workerIds.indexOf(preferredWorker) !== -1;
+                  })
+                : matrixSlots
+            };
+          } else {
+            availability = shouldUseApiBackend()
+              ? await fetchBookingAvailabilityFast(
+                  availabilityPayload,
+                  slotAbortController ? slotAbortController.signal : undefined
+                )
+              : await gas('getBookingAvailability', availabilityPayload);
+          }
+          if (requestSequence !== state.slotRequestSequence) return;
+          if (availability && availability.staleCatalog) {
+            state.data = normalizeAppData(await fetchPublicDataFast(true));
+            renderApp();
+            showToast(state.language === 'en'
+              ? 'The service list changed. It has been refreshed; please choose the service again.'
+              : 'La lista de servicios cambió. Ya fue actualizada; selecciona el servicio nuevamente.');
+            return;
+          }
+          const slots = availability && Array.isArray(availability.slots) ? availability.slots : [];
           if (!slots.length) {
             slotGrid.innerHTML = `<div class="empty">${escapeHtml(t('noSlots'))}</div>`;
             return;
           }
 
-          slotGrid.innerHTML = slots.map(slot => (
-            `<button class="slot" type="button" data-time="${escapeHtml(slot.value)}">${escapeHtml(slot.label)}</button>`
-          )).join('');
-
-          slotGrid.querySelectorAll('.slot').forEach(button => {
-            button.addEventListener('click', () => {
-              slotGrid.querySelectorAll('.slot').forEach(item => item.classList.remove('selected'));
-              button.classList.add('selected');
-              state.selectedTime = button.dataset.time;
-            });
-          });
+          renderSlotButtons(slotGrid, slots);
+          if (usedMatrix) refreshCanonicalAvailability(requestSequence, availabilityPayload);
         } catch (error) {
+          if (error && error.name === 'AbortError') return;
           slotGrid.innerHTML = `<div class="empty">${escapeHtml(error.message || error)}</div>`;
+        } finally {
+          if (state.slotAbortController === slotAbortController) state.slotAbortController = null;
+        }
+      }
+
+      function renderSlotButtons(slotGrid, slots) {
+        const selectedTime = state.selectedTime;
+        slotGrid.innerHTML = slots.map(slot => (
+          `<button class="slot ${slot.value === selectedTime ? 'selected' : ''}" type="button" data-time="${escapeHtml(slot.value)}">${escapeHtml(slot.label)}</button>`
+        )).join('');
+        if (selectedTime && !slots.some(slot => slot.value === selectedTime)) state.selectedTime = '';
+        slotGrid.querySelectorAll('.slot').forEach(button => {
+          button.addEventListener('click', () => {
+            slotGrid.querySelectorAll('.slot').forEach(item => item.classList.remove('selected'));
+            button.classList.add('selected');
+            state.selectedTime = button.dataset.time;
+          });
+        });
+      }
+
+      async function refreshCanonicalAvailability(requestSequence, payload) {
+        try {
+          const availability = await gas('getBookingAvailability', payload);
+          if (requestSequence !== state.slotRequestSequence) return;
+          if (availability && availability.staleCatalog) {
+            state.availabilityMatrix = null;
+            state.data = normalizeAppData(await fetchPublicDataFast(true));
+            renderApp();
+            showToast(state.language === 'en'
+              ? 'The service list changed. It has been refreshed; please choose the service again.'
+              : 'La lista de servicios cambió. Ya fue actualizada; selecciona el servicio nuevamente.');
+            return;
+          }
+          const slotGrid = $('#slotGrid');
+          const slots = availability && Array.isArray(availability.slots) ? availability.slots : [];
+          if (!slots.length) {
+            state.selectedTime = '';
+            slotGrid.innerHTML = `<div class="empty">${escapeHtml(t('noSlots'))}</div>`;
+            return;
+          }
+          renderSlotButtons(slotGrid, slots);
+        } catch (error) {
+          console.warn('No se pudo completar la verificación en vivo de horarios:', error.message || error);
         }
       }
 
@@ -2941,6 +3991,7 @@
             $('#date').value = button.dataset.date;
             state.calendarDate = makeLocalDate(button.dataset.date);
             renderCalendar();
+            fillWorkerSelect();
             loadSlots();
             refreshIcons();
           });
@@ -2956,6 +4007,10 @@
         if (!state.signatureDrawn) {
           showToast(t('missingSignature'));
           return;
+        }
+        if ($('#firstVisit').checked && !state.firstVisitVerified) {
+          const verified = await verifyFirstVisitEligibility(true);
+          if (!verified) return;
         }
 
         const submitButton = $('#submitBooking');
@@ -2975,8 +4030,8 @@
           time: state.selectedTime,
           coupon: $('#coupon').value,
           tip: $('#tip') ? $('#tip').value : 0,
-          paymentMethod: $('#paymentMethod') ? $('#paymentMethod').value : 'cash',
-          paymentType: ($('#paymentMethod') && $('#paymentMethod').value === 'online_full') ? 'full' : (($('#paymentMethod') && $('#paymentMethod').value === 'online_deposit') ? 'deposit' : 'cash'),
+          paymentMethod: 'cash',
+          paymentType: 'cash',
           notes: $('#notes').value,
           firstVisit: $('#firstVisit').checked,
           agreementAccepted: $('#agreementAccepted').checked,
@@ -2988,6 +4043,7 @@
           closeBooking();
           showReceipt(reservation);
           $('#bookingForm').reset();
+          resetFirstVisitVerification();
           $('#date').min = state.data.today;
           clearSignature();
           await refreshData();
@@ -3027,11 +4083,11 @@
               <div><span>${escapeHtml(t('balancePending'))}</span><strong>${formatMoney(reservation.balancePending || reservation.total)}</strong></div>
               <div><span>${escapeHtml(t('receiptTotal'))}</span><strong>${formatMoney(reservation.total)}</strong></div>` : ''}
             </div>
+            <div class="extras-disclaimer">${escapeHtml(t('emailReceiptCopy'))}</div>
             <div class="extras-disclaimer">${escapeHtml(reservation.extrasDisclaimer || t('paymentDisclaimer'))}</div>
           </div>
           <div class="dialog-actions">
             ${reservation.paymentLink ? `<a class="btn" href="${escapeHtml(reservation.paymentLink)}" target="_blank" rel="noopener"><i data-lucide="credit-card" aria-hidden="true"></i> ${escapeHtml(t('payOnline'))}</a>` : ''}
-            ${reservation.receiptUrl ? `<a class="btn" href="${escapeHtml(reservation.receiptUrl)}" target="_blank" rel="noopener"><i data-lucide="file-down" aria-hidden="true"></i> ${escapeHtml(t('viewPdf'))}</a>` : ''}
             <button class="btn secondary" type="button" onclick="document.querySelector('#closeReceipt').click()">${escapeHtml(t('close'))}</button>
           </div>
         `;
@@ -3041,7 +4097,8 @@
       }
 
       async function refreshData() {
-        state.data = await gas('getAppData');
+        state.data = normalizeAppData(await gas('getAppData'));
+        state.availabilityMatrix = null;
         renderApp();
       }
 
@@ -3169,17 +4226,61 @@
 
       async function gas(functionName, ...args) {
         if (shouldUseApiBackend()) {
+          if (functionName === 'getAppData') return fetchPublicDataFast(false);
+          if (functionName === 'getBookingAvailability') return fetchBookingAvailabilityFast(args[0]);
           return callBackend(functionName, args);
         }
 
         if (functionName === 'getAppData') return loadAppData();
         if (functionName === 'getAvailableSlots') return getAvailableSlotsStatic(args[0], args[1], args[2], args[4]);
+        if (functionName === 'getBookingAvailability') {
+          const payload = args[0] || {};
+          return {
+            staleCatalog: false,
+            catalogVersion: state.data.catalogVersion || '',
+            slots: getAvailableSlotsStatic(payload.category, payload.service, payload.date, payload.preferredWorker)
+          };
+        }
+        if (functionName === 'checkFirstVisitEligibility') return checkFirstVisitEligibilityStatic(args[0]);
         if (functionName === 'createReservation') return createReservationStatic(args[0]);
         throw new Error('Esta funcion todavia necesita backend.');
       }
 
       async function callBackend(functionName, args) {
         return postToAppsScript(functionName, args);
+      }
+
+      async function fetchPublicDataFast(forceFresh) {
+        const suffix = forceFresh ? `?fresh=${Date.now()}` : '';
+        return fetchEdgeEnvelope(`/api/public-data${suffix}`);
+      }
+
+      async function fetchBookingAvailabilityFast(payload, signal) {
+        const params = new URLSearchParams();
+        Object.keys(payload || {}).forEach(key => {
+          const value = payload[key];
+          if (value !== null && typeof value !== 'undefined') params.set(key, String(value));
+        });
+        return fetchEdgeEnvelope(`/api/booking-availability?${params.toString()}`, signal);
+      }
+
+      async function prefetchAvailabilityMatrix() {
+        return;
+      }
+
+      async function fetchEdgeEnvelope(url, signal) {
+        const response = await fetch(url, {
+          method: 'GET',
+          cache: 'no-store',
+          headers: { Accept: 'application/json' },
+          signal
+        });
+        if (!response.ok) throw new Error('No se pudo consultar la información actualizada.');
+        const envelope = await response.json();
+        if (!envelope || envelope.ok !== true) {
+          throw new Error(envelope && envelope.error ? envelope.error : 'La respuesta del sistema no es válida.');
+        }
+        return envelope.data;
       }
 
       function postToAppsScript(functionName, args) {
@@ -3285,8 +4386,10 @@
         if (!assignedWorker) throw new Error(t('noSlots'));
 
         const price = Number(service.price || 0);
-        const coupon = applyStaticCoupon(payload.coupon, service.category, price);
+        const automaticCoupon = payload.firstVisit ? 'BIENVENIDA10' : payload.coupon;
+        const coupon = applyStaticCoupon(automaticCoupon, service.category, price);
         const tip = Number(payload.tip || 0);
+        const total = roundMoney(coupon.total + tip);
         return {
           id: `DHS-${Date.now()}`,
           category: service.category,
@@ -3299,10 +4402,10 @@
           price,
           discount: coupon.discount,
           tip,
-          total: roundMoney(coupon.total + tip),
+          total,
           coupon: coupon.code,
-          paymentMethod: String(payload.paymentMethod || '').indexOf('online') !== -1 ? 'Online pendiente' : 'Pago en local',
-          paymentStatus: String(payload.paymentMethod || '').indexOf('online') !== -1 ? 'Pendiente de confirmacion' : 'Pendiente en local',
+          paymentMethod: 'Pago en local',
+          paymentStatus: 'Pendiente en local',
           deposit: 0,
           balancePending: total,
           paymentLink: '',
@@ -3343,6 +4446,91 @@
         const value = Number(discount.value || 0);
         const amount = value <= 100 ? roundMoney(price * (value / 100)) : Math.min(price, roundMoney(value));
         return { code: couponCode, discount: amount, total: roundMoney(Math.max(0, price - amount)) };
+      }
+
+      function checkFirstVisitEligibilityStatic(payload) {
+        const phone = String(payload && payload.phone || '').replace(/\D/g, '');
+        const email = String(payload && payload.email || '').trim();
+        return {
+          eligible: phone.length >= 7 && /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email),
+          couponCode: 'BIENVENIDA10',
+          verified: false
+        };
+      }
+
+      async function handleFirstVisitChange() {
+        if (!$('#firstVisit').checked) {
+          resetFirstVisitVerification();
+          return;
+        }
+        await verifyFirstVisitEligibility(false);
+      }
+
+      function invalidateFirstVisitVerification() {
+        if (!$('#firstVisit').checked) return;
+        state.firstVisitVerified = false;
+        if ($('#coupon').value.trim().toUpperCase() === 'BIENVENIDA10') $('#coupon').value = '';
+        $('#coupon').readOnly = false;
+        setFirstVisitStatus(t('firstVisitNeedsContact'), '');
+      }
+
+      function verifyFirstVisitIfSelected() {
+        if ($('#firstVisit').checked && !state.firstVisitChecking) verifyFirstVisitEligibility(false);
+      }
+
+      async function verifyFirstVisitEligibility(showErrors) {
+        if (state.firstVisitChecking) return false;
+        const phone = $('#phone').value.trim();
+        const email = $('#email').value.trim();
+        if (phone.replace(/\D/g, '').length < 7 || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+          state.firstVisitVerified = false;
+          setFirstVisitStatus(t('firstVisitNeedsContact'), 'error');
+          if (showErrors) showToast(t('firstVisitNeedsContact'));
+          return false;
+        }
+
+        state.firstVisitChecking = true;
+        setFirstVisitStatus(t('firstVisitChecking'), '');
+        try {
+          const result = await gas('checkFirstVisitEligibility', { phone, email });
+          if (!result || !result.eligible) {
+            state.firstVisitVerified = false;
+            $('#firstVisit').checked = false;
+            if ($('#coupon').value.trim().toUpperCase() === 'BIENVENIDA10') $('#coupon').value = '';
+            $('#coupon').readOnly = false;
+            setFirstVisitStatus(t('firstVisitNotEligible'), 'error');
+            if (showErrors) showToast(t('firstVisitNotEligible'));
+            return false;
+          }
+          state.firstVisitVerified = true;
+          $('#coupon').value = result.couponCode || 'BIENVENIDA10';
+          $('#coupon').readOnly = true;
+          setFirstVisitStatus(t('firstVisitApplied'), 'success');
+          return true;
+        } catch (error) {
+          state.firstVisitVerified = false;
+          setFirstVisitStatus(t('firstVisitVerifyError'), 'error');
+          if (showErrors) showToast(error.message || t('firstVisitVerifyError'));
+          return false;
+        } finally {
+          state.firstVisitChecking = false;
+        }
+      }
+
+      function setFirstVisitStatus(message, kind) {
+        const node = $('#firstVisitStatus');
+        node.textContent = message || '';
+        node.hidden = !message;
+        node.classList.toggle('success', kind === 'success');
+        node.classList.toggle('error', kind === 'error');
+      }
+
+      function resetFirstVisitVerification() {
+        state.firstVisitVerified = false;
+        state.firstVisitChecking = false;
+        $('#coupon').readOnly = false;
+        if ($('#coupon').value.trim().toUpperCase() === 'BIENVENIDA10') $('#coupon').value = '';
+        setFirstVisitStatus('', '');
       }
 
       function isDateBlocked(dateIso) {

@@ -3,25 +3,25 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dominican Hair Salon Admin</title>
+    <title>RESET Admin</title>
     <link rel="preconnect" href="https://unpkg.com">
-    <script src="/dominicanhairsalon/assets/admin-config.js?v=20260529-admin-restore-oldlogic1"></script>
+    <script src="assets/admin-config.js?v=20260817-reset1"></script>
     <script defer src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
     <style>
       :root {
-        --ink: #2c2528;
-        --muted: #76696e;
-        --line: #eadde1;
-        --paper: #fffaf7;
-        --panel: #ffffff;
-        --rose: #b76e79;
-        --plum: #432233;
-        --sage: #7f9277;
-        --gold: #c28d55;
-        --danger: #ad3f4b;
-        --shadow: 0 18px 44px rgba(67, 34, 51, 0.12);
-        --radius: 8px;
+        --ink: #31452f;
+        --muted: #5c6a52;
+        --line: #e4cf8d;
+        --paper: #fbf3d8;
+        --panel: #fffdf5;
+        --rose: #c89b2d;
+        --plum: #344a34;
+        --sage: #607255;
+        --gold: #d2ad4c;
+        --danger: #9b4743;
+        --shadow: 0 22px 58px rgba(91, 68, 16, 0.16);
+        --radius: 16px;
       }
 
       * {
@@ -36,7 +36,9 @@
         margin: 0;
         font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
         color: var(--ink);
-        background: var(--paper);
+        background:
+          radial-gradient(circle at 10% 0%, rgba(244, 215, 119, 0.34), transparent 28%),
+          var(--paper);
       }
 
       button,
@@ -59,7 +61,7 @@
         position: sticky;
         top: 0;
         z-index: 10;
-        background: rgba(255, 250, 247, 0.92);
+        background: rgba(255, 253, 245, 0.93);
         border-bottom: 1px solid var(--line);
         backdrop-filter: blur(16px);
       }
@@ -88,6 +90,14 @@
         place-items: center;
         color: #fff;
         background: linear-gradient(135deg, var(--plum), var(--rose));
+        overflow: hidden;
+        border: 1px solid var(--line);
+      }
+
+      .brand-mark img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
       }
 
       .top-actions {
@@ -145,7 +155,7 @@
       }
 
       .btn.soft {
-        background: rgba(183, 110, 121, 0.13);
+        background: rgba(184, 134, 45, 0.13);
         color: var(--plum);
       }
 
@@ -177,6 +187,20 @@
       .login-card {
         width: min(420px, 100%);
         padding: 24px;
+      }
+
+      .login-logo {
+        width: 108px;
+        height: 108px;
+        margin: 0 auto 16px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid rgba(184, 134, 45, .55);
+        box-shadow: 0 16px 38px rgba(37, 41, 31, .18);
+      }
+
+      .module-payments {
+        display: none !important;
       }
 
       h1,
@@ -212,6 +236,21 @@
         color: var(--ink);
         padding: 10px 11px;
         outline: none;
+      }
+
+      select {
+        appearance: none;
+        -webkit-appearance: none;
+        padding-right: 42px;
+        background-image:
+          linear-gradient(45deg, transparent 50%, var(--plum) 50%),
+          linear-gradient(135deg, var(--plum) 50%, transparent 50%);
+        background-position:
+          calc(100% - 17px) 50%,
+          calc(100% - 12px) 50%;
+        background-size: 5px 5px, 5px 5px;
+        background-repeat: no-repeat;
+        font-weight: 750;
       }
 
       textarea {
@@ -255,6 +294,28 @@
         padding: 10px 14px;
         font-weight: 850;
         white-space: nowrap;
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+      }
+
+      .nav-badge {
+        min-width: 21px;
+        height: 21px;
+        display: inline-grid;
+        place-items: center;
+        border-radius: 999px;
+        padding: 0 6px;
+        color: #fff;
+        background: #b88718;
+        font-size: 11px;
+        font-weight: 950;
+        box-shadow: 0 4px 12px rgba(184, 135, 24, .3);
+      }
+
+      .tab.active .nav-badge {
+        color: var(--plum);
+        background: #fff7dc;
       }
 
       .tab.active {
@@ -316,6 +377,8 @@
         margin-top: 6px;
         color: var(--plum);
         font-size: 24px;
+        line-height: 1.16;
+        overflow-wrap: anywhere;
       }
 
       .panel {
@@ -388,6 +451,20 @@
         border-bottom: 0;
       }
 
+      tr.new-item-highlight td {
+        background: linear-gradient(90deg, rgba(240, 217, 142, .34), rgba(255, 252, 240, .82));
+      }
+
+      tr.new-item-highlight td:first-child {
+        box-shadow: inset 4px 0 0 #b88718;
+      }
+
+      .blocked-card.new-item-highlight {
+        border-color: rgba(184, 135, 24, .55);
+        background: linear-gradient(110deg, rgba(240, 217, 142, .28), #fff);
+        box-shadow: inset 4px 0 0 #b88718;
+      }
+
       .status {
         display: inline-flex;
         align-items: center;
@@ -444,6 +521,87 @@
         border-radius: var(--radius);
         background: #fff;
         padding: 12px;
+      }
+
+      button.history-card {
+        width: 100%;
+        color: inherit;
+        text-align: left;
+        cursor: pointer;
+        transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+      }
+
+      button.history-card:hover,
+      button.history-card:focus-visible {
+        transform: translateY(-2px);
+        border-color: var(--gold);
+        box-shadow: 0 12px 28px rgba(91, 68, 16, 0.12);
+      }
+
+      .history-card-head {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        justify-content: space-between;
+      }
+
+      .history-count {
+        min-width: 30px;
+        height: 30px;
+        display: inline-grid;
+        place-items: center;
+        padding: 0 8px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        color: var(--plum);
+        background: var(--paper);
+        font-weight: 900;
+      }
+
+      .client-history-modal {
+        width: min(900px, calc(100% - 28px));
+        max-height: calc(100vh - 40px);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        padding: 0;
+        color: var(--ink);
+        background: var(--panel);
+        box-shadow: var(--shadow);
+      }
+
+      .client-history-modal::backdrop {
+        background: rgba(36, 49, 34, 0.48);
+        backdrop-filter: blur(5px);
+      }
+
+      .client-history-content {
+        padding: 20px;
+        max-height: calc(100vh - 90px);
+        overflow: auto;
+      }
+
+      .history-visit {
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        padding: 14px;
+        background: #fff;
+        margin-top: 10px;
+      }
+
+      #discountDaysChecks .check {
+        min-height: 38px;
+        padding: 8px 11px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: #fff;
+        cursor: pointer;
+      }
+
+      #discountDaysChecks .check:has(input:checked) {
+        color: var(--plum);
+        border-color: var(--gold);
+        background: var(--paper);
+        box-shadow: inset 0 0 0 1px rgba(210, 173, 76, 0.3);
       }
 
       .history-card strong,
@@ -566,6 +724,8 @@
 
       .hidden-by-permission,
       .staff-mode .admin-timeoff-only,
+      .staff-mode .admin-timeoff-review,
+      body:not(.staff-mode) .staff-timeoff-only,
       .staff-mode .payment-only {
         display: none !important;
       }
@@ -595,6 +755,22 @@
         padding: 20px;
         color: var(--muted);
         background: #fff;
+      }
+
+      .tab-loading-note {
+        position: sticky;
+        z-index: 12;
+        top: 8px;
+        width: fit-content;
+        margin: 0 0 12px auto;
+        border: 1px solid rgba(184, 134, 45, 0.3);
+        border-radius: 999px;
+        padding: 8px 12px;
+        color: var(--plum);
+        background: rgba(255, 249, 225, 0.96);
+        box-shadow: 0 8px 22px rgba(66, 81, 58, 0.1);
+        font-size: 12px;
+        font-weight: 800;
       }
 
       .toast {
@@ -680,7 +856,8 @@
         margin-top: 8px;
       }
 
-      .availability-day input[type="time"] {
+      .availability-day select[data-avail-start],
+      .availability-day select[data-avail-end] {
         min-width: 0;
         padding: 9px 8px;
       }
@@ -829,8 +1006,8 @@
     <header class="topbar">
       <div class="shell topbar-inner">
         <div class="brand">
-          <span class="brand-mark"><i data-lucide="sparkles" aria-hidden="true"></i></span>
-          <span id="brandName">Dominican Hair Salon Admin</span>
+          <span class="brand-mark"><img src="assets/hair-salon-reset-logo.jpeg" alt="Hair Salon Reset"></span>
+          <span id="brandName">RESET Admin</span>
         </div>
         <div class="top-actions">
           <div class="admin-language-switch" aria-label="Language">
@@ -847,8 +1024,9 @@
     <main>
       <section id="login" class="login">
         <form id="loginForm" class="login-card">
+          <img class="login-logo" src="assets/hair-salon-reset-logo.jpeg" alt="Hair Salon Reset By Yaleixi">
           <h1 data-admin-i18n="loginTitle">Admin</h1>
-          <p class="muted">Dominican Hair Salon</p>
+          <p class="muted">RESET by Yaleixi</p>
           <div class="field">
             <label for="username" data-admin-i18n="loginUser">Correo o usuario</label>
             <input id="username" autocomplete="username" required>
@@ -863,15 +1041,18 @@
 
       <section id="admin" class="admin shell">
         <nav class="tabs" aria-label="Admin">
-          <button class="tab active" type="button" data-tab="reservations" data-admin-i18n="tabReservations">Reservas</button>
-          <button class="tab" type="button" data-tab="earnings" data-admin-i18n="tabEarnings">Ganancias</button>
-          <button class="tab" type="button" data-tab="timeoff" data-admin-i18n="tabTimeOff">Dias libres</button>
+          <button class="tab" type="button" data-tab="qr" data-admin-i18n="tabQr">Escanear QR</button>
+          <button class="tab" type="button" data-tab="manual" data-admin-i18n="tabManual">Reservas manuales</button>
+          <button class="tab active" type="button" data-tab="reservations"><span data-admin-i18n="tabReservations">Reservas</span><span class="nav-badge" data-nav-badge="reservations" hidden></span></button>
           <button class="tab" type="button" data-tab="services" data-admin-i18n="tabServices">Servicios</button>
           <button class="tab" type="button" data-tab="photos" data-admin-i18n="tabPhotos">Fotos</button>
           <button class="tab" type="button" data-tab="discounts" data-admin-i18n="tabDiscounts">Descuentos</button>
           <button class="tab" type="button" data-tab="events" data-admin-i18n="tabEvents">Eventos</button>
-          <button class="tab" type="button" data-tab="qr" data-admin-i18n="tabQr">Escanear QR</button>
+          <button class="tab" type="button" data-tab="testimonials"><span data-admin-i18n="tabTestimonials">Testimonios</span><span class="nav-badge" data-nav-badge="testimonials" hidden></span></button>
+          <button class="tab" type="button" data-tab="faqs" data-admin-i18n="tabFaqs">FAQ</button>
+          <button class="tab" type="button" data-tab="timeoff"><span data-admin-i18n="tabTimeOff">Dias libres</span><span class="nav-badge" data-nav-badge="timeoff" hidden></span></button>
           <button class="tab" type="button" data-tab="users" data-admin-i18n="tabUsers">Usuarios</button>
+          <button class="tab" type="button" data-tab="devices"><span>Dispositivos</span><span class="nav-badge" data-nav-badge="devices" hidden></span></button>
           <button class="tab" type="button" data-tab="settings" data-admin-i18n="tabSettings">Ajustes</button>
           <button class="tab" type="button" data-tab="help" data-admin-i18n="tabHelp">Ayuda</button>
         </nav>
@@ -883,6 +1064,7 @@
                 <h2>Reservas</h2>
                 <div class="muted" id="reservationCount"></div>
               </div>
+              <button class="btn secondary mini" type="button" id="openEarningsBtn"><i data-lucide="chart-no-axes-combined" aria-hidden="true"></i>Ganancias</button>
             </div>
             <div id="dashboardGrid" class="dashboard-grid"></div>
             <div class="filters">
@@ -898,6 +1080,11 @@
             </div>
             <div id="reservationTable"></div>
             <div id="clientHistory"></div>
+          </div>
+        </section>
+
+        <section id="manual" class="tab-panel" hidden>
+          <div class="panel">
             <form id="manualReservationForm" class="manual-form">
               <div class="panel-head">
                 <div>
@@ -946,7 +1133,7 @@
                 </div>
                 <div class="field">
                   <label for="manualTime">Hora</label>
-                  <input id="manualTime" type="time" required>
+                  <select id="manualTime" required aria-label="Hora en formato de 12 horas"></select>
                 </div>
                 <div class="field payment-only">
                   <label for="manualDiscount">Descuento pago</label>
@@ -1019,7 +1206,7 @@
 
         <section id="timeoff" class="tab-panel" hidden>
           <div class="grid">
-            <form id="timeOffForm" class="panel">
+            <form id="timeOffForm" class="panel staff-timeoff-only">
               <div class="panel-head">
                 <h2>Solicitar dias libres</h2>
                 <button class="btn secondary mini" type="button" id="newTimeOffBtn"><i data-lucide="plus" aria-hidden="true"></i>Nueva</button>
@@ -1061,9 +1248,25 @@
                 <button class="btn secondary" type="button" data-reset-form="timeoff"><i data-lucide="x" aria-hidden="true"></i>Cancelar</button>
               </div>
             </form>
+            <form id="myAvailabilityForm" class="panel staff-timeoff-only">
+              <div class="panel-head">
+                <div>
+                  <h2>Mi disponibilidad semanal</h2>
+                  <div class="muted" id="myAvailabilityHint">Solo puedes elegir dias y horas dentro del horario abierto del salon.</div>
+                </div>
+              </div>
+              <div id="myAvailability" class="availability-grid"></div>
+              <div class="row-actions">
+                <button class="btn" type="submit"><i data-lucide="calendar-check" aria-hidden="true"></i>Guardar mi disponibilidad</button>
+              </div>
+            </form>
             <div class="panel">
               <div class="panel-head">
-                <h2>Calendario de solicitudes</h2>
+                <div>
+                  <h2 class="admin-timeoff-review">Solicitudes de las trabajadoras</h2>
+                  <h2 class="staff-timeoff-only">Mis solicitudes</h2>
+                  <div class="muted admin-timeoff-review">Revisa, aprueba o deniega cada solicitud. La administradora permanece disponible dentro del horario del salon.</div>
+                </div>
               </div>
               <div id="timeOffList" class="compact-list"></div>
             </div>
@@ -1080,12 +1283,12 @@
               <input type="hidden" id="userRow">
               <div class="form-grid">
                 <div class="field">
-                  <label for="userName">Alias interno</label>
+                  <label for="userName">Usuario de acceso</label>
                   <input id="userName" required>
                 </div>
                 <div class="field">
-                  <label for="userDisplayName">Nombre visible</label>
-                  <input id="userDisplayName">
+                  <label for="userDisplayName">Nombre completo</label>
+                  <input id="userDisplayName" required>
                 </div>
                 <div class="field">
                   <label for="userEmail">Correo de login</label>
@@ -1093,42 +1296,51 @@
                 </div>
                 <div class="field">
                   <label for="userPhone">Telefono</label>
-                  <input id="userPhone" autocomplete="tel">
+                  <input id="userPhone" autocomplete="tel" required>
                 </div>
                 <div class="field">
-                  <label for="userPassword">Contrasena</label>
-                  <input id="userPassword" required>
+                  <label for="userPosition">Posicion</label>
+                  <input id="userPosition" placeholder="Ej. Estilista" required>
+                </div>
+                <div class="field full">
+                  <label for="userPassword">Contrasena temporal</label>
+                  <input id="userPassword" type="password" autocomplete="new-password" minlength="8">
+                  <span class="muted">Obligatoria al crear. Al editar, dejala vacia para conservar la actual.</span>
                 </div>
                 <div class="field">
-                  <label for="userRole">Rol</label>
+                  <label for="userRole">Tipo de cuenta</label>
                   <select id="userRole">
-                    <option value="staff">Staff</option>
-                    <option value="admin">Admin</option>
+                    <option value="staff">Trabajadora — acceso según permisos</option>
+                    <option value="admin">Administradora — acceso completo</option>
                   </select>
                 </div>
                 <label class="check full">
                   <input id="userActive" type="checkbox" checked>
                   Usuario activo
                 </label>
-                <div class="field full">
-                  <label>Servicios permitidos</label>
-                  <div id="userAllowedServices" class="service-checks"></div>
-                </div>
-                <div class="field full">
-                  <label>Disponibilidad por dia</label>
-                  <div id="userAvailability" class="availability-grid"></div>
-                </div>
+              </div>
+              <div class="field full">
+                <label>Permisos específicos</label>
+                <span class="muted">Marca solo las funciones necesarias. Una trabajadora puede recibir una o varias áreas sin convertirse en administradora.</span>
               </div>
               <div class="permission-grid">
-                <label class="check"><input id="permEditPage" type="checkbox">Editar pagina</label>
-                <label class="check"><input id="permEditAppointments" type="checkbox" checked>Editar citas</label>
-                <label class="check"><input id="permEditAllAppointments" type="checkbox">Editar citas ajenas</label>
-                <label class="check"><input id="permViewGeneralEarnings" type="checkbox">Ver ganancias generales</label>
-                <label class="check"><input id="permManageUsers" type="checkbox">Administrar usuarios</label>
+                <label class="check"><input id="permEditAppointments" type="checkbox" checked>Administrar sus citas</label>
+                <label class="check"><input id="permEditAllAppointments" type="checkbox">Administrar todas las citas</label>
+                <label class="check"><input id="permViewClientHistory" type="checkbox" checked>Historial de clientas</label>
+                <label class="check"><input id="permUseQr" type="checkbox" checked>Escaner QR</label>
+                <label class="check"><input id="permViewEarnings" type="checkbox" checked>Ver ganancias propias</label>
+                <label class="check"><input id="permViewGeneralEarnings" type="checkbox">Ver ganancias de todas</label>
+                <label class="check"><input id="permExportReports" type="checkbox">Exportar reportes</label>
+                <label class="check"><input id="permManagePayments" type="checkbox">Caja y ajustes de ingresos</label>
+                <label class="check"><input id="permManageServices" type="checkbox">Administrar servicios</label>
+                <label class="check"><input id="permManageGallery" type="checkbox">Administrar galeria</label>
                 <label class="check"><input id="permManageDiscounts" type="checkbox">Administrar descuentos</label>
+                <label class="check"><input id="permEditPage" type="checkbox">Eventos y publicacion</label>
                 <label class="check"><input id="permManageTimeOff" type="checkbox">Aprobar dias libres</label>
-                <label class="check"><input id="permManageBlockedDays" type="checkbox">Bloquear dias</label>
-                <label class="check"><input id="permManagePayments" type="checkbox">Gestionar pagos</label>
+                <label class="check"><input id="permManageBlockedDays" type="checkbox">Bloquear agenda</label>
+                <label class="check"><input id="permManageSettings" type="checkbox">Ajustes del salon</label>
+                <label class="check"><input id="permManageUsers" type="checkbox">Administrar trabajadoras</label>
+                <label class="check"><input id="permManageDevices" type="checkbox">Administrar dispositivos</label>
               </div>
               <div class="row-actions">
                 <button class="btn" type="submit"><i data-lucide="user-cog" aria-hidden="true"></i>Guardar usuario</button>
@@ -1137,9 +1349,55 @@
             </form>
             <div class="panel">
               <div class="panel-head">
-                <h2>Usuarios</h2>
+                <h2>Trabajadoras</h2>
               </div>
               <div id="userTable"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="devices" class="tab-panel" hidden>
+          <div class="grid">
+            <form id="devicePolicyForm" class="panel">
+              <div class="panel-head">
+                <div>
+                  <h2>Dispositivos del salón</h2>
+                  <div class="muted">Reglas opcionales para RESET Trabajo en Android, iPhone y iPad.</div>
+                </div>
+              </div>
+              <button class="btn secondary mini" id="deviceInfoBtn" type="button" title="Cómo funciona la protección de dispositivos"><i data-lucide="info" aria-hidden="true"></i>Cómo funciona</button>
+              <div class="form-grid" style="margin-top: 14px;">
+                <label class="check full"><input id="deviceRequireWifi" type="checkbox">Proteger con el Wi-Fi del salón</label>
+                <div class="field full">
+                  <label for="deviceAllowedWifi">Nombre de la red del salón</label>
+                  <input id="deviceAllowedWifi" placeholder="Ej. RESET-SALON">
+                  <span class="muted">Cópialo exactamente como aparece en los ajustes de Wi-Fi del dispositivo.</span>
+                </div>
+                <label class="check full"><input id="deviceRequireLocation" type="checkbox">Proteger por cercanía al salón</label>
+                <div class="field">
+                  <label for="deviceSalonLatitude">Latitud del salón</label>
+                  <input id="deviceSalonLatitude" type="number" step="0.000001" placeholder="Ej. 30.188714">
+                </div>
+                <div class="field">
+                  <label for="deviceSalonLongitude">Longitud del salón</label>
+                  <input id="deviceSalonLongitude" type="number" step="0.000001" placeholder="Ej. -81.721742">
+                </div>
+                <div class="field">
+                  <label for="deviceRadiusMeters">Área permitida alrededor del salón (metros)</label>
+                  <input id="deviceRadiusMeters" type="number" min="50" max="10000" value="500">
+                  <span class="muted">Recomendado: 300 a 500 m para evitar bloqueos por variaciones del GPS.</span>
+                </div>
+              </div>
+              <button class="btn" type="submit"><i data-lucide="shield-check" aria-hidden="true"></i>Guardar seguridad</button>
+            </form>
+            <div class="panel">
+              <div class="panel-head">
+                <div>
+                  <h2>Dispositivos registrados</h2>
+                  <div class="muted">Última conexión, usuaria, red y ubicación reportada.</div>
+                </div>
+              </div>
+              <div id="deviceTable"></div>
             </div>
           </div>
         </section>
@@ -1184,9 +1442,14 @@
                   <input id="serviceVisible" type="checkbox" checked>
                   Visible
                 </label>
+                <input id="serviceImage" type="hidden">
                 <div class="field full">
-                  <label for="serviceImage">Imagen principal</label>
-                  <input id="serviceImage">
+                  <label for="serviceImageFile">Imagen principal</label>
+                  <input id="serviceImageFile" type="file" accept="image/jpeg,image/png,image/webp">
+                  <small>Elige una foto del telefono o la computadora. Se optimiza antes de subirla.</small>
+                </div>
+                <div class="field full">
+                  <img id="serviceImagePreview" class="preview" alt="Vista previa de la imagen del servicio">
                 </div>
               </div>
               <div class="row-actions">
@@ -1267,10 +1530,7 @@
                 <div class="field full">
                   <img id="photoPreview" class="preview" alt="">
                 </div>
-                <div class="field full">
-                  <label for="photoUrl">Url existente opcional</label>
-                  <input id="photoUrl">
-                </div>
+                <input id="photoUrl" type="hidden">
               </div>
               <div class="row-actions">
                 <button class="btn" type="submit"><i data-lucide="image-up" aria-hidden="true"></i>Guardar foto</button>
@@ -1320,14 +1580,8 @@
                   <img id="beforePreview" alt="">
                   <img id="afterPreview" alt="">
                 </div>
-                <div class="field">
-                  <label for="beforeUrl">Url antes opcional</label>
-                  <input id="beforeUrl">
-                </div>
-                <div class="field">
-                  <label for="afterUrl">Url despues opcional</label>
-                  <input id="afterUrl">
-                </div>
+                <input id="beforeUrl" type="hidden">
+                <input id="afterUrl" type="hidden">
               </div>
               <div class="row-actions">
                 <button class="btn" type="submit"><i data-lucide="images" aria-hidden="true"></i>Guardar antes/despues</button>
@@ -1412,7 +1666,7 @@
 
         <section id="events" class="tab-panel" hidden>
           <div class="grid">
-            <form id="eventForm" class="panel">
+            <form id="eventForm" class="panel" data-event-management>
               <div class="panel-head">
                 <h2>Eventos especiales</h2>
                 <button class="btn secondary mini" type="button" id="newEventBtn"><i data-lucide="plus" aria-hidden="true"></i>Nuevo</button>
@@ -1477,6 +1731,47 @@
           </div>
         </section>
 
+        <section id="testimonials" class="tab-panel" hidden>
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h2>Testimonios de clientas</h2>
+                <div class="muted">Experiencias enviadas desde el recibo final. Publica las que deseas mostrar en la página principal.</div>
+              </div>
+            </div>
+            <div id="testimonialAdminTable"></div>
+          </div>
+        </section>
+
+        <section id="faqs" class="tab-panel" hidden>
+          <div class="grid">
+            <form id="faqAdminForm" class="panel">
+              <div class="panel-head">
+                <div>
+                  <h2>Preguntas frecuentes</h2>
+                  <div class="muted">Publica respuestas claras en español e inglés para orientar a las clientas antes de reservar.</div>
+                </div>
+                <button class="btn secondary mini" type="button" id="newFaqBtn"><i data-lucide="plus" aria-hidden="true"></i>Nueva</button>
+              </div>
+              <input type="hidden" id="faqRow">
+              <input type="hidden" id="faqId">
+              <div class="form-grid">
+                <div class="field full"><label for="faqQuestion">Pregunta en español</label><input id="faqQuestion" maxlength="220" required></div>
+                <div class="field full"><label for="faqAnswer">Respuesta en español</label><textarea id="faqAnswer" maxlength="1400" required></textarea></div>
+                <div class="field full"><label for="faqQuestionEn">Pregunta en inglés</label><input id="faqQuestionEn" maxlength="220" placeholder="Se completa automáticamente si se deja en blanco"></div>
+                <div class="field full"><label for="faqAnswerEn">Respuesta en inglés</label><textarea id="faqAnswerEn" maxlength="1400" placeholder="Se completa automáticamente si se deja en blanco"></textarea></div>
+                <div class="field"><label for="faqOrder">Orden</label><input id="faqOrder" type="number" min="1" step="1" value="1"></div>
+                <label class="check"><input id="faqVisible" type="checkbox" checked>Mostrar en la página pública</label>
+              </div>
+              <div class="row-actions">
+                <button class="btn" type="submit"><i data-lucide="save" aria-hidden="true"></i>Guardar pregunta</button>
+                <button class="btn secondary" type="button" data-reset-form="faq"><i data-lucide="x" aria-hidden="true"></i>Cancelar</button>
+              </div>
+            </form>
+            <div class="panel"><div class="panel-head"><h2>FAQ publicada</h2></div><div id="faqAdminTable"></div></div>
+          </div>
+        </section>
+
         <section id="qr" class="tab-panel" hidden>
           <div class="panel">
             <div class="panel-head">
@@ -1522,15 +1817,19 @@
               <div class="form-grid">
                 <div class="field full developer-only">
                   <label for="localName">Nombre del local</label>
-                  <input id="localName" placeholder="Dominican Hair Salon">
+                  <input id="localName" placeholder="Hair Salon Reset">
                 </div>
+                <input id="logoUrl" type="hidden">
                 <div class="field full developer-only">
-                  <label for="logoUrl">Logo URL</label>
-                  <input id="logoUrl" placeholder="https://...">
+                  <label for="logoFile">Logo del negocio</label>
+                  <input id="logoFile" type="file" accept="image/jpeg,image/png,image/webp">
+                  <img id="logoPreview" class="preview" alt="Vista previa del logo">
                 </div>
+                <input id="heroImageUrl" type="hidden">
                 <div class="field full developer-only">
-                  <label for="heroImageUrl">Imagen principal URL</label>
-                  <input id="heroImageUrl" placeholder="https://...">
+                  <label for="heroImageFile">Imagen principal de la pagina</label>
+                  <input id="heroImageFile" type="file" accept="image/jpeg,image/png,image/webp">
+                  <img id="heroImagePreview" class="preview" alt="Vista previa de la imagen principal">
                 </div>
                 <label class="check full">
                   <input id="contactVisible" type="checkbox">
@@ -1544,6 +1843,11 @@
                   <label for="contactEmail">Email</label>
                   <input id="contactEmail" type="email">
                 </div>
+                <div class="field full">
+                  <label for="salonAddress">Dirección del salón</label>
+                  <input id="salonAddress" autocomplete="street-address" placeholder="Número, calle, ciudad, estado y código postal">
+                  <small>Esta dirección aparecerá en los recibos y abrirá la ubicación correcta en Google Maps.</small>
+                </div>
                 <label class="check full">
                   <input id="instagramVisible" type="checkbox">
                   Mostrar boton de Instagram
@@ -1554,27 +1858,23 @@
                 </div>
                 <div class="field">
                   <label for="businessStart">Hora de inicio</label>
-                  <input id="businessStart" type="time">
+                  <select id="businessStart" aria-label="Hora de inicio en formato de 12 horas"></select>
                 </div>
                 <div class="field">
                   <label for="businessEnd">Hora de cierre</label>
-                  <input id="businessEnd" type="time">
+                  <select id="businessEnd" aria-label="Hora de cierre en formato de 12 horas"></select>
                 </div>
                 <div class="field">
                   <label for="businessInterval">Intervalo min</label>
                   <input id="businessInterval" type="number" min="15" step="5">
                 </div>
-                <label class="check module-reminders">
-                  <input id="remindersEnabled" type="checkbox">
-                  Recordatorios por email
-                </label>
                 <label class="check module-qr">
                   <input id="qrEnabled" type="checkbox">
                   QR activo
                 </label>
                 <label class="check module-qr">
                   <input id="qrIncludeEmail" type="checkbox">
-                  Incluir QR en email/PDF
+                  Incluir QR en los emails de clientas
                 </label>
                 <div class="field module-qr">
                   <label for="qrExpirationHours">Expiracion QR (horas)</label>
@@ -1652,10 +1952,6 @@
                   <label>Dias abiertos</label>
                   <div id="openDays" class="day-checks"></div>
                 </div>
-                <div class="field">
-                  <label for="reminderHours">Primer recordatorio (horas)</label>
-                  <input id="reminderHours" type="number" min="24" step="1" value="24" readonly>
-                </div>
                 <div class="field full">
                   <label for="maintenanceMessage">Mensaje de mantenimiento</label>
                   <textarea id="maintenanceMessage"></textarea>
@@ -1672,8 +1968,6 @@
               <div class="row-actions">
                 <button class="btn" type="submit"><i data-lucide="settings" aria-hidden="true"></i>Guardar ajustes</button>
                 <button class="btn secondary" type="button" data-reset-form="settings"><i data-lucide="x" aria-hidden="true"></i>Cancelar</button>
-                <button class="btn secondary module-reminders" type="button" id="sendRemindersBtn"><i data-lucide="bell-ring" aria-hidden="true"></i>Enviar recordatorios ahora</button>
-                <button class="btn secondary developer-only module-reminders" type="button" id="installReminderTriggerBtn"><i data-lucide="alarm-clock" aria-hidden="true"></i>Activar automaticos</button>
                 <button class="btn secondary" type="button" id="clearPublicCacheBtn"><i data-lucide="rotate-cw" aria-hidden="true"></i>Actualizar pagina clientas</button>
               </div>
             </form>
@@ -1730,7 +2024,7 @@
             <div class="panel-head">
               <div>
                 <h2>Guia rapida</h2>
-                <div class="muted">Pasos cortos para mantener Dominican Hair Salon actualizada desde el telefono.</div>
+                <div class="muted">Pasos cortos para mantener RESET actualizada desde el teléfono.</div>
               </div>
             </div>
             <div class="note-box" id="developerSupportNotice">Para activar funciones adicionales, cambiar de plan o agregar módulos premium, contacta con el developer.</div>
@@ -1743,26 +2037,31 @@
     <datalist id="categoryList"></datalist>
     <div id="welcomeModal" class="welcome-modal" role="dialog" aria-modal="true" aria-labelledby="welcomeTitle">
       <div class="welcome-card">
-        <span class="brand-mark"><i data-lucide="sparkles" aria-hidden="true"></i></span>
+        <span class="brand-mark"><img src="assets/hair-salon-reset-logo.jpeg" alt="Hair Salon Reset"></span>
         <h2 id="welcomeTitle">Bienvenido</h2>
         <p id="welcomeName"></p>
-        <p id="welcomeRole" class="muted"></p>
+        <p id="welcomeMessage" class="muted"></p>
         <button class="btn" type="button" id="closeWelcomeBtn">Continuar</button>
       </div>
     </div>
+    <dialog id="clientHistoryModal" class="client-history-modal" aria-labelledby="clientHistoryTitle">
+      <div id="clientHistoryModalContent" class="client-history-content"></div>
+    </dialog>
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
     <script>
       const $ = selector => document.querySelector(selector);
       const $$ = selector => Array.prototype.slice.call(document.querySelectorAll(selector));
+      const STAFF_PORTAL_MODE = new URLSearchParams(window.location.search).get('portal') === 'staff';
+      const AUTH_STORAGE_KEY = STAFF_PORTAL_MODE ? 'hair_salon_staff_secret' : 'angels_admin_secret';
       const ADMIN_CONFIG = Object.assign({
-        apiBaseUrl: 'https://script.google.com/macros/s/AKfycbzJ2S8OEOaosU6nqBk6PHhMdYOavjnFqqVxvLi7DJTVtYh1A4HSj1N31PWwv5LLQLDXwQ/exec',
-        adminApiUrl: 'https://script.google.com/macros/s/AKfycbzJ2S8OEOaosU6nqBk6PHhMdYOavjnFqqVxvLi7DJTVtYh1A4HSj1N31PWwv5LLQLDXwQ/exec',
-        publicApiUrl: 'https://script.google.com/macros/s/AKfycbwFGn869QEqkSHH-iS99Nx5mJqANgFCFv9qUtjyF0SdaM2tfKq3PGL32TsWyYJnWUIy/exec',
-        developerApiUrl: 'https://script.google.com/macros/s/AKfycbx4xPvQJG1mhylxqTZ5Kl6YcYCaU2mohbAoYJco8tDWLg2qDnoFsxZZQzRCuSKoUTD7/exec',
-        developerDashboardUrl: 'https://visualnetworkdev.github.io/developer/index.html',
-        publicUrl: 'https://visualnetworkdev.github.io/dominicanhairsalon/',
-        qrScannerUrl: 'https://visualnetworkdev.github.io/dominicanhairsalon/qr-scanner.html'
+        apiBaseUrl: 'https://script.google.com/macros/s/AKfycbycUu_K-Ms4xzGVDWcYgoia0WZp_jamPC0O9YmXpZHdztJ7ENC6hb7Zlk5wN6ZkVGwX/exec',
+        adminApiUrl: 'https://script.google.com/macros/s/AKfycbycUu_K-Ms4xzGVDWcYgoia0WZp_jamPC0O9YmXpZHdztJ7ENC6hb7Zlk5wN6ZkVGwX/exec',
+        publicApiUrl: 'https://script.google.com/macros/s/AKfycbzunUZqlntWZWulmE3ORRnrJszzaIWv4nfZX0-ZnXdZx2V7N_gCpSUwn7lXIZXH5t0K/exec',
+        developerApiUrl: '',
+        developerDashboardUrl: '',
+        publicUrl: './',
+        qrScannerUrl: './qr-scanner.html'
       }, window.ANGELS_ADMIN_CONFIG || {});
       const PUBLIC_APP_URL = ADMIN_CONFIG.publicUrl || './';
 
@@ -1803,18 +2102,22 @@
       }
 
       const state = {
-        secret: storageGet('sessionStorage', 'angels_admin_secret', ''),
+        secret: storageGet('sessionStorage', AUTH_STORAGE_KEY, ''),
         data: null,
         loadedTabs: {},
         tab: 'reservations',
         language: storageGet('localStorage', 'dhs_admin_language', 'es'),
+        serviceFile: null,
+        logoFile: null,
+        heroImageFile: null,
         photoFile: null,
         beforeFile: null,
         afterFile: null,
         qrStream: null,
         qrTimer: null,
         qrFrame: null,
-        qrReservation: null
+        qrReservation: null,
+        highlightedItems: {}
       };
 
       const ADMIN_I18N = {
@@ -1823,16 +2126,20 @@
           refresh: 'Actualizar',
           logout: 'Cerrar sesion',
           loginTitle: 'Admin',
+          staffLoginTitle: 'Portal de trabajadoras',
           loginUser: 'Correo o usuario',
           loginPassword: 'Contrasena',
           loginButton: 'Entrar',
           tabReservations: 'Reservas',
+          tabManual: 'Reservas manuales',
           tabEarnings: 'Ganancias',
           tabTimeOff: 'Dias libres',
           tabServices: 'Servicios',
           tabPhotos: 'Fotos',
           tabDiscounts: 'Descuentos',
           tabEvents: 'Eventos',
+          tabTestimonials: 'Testimonios',
+          tabFaqs: 'FAQ',
           tabQr: 'Escanear QR',
           tabUsers: 'Usuarios',
           tabSettings: 'Ajustes',
@@ -1853,30 +2160,35 @@
           attempts: 'Intentos',
           edit: 'Editar',
           reset: 'Rehabilitar',
-          deactivate: 'Desactivar',
+          deactivate: 'Eliminar acceso',
           basic: 'Basico',
           page: 'Pagina',
           appointments: 'Citas',
           allAppointments: 'Todas las citas',
           earnings: 'Ganancias',
           payments: 'Pagos',
-          timeOff: 'Dias libres'
+          timeOff: 'Dias libres',
+          updatingSection: 'Actualizando información…'
         },
         en: {
           publicView: 'Client view',
           refresh: 'Refresh',
           logout: 'Log out',
           loginTitle: 'Admin',
+          staffLoginTitle: 'Staff portal',
           loginUser: 'Email or user',
           loginPassword: 'Password',
           loginButton: 'Sign in',
           tabReservations: 'Bookings',
+          tabManual: 'Manual bookings',
           tabEarnings: 'Earnings',
           tabTimeOff: 'Time off',
           tabServices: 'Services',
           tabPhotos: 'Photos',
           tabDiscounts: 'Discounts',
           tabEvents: 'Events',
+          tabTestimonials: 'Testimonials',
+          tabFaqs: 'FAQ',
           tabQr: 'Scan QR',
           tabUsers: 'Users',
           tabSettings: 'Settings',
@@ -1897,21 +2209,24 @@
           attempts: 'Attempts',
           edit: 'Edit',
           reset: 'Restore',
-          deactivate: 'Deactivate',
+          deactivate: 'Remove access',
           basic: 'Basic',
           page: 'Page',
           appointments: 'Appointments',
           allAppointments: 'All appointments',
           earnings: 'Earnings',
           payments: 'Payments',
-          timeOff: 'Time off'
+          timeOff: 'Time off',
+          updatingSection: 'Updating information…'
         }
       };
 
       document.addEventListener('DOMContentLoaded', init);
 
       function init() {
+        document.body.classList.toggle('staff-portal-mode', STAFF_PORTAL_MODE);
         bindEvents();
+        prepareTimeSelects();
         setPublicLink();
         hydrateLoginFields();
         applyAdminLanguage();
@@ -1933,7 +2248,7 @@
             username: $('#username').value.trim(),
             password: $('#secret').value.trim()
           });
-          storageSet('sessionStorage', 'angels_admin_secret', state.secret);
+          storageSet('sessionStorage', AUTH_STORAGE_KEY, state.secret);
           loadAdminData();
         });
         $('#publicLink').addEventListener('click', event => {
@@ -1959,11 +2274,20 @@
         $('#serviceForm').addEventListener('submit', saveService);
         $('#discountForm').addEventListener('submit', saveDiscount);
         $('#eventForm').addEventListener('submit', saveEvent);
+        $('#faqAdminForm').addEventListener('submit', saveFaq);
         $('#photoForm').addEventListener('submit', savePhoto);
         $('#beforeAfterForm').addEventListener('submit', saveBeforeAfter);
         $('#timeOffForm').addEventListener('submit', saveTimeOffRequest);
+        $('#myAvailabilityForm').addEventListener('submit', saveMyAvailability);
         $('#newTimeOffBtn').addEventListener('click', resetTimeOffForm);
         $('#userForm').addEventListener('submit', saveUser);
+        $('#devicePolicyForm').addEventListener('submit', saveDevicePolicy);
+        $('#deviceInfoBtn').addEventListener('click', showDeviceSecurityInfo);
+        $('#deviceRequireWifi').addEventListener('change', updateDevicePolicyUi);
+        $('#deviceRequireLocation').addEventListener('change', updateDevicePolicyUi);
+        $('#clientHistoryModal').addEventListener('click', event => {
+          if (event.target === $('#clientHistoryModal')) $('#clientHistoryModal').close();
+        });
         $('#newUserBtn').addEventListener('click', resetUserForm);
         $('#userRole').addEventListener('change', applyRoleDefaults);
         $('#settingsForm').addEventListener('submit', saveSettings);
@@ -1978,11 +2302,11 @@
         $('#newServiceBtn').addEventListener('click', resetServiceForm);
         $('#newDiscountBtn').addEventListener('click', resetDiscountForm);
         $('#newEventBtn').addEventListener('click', resetEventForm);
+        $('#newFaqBtn').addEventListener('click', resetFaqForm);
+        $('#openEarningsBtn').addEventListener('click', () => setTab('earnings'));
         $('#newPhotoBtn').addEventListener('click', resetPhotoForm);
         $('#newBeforeAfterBtn').addEventListener('click', resetBeforeAfterForm);
         $('#newBlockedDayBtn').addEventListener('click', resetBlockedDayForm);
-        $('#sendRemindersBtn').addEventListener('click', runReminders);
-        $('#installReminderTriggerBtn').addEventListener('click', installReminderTrigger);
         $('#clearPublicCacheBtn').addEventListener('click', clearPublicPageCache);
         $('#exportReportBtn').addEventListener('click', exportReport);
         $('#startQrBtn').addEventListener('click', startQrScanner);
@@ -1994,6 +2318,9 @@
         $$('[data-report-range]').forEach(button => button.addEventListener('click', () => setReportRange(button.dataset.reportRange)));
         $$('[data-reset-form]').forEach(button => button.addEventListener('click', () => resetNamedForm(button.dataset.resetForm)));
         $('#photoFile').addEventListener('change', handlePhotoFile);
+        $('#serviceImageFile').addEventListener('change', handleServiceImageFile);
+        $('#logoFile').addEventListener('change', event => handleSettingsImageFile(event, 'logo'));
+        $('#heroImageFile').addEventListener('change', event => handleSettingsImageFile(event, 'hero'));
         $('#beforeFile').addEventListener('change', event => handleBeforeAfterFile(event, 'before'));
         $('#afterFile').addEventListener('change', event => handleBeforeAfterFile(event, 'after'));
         $('#photoAspect').addEventListener('change', updatePreviewAspect);
@@ -2055,7 +2382,10 @@
           button.classList.toggle('active', button.dataset.adminLang === state.language);
         });
         $$('[data-admin-i18n]').forEach(node => {
-          node.textContent = adminText(node.dataset.adminI18n);
+          const key = STAFF_PORTAL_MODE && node.dataset.adminI18n === 'loginTitle'
+            ? 'staffLoginTitle'
+            : node.dataset.adminI18n;
+          node.textContent = adminText(key);
         });
         const helpTitle = document.querySelector('#help .panel-head h2');
         const helpCopy = document.querySelector('#help .panel-head .muted');
@@ -2069,7 +2399,15 @@
         try {
           state.loadedTabs = {};
           mergeAdminData(await gas('getAdminShellData', state.secret));
-          $('#brandName').textContent = `${state.data.appName} Admin`;
+          if (STAFF_PORTAL_MODE && state.data.authRole !== 'staff') {
+            throw new Error('Este acceso es exclusivamente para trabajadoras. Usa el portal administrativo.');
+          }
+          if (!STAFF_PORTAL_MODE && state.data.authRole === 'staff') {
+            throw new Error('Tu usuario debe entrar desde el Portal de trabajadoras.');
+          }
+          $('#brandName').textContent = STAFF_PORTAL_MODE
+            ? `${state.data.appName} | Trabajadoras`
+            : `${state.data.appName} Admin`;
           $('#login').classList.add('hidden');
           $('#admin').classList.add('open');
           $('#logoutBtn').hidden = false;
@@ -2078,9 +2416,10 @@
           applyAccessVisibility();
           showLoginGreeting();
           renderShell();
-          await loadAdminTab(state.tab || 'reservations', true);
+          setTab(state.tab || 'reservations');
+          window.setTimeout(() => prefetchAdminTabs(), 350);
         } catch (error) {
-          storageRemove('sessionStorage', 'angels_admin_secret');
+          storageRemove('sessionStorage', AUTH_STORAGE_KEY);
           state.secret = '';
           state.data = null;
           state.loadedTabs = {};
@@ -2100,7 +2439,7 @@
 
       function mergeAdminData(partial) {
         state.data = Object.assign({}, state.data || {}, partial || {});
-        ['categories', 'services', 'photos', 'beforeAfter', 'discounts', 'users', 'timeOffRequests', 'events', 'blockedDays', 'clientHistory', 'reservations'].forEach(key => {
+        ['categories', 'services', 'photos', 'beforeAfter', 'discounts', 'users', 'devices', 'timeOffRequests', 'events', 'testimonials', 'faqs', 'blockedDays', 'clientHistory', 'reservations'].forEach(key => {
           if (!Array.isArray(state.data[key])) state.data[key] = [];
         });
         state.data.dashboard = state.data.dashboard || {};
@@ -2109,7 +2448,24 @@
         state.data.settings = state.data.settings || {};
         state.data.modules = state.data.modules || {};
         state.data.permissions = state.data.permissions || {};
+        state.data.devicePolicy = state.data.devicePolicy || {};
         state.data.loadedAt = new Date().toISOString();
+        updateNotificationBadges();
+      }
+
+      function markAllAdminTabsLoaded() {
+        state.loadedTabs = {};
+        ['manual', 'reservations', 'earnings', 'timeoff', 'services', 'photos', 'discounts', 'events', 'testimonials', 'faqs', 'qr', 'users', 'devices', 'settings', 'help']
+          .forEach(tab => { state.loadedTabs[tab] = true; });
+      }
+
+      function applyFullAdminData(data, render) {
+        mergeAdminData(data);
+        markAllAdminTabsLoaded();
+        if (render !== false) {
+          renderShell();
+          renderCurrentTab(state.tab || 'reservations');
+        }
       }
 
       function renderShell() {
@@ -2129,7 +2485,10 @@
           renderCurrentTab(tab);
           return;
         }
-        setBusy(true);
+        const panel = document.getElementById(tab);
+        if (panel && tab === state.tab && !panel.querySelector('.tab-loading-note')) {
+          panel.insertAdjacentHTML('afterbegin', `<div class="tab-loading-note" role="status" aria-live="polite">${escapeHtml(adminText('updatingSection'))}</div>`);
+        }
         try {
           const partial = await gas('getAdminTabData', state.secret, tab, getTabOptions(tab));
           mergeAdminData(partial);
@@ -2138,7 +2497,24 @@
         } catch (error) {
           showToast(error.message || String(error));
         } finally {
-          setBusy(false);
+          if (panel) panel.querySelectorAll('.tab-loading-note').forEach(node => node.remove());
+        }
+      }
+
+      async function prefetchAdminTabs() {
+        if (!state.secret || !state.data) return;
+        const tabs = $$('.tab:not(.hidden-by-permission)')
+          .map(button => button.dataset.tab)
+          .filter(tab => tab && tab !== state.tab && !state.loadedTabs[tab]);
+        for (const tab of tabs) {
+          if (!state.secret) return;
+          try {
+            const partial = await gas('getAdminTabData', state.secret, tab, getTabOptions(tab));
+            mergeAdminData(partial);
+            state.loadedTabs[tab] = true;
+          } catch (error) {
+            console.warn(`No se pudo precargar ${tab}:`, error.message || error);
+          }
         }
       }
 
@@ -2178,12 +2554,19 @@
           renderDiscounts();
         } else if (tab === 'events') {
           renderEvents();
+        } else if (tab === 'testimonials') {
+          renderTestimonialsAdmin();
+        } else if (tab === 'faqs') {
+          renderFaqsAdmin();
+        } else if (tab === 'manual') {
+          renderCategoryList();
+          renderManualReservationOptions();
         } else if (tab === 'qr') {
           renderCategoryList();
         } else if (tab === 'users') {
           renderUsers();
-          renderUserServiceChecks();
-          renderUserAvailability();
+        } else if (tab === 'devices') {
+          renderDevices();
         } else if (tab === 'settings') {
           renderSettings();
           renderBlockedDays();
@@ -2195,7 +2578,7 @@
       }
 
       function logoutAdmin() {
-        storageRemove('sessionStorage', 'angels_admin_secret');
+        storageRemove('sessionStorage', AUTH_STORAGE_KEY);
         state.secret = '';
         state.data = null;
         state.loadedTabs = {};
@@ -2205,6 +2588,7 @@
         $('#logoutBtn').hidden = true;
         document.body.classList.remove('developer-mode');
         document.body.classList.remove('staff-mode');
+        showLoginGreeting.done = false;
         showToast('Sesion cerrada.');
       }
 
@@ -2212,10 +2596,12 @@
         if (showLoginGreeting.done) return;
         showLoginGreeting.done = true;
         const user = currentUser();
-        const role = (state.data.authRole || '').toUpperCase();
-        $('#welcomeTitle').textContent = adminText('welcome');
-        $('#welcomeName').textContent = user.displayName || user.email || user.username || 'Usuario';
-        $('#welcomeRole').textContent = `${adminText('role')}: ${role}`;
+        const name = user.displayName || user.email || user.username || 'Usuario';
+        $('#welcomeTitle').textContent = `¡Bienvenida, ${name}!`;
+        $('#welcomeName').textContent = 'Tu espacio de trabajo está listo.';
+        $('#welcomeMessage').textContent = state.data.authRole === 'staff'
+          ? 'Que hoy cada cita sea una oportunidad para crear, cuidar y hacer sentir especial a alguien. Solo verás las funciones autorizadas para tu cuenta.'
+          : 'Todo está preparado para que administres RESET con calma, claridad y seguridad. Gracias por cuidar cada detalle del salón.';
         $('#welcomeModal').classList.add('open');
         refreshIcons();
       }
@@ -2244,8 +2630,86 @@
         return (state.data && state.data.currentUser) || {};
       }
 
+      function notificationItems(tabName) {
+        if (!state.data) return [];
+        if (tabName === 'reservations') return state.data.reservations || [];
+        if (tabName === 'testimonials') return state.data.testimonials || [];
+        if (tabName === 'timeoff') return state.data.timeOffRequests || [];
+        if (tabName === 'devices') return state.data.devices || [];
+        return [];
+      }
+
+      function notificationItemKey(tabName, item) {
+        if (tabName === 'devices') return String(item.deviceId || item.id || item.rowNumber || '');
+        return String(item.id || item.reservationId || item.rowNumber || '');
+      }
+
+      function notificationStorageKey() {
+        const user = String(currentUser().username || 'session').toLowerCase();
+        return `reset_seen_items_${user}`;
+      }
+
+      function readSeenItems() {
+        try { return JSON.parse(storageGet('localStorage', notificationStorageKey(), '{}')) || {}; }
+        catch (error) { return {}; }
+      }
+
+      function writeSeenItems(value) {
+        storageSet('localStorage', notificationStorageKey(), JSON.stringify(value || {}));
+      }
+
+      function unseenNotificationKeys(tabName) {
+        if (!['reservations', 'testimonials', 'timeoff', 'devices'].includes(tabName)) return [];
+        const currentKeys = notificationItems(tabName).map(item => notificationItemKey(tabName, item)).filter(Boolean);
+        const seen = readSeenItems();
+        if (!Object.prototype.hasOwnProperty.call(seen, tabName) || !state.loadedTabs[tabName]) {
+          seen[tabName] = currentKeys;
+          writeSeenItems(seen);
+          return [];
+        }
+        const known = new Set(Array.isArray(seen[tabName]) ? seen[tabName] : []);
+        return currentKeys.filter(key => !known.has(key));
+      }
+
+      function updateNotificationBadges() {
+        ['reservations', 'testimonials', 'timeoff', 'devices'].forEach(tabName => {
+          const badge = document.querySelector(`[data-nav-badge="${tabName}"]`);
+          if (!badge) return;
+          const count = unseenNotificationKeys(tabName).length;
+          badge.hidden = count === 0;
+          badge.textContent = count > 99 ? '99+' : String(count);
+          badge.setAttribute('aria-label', `${count} novedades`);
+        });
+      }
+
+      function markSectionNotificationsSeen(tabName) {
+        if (!['reservations', 'testimonials', 'timeoff', 'devices'].includes(tabName) || !state.data) return;
+        const unseen = unseenNotificationKeys(tabName);
+        state.highlightedItems[tabName] = unseen;
+        const seen = readSeenItems();
+        seen[tabName] = notificationItems(tabName).map(item => notificationItemKey(tabName, item)).filter(Boolean);
+        writeSeenItems(seen);
+        updateNotificationBadges();
+      }
+
+      function isNewItemHighlighted(tabName, item) {
+        return (state.highlightedItems[tabName] || []).includes(notificationItemKey(tabName, item));
+      }
+
       function can(permission) {
         const perms = permissions();
+        if (Object.prototype.hasOwnProperty.call(perms, permission)) return Boolean(perms[permission]);
+        const legacy = {
+          canViewClientHistory: 'canEditAppointments',
+          canViewEarnings: state.data && state.data.authRole === 'staff' ? 'canEditAppointments' : 'canViewGeneralEarnings',
+          canExportReports: 'canViewGeneralEarnings',
+          canUseQr: 'canEditAppointments',
+          canManageServices: 'canEditPage',
+          canManageGallery: 'canEditPage',
+          canManageDevices: 'canManageUsers',
+          canManageSettings: 'canEditPage'
+        };
+        if (legacy[permission]) return Boolean(perms[legacy[permission]]);
         return Boolean(perms[permission]);
       }
 
@@ -2259,16 +2723,20 @@
         if (!state.data) return;
         const access = {
           reservations: true,
-          earnings: moduleEnabled('REPORTS') && can('canEditAppointments'),
+          manual: can('canEditAppointments'),
+          earnings: moduleEnabled('REPORTS') && can('canViewEarnings'),
           timeoff: true,
-          services: can('canEditPage'),
-          photos: can('canEditPage'),
+          services: can('canManageServices'),
+          photos: can('canManageGallery'),
           discounts: can('canManageDiscounts'),
-          events: can('canEditPage'),
-          qr: moduleEnabled('QR') && can('canEditAppointments'),
+          events: true,
+          testimonials: can('canEditPage'),
+          faqs: can('canEditPage'),
+          qr: moduleEnabled('QR') && can('canUseQr'),
           users: moduleEnabled('WORKERS') && can('canManageUsers'),
-          settings: can('canEditPage'),
-          developer: state.data.authRole === 'developer',
+          devices: can('canManageDevices'),
+          settings: can('canManageSettings'),
+          developer: !STAFF_PORTAL_MODE && state.data.authRole === 'developer',
           help: true
         };
         $$('.tab').forEach(tab => {
@@ -2279,6 +2747,7 @@
           if (panel) panel.classList.toggle('hidden-by-permission', !access[tabName]);
         });
         if (!access[state.tab]) setTab('reservations');
+        if ($('#openEarningsBtn')) $('#openEarningsBtn').hidden = !access.earnings;
         $$('.payment-only').forEach(node => {
           node.classList.toggle('hidden-by-permission', !can('canManagePayments'));
         });
@@ -2294,17 +2763,24 @@
         $$('.admin-timeoff-only').forEach(node => {
           node.classList.toggle('hidden-by-permission', !can('canManageTimeOff'));
         });
+        $$('[data-event-management]').forEach(node => {
+          node.classList.toggle('hidden-by-permission', !can('canEditPage'));
+        });
       }
 
       function setTab(tabName) {
         const tabButton = document.querySelector(`.tab[data-tab="${tabName}"]`);
         if (tabButton && tabButton.classList.contains('hidden-by-permission')) tabName = 'reservations';
         state.tab = tabName;
+        markSectionNotificationsSeen(tabName);
         $$('.tab').forEach(tab => tab.classList.toggle('active', tab.dataset.tab === tabName));
         $$('.tab-panel').forEach(panel => {
           panel.hidden = panel.id !== tabName;
         });
-        if (state.data) loadAdminTab(tabName, false);
+        if (state.data) {
+          renderCurrentTab(tabName);
+          if (!state.loadedTabs[tabName]) loadAdminTab(tabName, false);
+        }
       }
 
       function renderDashboard() {
@@ -2315,7 +2791,7 @@
           <article class="metric-card"><span>Hoy</span><strong>${dashboard.todayCount || 0}</strong></article>
           <article class="metric-card"><span>Mis citas hoy</span><strong>${dashboard.ownTodayCount || 0}</strong></article>
           <article class="metric-card"><span>Pendientes</span><strong>${dashboard.pendingCount || 0}</strong></article>
-          <article class="metric-card"><span>${totalLabel}</span><strong>${formatMoney(dashboard.todayTotal || 0)}</strong></article>
+          ${dashboard.canViewEarnings === false ? '' : `<article class="metric-card"><span>${totalLabel}</span><strong>${formatMoney(dashboard.todayTotal || 0)}</strong></article>`}
           <article class="metric-card"><span>Proxima cita</span><strong>${next ? `${escapeHtml(next.date)} ${escapeHtml(next.time)}` : 'Sin cita'}</strong></article>
         `;
       }
@@ -2350,13 +2826,12 @@
                   <th>Cita</th>
                   <th>Total</th>
                   <th>Estado</th>
-                  <th>Notas internas</th>
                   <th>Acciones</th>
                 </tr>
               </thead>
               <tbody>
                 ${reservations.map(item => `
-                  <tr>
+                  <tr class="${isNewItemHighlighted('reservations', item) ? 'new-item-highlight' : ''}">
                     <td>
                       <strong>${escapeHtml(item.clientName || 'Sin nombre')}</strong><br>
                       <span class="muted">${escapeHtml(item.phone || '')}</span><br>
@@ -2364,7 +2839,7 @@
                     </td>
                     <td>
                       <strong>${escapeHtml(item.category)} - ${escapeHtml(item.service)}</strong><br>
-                      <span>${escapeHtml(item.date)} ${escapeHtml(item.time)}</span><br>
+                      <span>${escapeHtml(item.date)} ${escapeHtml(formatTime12(item.time))}</span><br>
                       <span class="muted">${item.duration} min - ${escapeHtml(item.id)}</span><br>
                       <span class="muted">Asignada: ${escapeHtml(item.assignedUser || 'Sin asignar')}</span>
                       ${item.reminder24hSent ? `<br><span class="muted">Recordatorio 24h: ${escapeHtml(item.reminder24hSent)}</span>` : ''}
@@ -2376,17 +2851,13 @@
                     </td>
                     <td><span class="status ${slug(item.status)}">${escapeHtml(item.status)}</span></td>
                     <td>
-                      <textarea class="note-box" data-note-input="${item.rowNumber}" placeholder="Notas internas" ${item.canEdit ? '' : 'disabled'}>${escapeHtml(item.internalNotes || '')}</textarea>
-                      ${item.canEdit ? `<button class="btn secondary mini" data-note-row="${item.rowNumber}" type="button">Guardar nota</button>` : '<span class="muted">Solo lectura</span>'}
-                    </td>
-                    <td>
                       <div class="row-actions">
-                        ${item.canEdit ? `<button class="btn secondary mini" data-edit-manual="${item.rowNumber}" type="button">Editar</button>
-                        <button class="btn soft mini" data-status-row="${item.rowNumber}" data-status="Confirmada" type="button">Confirmar</button>
+                        ${item.canEdit ? `<button class="btn soft mini" data-status-row="${item.rowNumber}" data-status="Confirmada" type="button">Confirmar</button>
+                        <button class="btn secondary mini" data-status-row="${item.rowNumber}" data-status="Pendiente" type="button">Pendiente</button>
+                        <button class="btn secondary mini" data-status-row="${item.rowNumber}" data-status="Completada" type="button">Completada</button>
                         <button class="btn danger mini" data-status-row="${item.rowNumber}" data-status="Cancelada" type="button">Cancelar</button>
-                        <button class="btn secondary mini" data-status-row="${item.rowNumber}" data-status="Pendiente" type="button">Pendiente</button>` : '<span class="muted">Solo ver</span>'}
+                        ` : '<span class="muted">Solo ver</span>'}
                         ${contactLinks(item)}
-                        ${item.receiptUrl ? `<a class="btn secondary mini" href="${escapeHtml(item.receiptUrl)}" target="_blank" rel="noopener">PDF</a>` : ''}
                       </div>
                     </td>
                   </tr>
@@ -2398,12 +2869,6 @@
 
         $$('[data-status-row]').forEach(button => {
           button.addEventListener('click', () => updateReservationStatus(button.dataset.statusRow, button.dataset.status));
-        });
-        $$('[data-note-row]').forEach(button => {
-          button.addEventListener('click', () => saveReservationNote(button.dataset.noteRow));
-        });
-        $$('[data-edit-manual]').forEach(button => {
-          button.addEventListener('click', () => editManualReservation(Number(button.dataset.editManual)));
         });
       }
 
@@ -2422,7 +2887,7 @@
 
       function contactMessage(item) {
         const name = item.clientName ? ` ${item.clientName}` : '';
-        return `Hola${name}, te escribimos de Dominican Hair Salon sobre tu cita de ${item.service} el ${item.date} a las ${item.time}.`;
+        return `Hola${name}, te escribimos de RESET by Yaleixi sobre tu cita de ${item.service} el ${item.date} a las ${formatTime12(item.time)}.`;
       }
 
       function normalizePhoneDigits(value) {
@@ -2469,13 +2934,13 @@
         fillManualServiceSelect();
         $('#manualService').value = item.service || '';
         $('#manualDate').value = item.date || '';
-        $('#manualTime').value = item.time24 || '';
+        populateTimeSelect($('#manualTime'), item.time24 || '09:00');
         $('#manualDiscount').value = item.manualDiscount || 0;
         $('#manualTip').value = item.tip || 0;
         $('#manualPaid').checked = Boolean(item.paid);
         $('#manualPaymentMethod').value = item.paymentMethod || '';
         $('#manualNotes').value = item.notes || '';
-        setTab('reservations');
+        setTab('manual');
         $('#manualClient').focus();
       }
 
@@ -2508,6 +2973,7 @@
 
       function resetManualReservationForm() {
         $('#manualReservationForm').reset();
+        populateTimeSelect($('#manualTime'), '09:00');
         $('#manualRow').value = '';
         renderManualReservationOptions();
         $('#manualStatus').value = 'Confirmada';
@@ -2520,7 +2986,7 @@
         const filtered = histories.filter(item => {
           if (!query) return true;
           return [item.clientName, item.phone, item.email].join(' ').toLowerCase().indexOf(query) !== -1;
-        }).slice(0, 6);
+        }).slice(0, 12);
 
         if (!filtered.length) {
           $('#clientHistory').innerHTML = '';
@@ -2535,17 +3001,140 @@
             </div>
           </div>
           <div class="history-grid">
-            ${filtered.map(item => `
-              <article class="history-card">
-                <strong>${escapeHtml(item.clientName || 'Sin nombre')}</strong><br>
+            ${filtered.map(item => {
+              const dataIndex = histories.indexOf(item);
+              return `
+              <button class="history-card" type="button" data-client-history-index="${dataIndex}">
+                <span class="history-card-head"><strong>${escapeHtml(item.clientName || 'Sin nombre')}</strong><span class="history-count">${Number(item.count || 0)}</span></span>
                 <span class="muted">${escapeHtml(item.phone || '')}</span><br>
                 <span class="muted">${escapeHtml(item.email || '')}</span><br>
                 <span>${item.count} citas - ${formatMoney(item.total)}</span><br>
-                <span class="muted">Ultima: ${escapeHtml(item.lastDate || '')}</span>
-              </article>
-            `).join('')}
+                <span class="muted">Ultima: ${escapeHtml(item.lastDate || '')} · ${escapeHtml(item.lastService || '')}</span><br>
+                <span class="muted">Abrir historial completo →</span>
+              </button>
+            `;}).join('')}
           </div>
         `;
+        $$('[data-client-history-index]').forEach(button => {
+          button.addEventListener('click', () => openClientHistory(Number(button.dataset.clientHistoryIndex)));
+        });
+      }
+
+      function openClientHistory(index) {
+        const client = ((state.data && state.data.clientHistory) || [])[index];
+        if (!client) return;
+        const visits = Array.isArray(client.reservations) ? client.reservations : [];
+        $('#clientHistoryModalContent').innerHTML = `
+          <div class="panel-head">
+            <div>
+              <h2 id="clientHistoryTitle">${escapeHtml(client.clientName || 'Clienta')}</h2>
+              <div class="muted">${Number(client.count || 0)} citas · ${escapeHtml(client.phone || '')} · ${escapeHtml(client.email || '')}</div>
+            </div>
+            <button class="btn secondary mini" type="button" data-close-client-history><i data-lucide="x" aria-hidden="true"></i>Cerrar</button>
+          </div>
+          <div class="dashboard-grid">
+            <article class="metric-card"><span>Visitas</span><strong>${Number(client.count || 0)}</strong></article>
+            <article class="metric-card"><span>Total historico</span><strong>${formatMoney(client.total || 0)}</strong></article>
+            <article class="metric-card"><span>Ultima visita</span><strong>${escapeHtml(client.lastDate || 'Sin fecha')}</strong></article>
+            <article class="metric-card"><span>Ultima trabajadora</span><strong>${escapeHtml(client.lastAssignedName || client.lastAssignedUser || 'Sin asignar')}</strong></article>
+          </div>
+          <h3>Historial completo</h3>
+          ${visits.length ? visits.map(visit => `
+            <article class="history-visit">
+              <div class="panel-head">
+                <div>
+                  <strong>${escapeHtml(visit.category || '')} · ${escapeHtml(visit.service || '')}</strong><br>
+                  <span class="muted">${escapeHtml(visit.date || '')} · ${escapeHtml(formatTime12(visit.time || ''))} · ${Number(visit.duration || 0)} min</span><br>
+                  <span class="muted">Atendio: ${escapeHtml(visit.assignedName || visit.assignedUser || 'Sin asignar')}</span>
+                </div>
+                <span class="status ${slug(visit.status)}">${escapeHtml(visit.status || 'Pendiente')}</span>
+              </div>
+              <p><strong>${formatMoney(visit.total || visit.price || 0)}</strong>${visit.discount ? ` · Descuento ${formatMoney(visit.discount)}` : ''}</p>
+              <details>
+                <summary><strong>Notas internas y seguimiento</strong></summary>
+                <div class="form-grid" style="margin-top: 10px;">
+                  <div class="field full">
+                    <label>Nota interna de esta visita</label>
+                    <textarea data-history-note="${visit.rowNumber}">${escapeHtml(visit.internalNotes || '')}</textarea>
+                  </div>
+                  <div class="field">
+                    <label>Proximo retoque recomendado</label>
+                    <input type="date" data-history-follow-date="${visit.rowNumber}" value="${escapeHtml(visit.retouchDate || '')}">
+                  </div>
+                  <div class="field">
+                    <label>Recomendacion de seguimiento</label>
+                    <textarea data-history-follow-note="${visit.rowNumber}">${escapeHtml(visit.followUpNotes || '')}</textarea>
+                  </div>
+                </div>
+                <div class="row-actions">
+                  <button class="btn secondary mini" type="button" data-history-save-note="${visit.rowNumber}">Guardar nota</button>
+                  <button class="btn secondary mini" type="button" data-history-save-follow="${visit.rowNumber}">Guardar seguimiento</button>
+                </div>
+              </details>
+              <div class="row-actions" style="margin-top: 12px;">
+                <button class="btn secondary mini" type="button" data-history-edit="${visit.rowNumber}">Editar cita</button>
+                ${visit.receiptUrl ? `<a class="btn secondary mini" href="${escapeHtml(visit.receiptUrl)}" target="_blank" rel="noopener">Abrir recibo</a>` : ''}
+                <button class="btn danger mini" type="button" data-history-delete="${visit.rowNumber}">Borrar cita</button>
+              </div>
+            </article>
+          `).join('') : '<div class="empty">No hay visitas registradas.</div>'}
+        `;
+        $('#clientHistoryModal').showModal();
+        $('[data-close-client-history]').addEventListener('click', () => $('#clientHistoryModal').close());
+        $$('[data-history-edit]').forEach(button => button.addEventListener('click', () => {
+          $('#clientHistoryModal').close();
+          editManualReservation(Number(button.dataset.historyEdit));
+        }));
+        $$('[data-history-save-note]').forEach(button => button.addEventListener('click', () => saveHistoryNote(Number(button.dataset.historySaveNote))));
+        $$('[data-history-save-follow]').forEach(button => button.addEventListener('click', () => saveHistoryFollowUp(Number(button.dataset.historySaveFollow))));
+        $$('[data-history-delete]').forEach(button => button.addEventListener('click', () => deleteHistoryReservation(Number(button.dataset.historyDelete))));
+        refreshIcons();
+      }
+
+      async function saveHistoryNote(rowNumber) {
+        const input = document.querySelector(`[data-history-note="${rowNumber}"]`);
+        $('#clientHistoryModal').close();
+        setBusy(true);
+        try {
+          applyFullAdminData(await gas('saveAdminReservationNote', state.secret, rowNumber, input ? input.value : ''));
+          showToast('Nota interna guardada.');
+        } catch (error) {
+          showToast(error.message || String(error));
+        } finally {
+          setBusy(false);
+        }
+      }
+
+      async function saveHistoryFollowUp(rowNumber) {
+        const date = document.querySelector(`[data-history-follow-date="${rowNumber}"]`);
+        const note = document.querySelector(`[data-history-follow-note="${rowNumber}"]`);
+        $('#clientHistoryModal').close();
+        setBusy(true);
+        try {
+          applyFullAdminData(await gas('saveAdminFollowUp', state.secret, rowNumber, {
+            retouchDate: date ? date.value : '',
+            followUpNotes: note ? note.value : ''
+          }));
+          showToast('Seguimiento guardado.');
+        } catch (error) {
+          showToast(error.message || String(error));
+        } finally {
+          setBusy(false);
+        }
+      }
+
+      async function deleteHistoryReservation(rowNumber) {
+        if (!confirm('¿Borrar esta cita del historial? Esta accion no se puede deshacer.')) return;
+        $('#clientHistoryModal').close();
+        setBusy(true);
+        try {
+          applyFullAdminData(await gas('deleteAdminReservation', state.secret, rowNumber));
+          showToast('Cita eliminada del historial.');
+        } catch (error) {
+          showToast(error.message || String(error));
+        } finally {
+          setBusy(false);
+        }
       }
 
       function serviceStageLabel(value) {
@@ -2607,7 +3196,7 @@
               <tbody>
                 ${appointments.map(item => `
                   <tr>
-                    <td><strong>${escapeHtml(item.clientName || '')}</strong><br><span class="muted">${escapeHtml(item.id || '')}<br>${escapeHtml(item.date || '')} ${escapeHtml(item.time || '')}</span></td>
+                    <td><strong>${escapeHtml(item.clientName || '')}</strong><br><span class="muted">${escapeHtml(item.id || '')}<br>${escapeHtml(item.date || '')} ${escapeHtml(formatTime12(item.time || ''))}</span></td>
                     <td>${escapeHtml(item.service || '')}</td>
                     <td>${escapeHtml(item.assignedName || item.assignedUser || 'Sin asignar')}</td>
                     <td><span class="status ${slug(serviceStageLabel(item.serviceStatus))}">${escapeHtml(serviceStageLabel(item.serviceStatus))}</span></td>
@@ -2768,22 +3357,23 @@
 
       function renderEvents() {
         const events = (state.data && state.data.events) || [];
+        const canManage = can('canEditPage') && state.data.canManageEvents !== false;
         if (!events.length) {
-          $('#eventTable').innerHTML = '<div class="empty">No hay eventos especiales.</div>';
+          $('#eventTable').innerHTML = `<div class="empty">${canManage ? 'No hay eventos especiales programados.' : 'No hay anuncios o eventos para el equipo en este momento.'}</div>`;
           return;
         }
         $('#eventTable').innerHTML = `
           <div class="table-wrap">
             <table>
-              <thead><tr><th>Evento</th><th>Fechas</th><th>Visibilidad</th><th>Estado</th><th></th></tr></thead>
+              <thead><tr><th>Evento</th><th>Fechas</th><th>Visibilidad</th><th>Estado</th><th ${canManage ? '' : 'hidden'}></th></tr></thead>
               <tbody>
                 ${events.map(item => `
                   <tr>
-                    <td><strong>${escapeHtml(item.title)}</strong><br><span class="muted">${escapeHtml(item.type)} - ${escapeHtml(item.description || '')}</span></td>
+                    <td><strong>${escapeHtml(state.language === 'en' ? (item.titleEn || item.title) : item.title)}</strong><br><span class="muted">${escapeHtml(item.type)} - ${escapeHtml(state.language === 'en' ? (item.descriptionEn || item.description || '') : (item.description || ''))}</span></td>
                     <td>${escapeHtml(item.startDate)}${item.endDate && item.endDate !== item.startDate ? ` - ${escapeHtml(item.endDate)}` : ''}</td>
                     <td>${escapeHtml(item.visibility)}<br><span class="muted">${item.blocksBooking ? 'Bloquea reservas' : 'Informativo'}</span></td>
                     <td>${item.active ? 'Activo' : 'Inactivo'}</td>
-                    <td>
+                    <td ${canManage ? '' : 'hidden'}>
                       <div class="row-actions">
                         <button class="btn secondary mini" data-edit-event="${item.rowNumber}" type="button">Editar</button>
                         <button class="btn danger mini" data-delete-event="${item.rowNumber}" type="button">Borrar</button>
@@ -2796,6 +3386,97 @@
           </div>`;
         $$('[data-edit-event]').forEach(button => button.addEventListener('click', () => editEvent(Number(button.dataset.editEvent))));
         $$('[data-delete-event]').forEach(button => button.addEventListener('click', () => deleteEvent(Number(button.dataset.deleteEvent))));
+      }
+
+      function renderTestimonialsAdmin() {
+        const testimonials = (state.data && state.data.testimonials) || [];
+        const target = $('#testimonialAdminTable');
+        if (!target) return;
+        if (!testimonials.length) {
+          target.innerHTML = '<div class="empty">Todavía no se han recibido testimonios desde los recibos finales.</div>';
+          return;
+        }
+        target.innerHTML = `
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Clienta</th><th>Experiencia</th><th>Estado</th><th>Acciones</th></tr></thead>
+              <tbody>${testimonials.map(item => {
+                const rating = Math.max(1, Math.min(5, Number(item.rating) || 5));
+                const stars = `${'★'.repeat(rating)}${'☆'.repeat(5 - rating)}`;
+                const published = item.status === 'aprobado' && item.visible;
+                return `<tr class="${isNewItemHighlighted('testimonials', item) ? 'new-item-highlight' : ''}">
+                  <td><strong>${escapeHtml(item.clientName || 'Clienta')}</strong><br><span class="muted">${escapeHtml(item.created || '')}</span></td>
+                  <td><div style="color:#b88718;font-size:19px;letter-spacing:2px" aria-label="${rating} de 5 estrellas">${stars}</div><div style="margin-top:7px;max-width:640px;white-space:normal;line-height:1.55">${escapeHtml(item.comment || '')}</div></td>
+                  <td><span class="status ${published ? 'ok' : 'pending'}">${published ? 'Publicado' : item.status === 'oculto' ? 'Oculto' : 'Nuevo'}</span></td>
+                  <td><div class="row-actions">
+                    ${published
+                      ? `<button class="btn secondary mini" type="button" data-testimonial-status="oculto" data-testimonial-row="${item.rowNumber}">Ocultar</button>`
+                      : `<button class="btn mini" type="button" data-testimonial-status="aprobado" data-testimonial-row="${item.rowNumber}">Publicar</button>`}
+                    <button class="btn danger mini" type="button" data-delete-testimonial="${item.rowNumber}">Borrar</button>
+                  </div></td>
+                </tr>`;
+              }).join('')}</tbody>
+            </table>
+          </div>`;
+        $$('[data-testimonial-status]').forEach(button => button.addEventListener('click', () => updateTestimonialStatus(Number(button.dataset.testimonialRow), button.dataset.testimonialStatus)));
+        $$('[data-delete-testimonial]').forEach(button => button.addEventListener('click', () => deleteTestimonial(Number(button.dataset.deleteTestimonial))));
+      }
+
+      function renderFaqsAdmin() {
+        const faqs = (state.data && state.data.faqs) || [];
+        const target = $('#faqAdminTable');
+        if (!target) return;
+        if (!faqs.length) {
+          target.innerHTML = '<div class="empty">Aún no hay preguntas frecuentes. Crea la primera para activar esta sección en la página pública.</div>';
+          return;
+        }
+        target.innerHTML = `
+          <div class="table-wrap"><table>
+            <thead><tr><th>Orden</th><th>Pregunta y respuesta</th><th>Visible</th><th>Acciones</th></tr></thead>
+            <tbody>${faqs.map(item => `<tr>
+              <td><strong>${Number(item.order || 1)}</strong></td>
+              <td><strong>${escapeHtml(item.question || '')}</strong><p class="muted" style="white-space:normal;max-width:680px">${escapeHtml(item.answer || '')}</p>${item.questionEn ? `<small class="muted">EN: ${escapeHtml(item.questionEn)}</small>` : ''}</td>
+              <td><span class="status ${item.visible ? 'ok' : 'pending'}">${item.visible ? 'Publicada' : 'Oculta'}</span></td>
+              <td><div class="row-actions"><button class="btn secondary mini" type="button" data-edit-faq="${item.rowNumber}">Editar</button><button class="btn danger mini" type="button" data-delete-faq="${item.rowNumber}">Borrar</button></div></td>
+            </tr>`).join('')}</tbody>
+          </table></div>`;
+        $$('[data-edit-faq]').forEach(button => button.addEventListener('click', () => editFaq(Number(button.dataset.editFaq))));
+        $$('[data-delete-faq]').forEach(button => button.addEventListener('click', () => deleteFaq(Number(button.dataset.deleteFaq))));
+      }
+
+      function editFaq(rowNumber) {
+        const item = ((state.data && state.data.faqs) || []).find(faq => Number(faq.rowNumber) === Number(rowNumber));
+        if (!item) return;
+        $('#faqRow').value = item.rowNumber || '';
+        $('#faqId').value = item.id || '';
+        $('#faqQuestion').value = item.question || '';
+        $('#faqAnswer').value = item.answer || '';
+        $('#faqQuestionEn').value = item.questionEn || '';
+        $('#faqAnswerEn').value = item.answerEn || '';
+        $('#faqOrder').value = item.order || 1;
+        $('#faqVisible').checked = Boolean(item.visible);
+        setTab('faqs');
+        $('#faqQuestion').focus();
+      }
+
+      async function saveFaq(event) {
+        event.preventDefault();
+        const ok = await mutate('saveAdminFaq', {
+          rowNumber: $('#faqRow').value,
+          id: $('#faqId').value,
+          question: $('#faqQuestion').value,
+          answer: $('#faqAnswer').value,
+          questionEn: $('#faqQuestionEn').value,
+          answerEn: $('#faqAnswerEn').value,
+          order: $('#faqOrder').value,
+          visible: $('#faqVisible').checked
+        }, 'Pregunta frecuente guardada y página pública actualizada.');
+        if (ok) resetFaqForm();
+      }
+
+      async function deleteFaq(rowNumber) {
+        if (!confirm('¿Borrar esta pregunta frecuente de forma permanente?')) return;
+        await mutate('deleteAdminFaq', rowNumber, null, 'Pregunta frecuente eliminada.');
       }
 
       function renderReportControls() {
@@ -2839,83 +3520,75 @@
         return inputs.map(input => input.value).join(', ');
       }
 
-      function renderUserServiceChecks() {
-        const services = (state.data && state.data.services) || [];
-        if (!$('#userAllowedServices')) return;
-        $('#userAllowedServices').innerHTML = `
-          <label class="check"><input type="checkbox" value="Todos" data-service-all checked>Todos</label>
-          ${services.map(service => `<label class="check"><input type="checkbox" value="${escapeHtml(service.service)}">${escapeHtml(service.service)}</label>`).join('')}
-        `;
-      }
-
-      function setAllowedServiceChecks(value) {
-        const text = String(value || 'Todos');
-        const selected = text.split(',').map(item => item.trim().toLowerCase());
-        const all = selected.indexOf('todos') !== -1 || selected.indexOf('all') !== -1 || !text.trim();
-        $$('#userAllowedServices input').forEach(input => {
-          input.checked = input.dataset.serviceAll === '' ? all : (!all && selected.indexOf(input.value.toLowerCase()) !== -1);
-        });
-      }
-
-      function readAllowedServices() {
-        const selected = $$('#userAllowedServices input:checked');
-        if (!selected.length || selected.some(input => input.dataset.serviceAll === '')) return 'Todos';
-        return selected.map(input => input.value).join(', ');
-      }
-
-      function renderUserAvailability() {
-        if (!$('#userAvailability')) return;
+      function renderMyAvailability() {
+        if (!$('#myAvailability') || !state.data || state.data.authRole !== 'staff') return;
+        const hours = state.data.businessHours || {};
+        const salonStart = hours.start || '09:00';
+        const salonEnd = hours.end || '18:00';
+        const openDays = new Set((hours.openDays || [1, 2, 3, 4, 5, 6]).map(Number));
+        const current = currentUser();
+        let availability = current.availability || {};
+        try { availability = typeof availability === 'string' ? JSON.parse(availability || '{}') : availability; } catch (error) { availability = {}; }
         const labels = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'];
-        $('#userAvailability').innerHTML = labels.map((label, index) => `
-          <div class="availability-day" data-availability-day="${index}">
-            <label class="check"><input type="checkbox" data-avail-enabled value="${index}" ${index >= 1 && index <= 6 ? 'checked' : ''}>${label}</label>
-            <div class="time-row">
-              <input type="time" data-avail-start value="09:00">
-              <input type="time" data-avail-end value="18:00">
-            </div>
-          </div>
-        `).join('');
-      }
-
-      function readAvailabilityForm() {
-        const availability = {};
-        $$('[data-availability-day]').forEach(day => {
-          const index = day.dataset.availabilityDay;
-          const enabled = day.querySelector('[data-avail-enabled]').checked;
-          availability[index] = enabled ? [{
-            start: day.querySelector('[data-avail-start]').value || '09:00',
-            end: day.querySelector('[data-avail-end]').value || '18:00'
-          }] : [];
-        });
-        return JSON.stringify(availability);
-      }
-
-      function setAvailabilityForm(value) {
-        let availability = {};
-        try {
-          availability = typeof value === 'string' ? JSON.parse(value || '{}') : (value || {});
-        } catch (error) {
-          availability = {};
-        }
-        $$('[data-availability-day]').forEach(day => {
-          const index = day.dataset.availabilityDay;
-          const blocks = availability[index] || [];
+        $('#myAvailability').innerHTML = labels.map((label, index) => {
+          const salonOpen = openDays.has(index);
+          const blocks = availability[String(index)] || [];
           const block = blocks[0] || {};
-          day.querySelector('[data-avail-enabled]').checked = Boolean(blocks.length);
-          day.querySelector('[data-avail-start]').value = block.start || '09:00';
-          day.querySelector('[data-avail-end]').value = block.end || '18:00';
+          return `
+          <div class="availability-day" data-my-availability-day="${index}">
+            <label class="check"><input type="checkbox" data-avail-enabled value="${index}" ${blocks.length && salonOpen ? 'checked' : ''} ${salonOpen ? '' : 'disabled'}>${label}</label>
+            ${salonOpen ? '<div class="time-row"><select data-avail-start aria-label="Hora de inicio"></select><select data-avail-end aria-label="Hora de cierre"></select></div>' : '<div class="muted">El salon esta cerrado.</div>'}
+          </div>
+        `;}).join('');
+        $$('[data-my-availability-day]').forEach(day => {
+          const index = day.dataset.myAvailabilityDay;
+          const block = (availability[index] || [])[0] || {};
+          const startSelect = day.querySelector('[data-avail-start]');
+          const endSelect = day.querySelector('[data-avail-end]');
+          if (!startSelect || !endSelect) return;
+          populateBusinessTimeSelect(startSelect, salonStart, salonEnd, Number(hours.intervalMinutes || 30), block.start || salonStart, false);
+          populateBusinessTimeSelect(endSelect, salonStart, salonEnd, Number(hours.intervalMinutes || 30), block.end || salonEnd, true);
         });
+        $('#myAvailabilityHint').textContent = `Horario del salon: ${formatTime12(salonStart)} a ${formatTime12(salonEnd)}. Los dias cerrados no se pueden seleccionar.`;
       }
 
-      function defaultAvailability() {
+      function readMyAvailabilityForm() {
         const availability = {};
-        for (let index = 0; index <= 6; index += 1) {
-          availability[index] = index >= 1 && index <= 6 ? [{ start: '09:00', end: '18:00' }] : [];
-        }
+        for (let index = 0; index <= 6; index += 1) availability[index] = [];
+        $$('[data-my-availability-day]').forEach(day => {
+          const index = day.dataset.myAvailabilityDay;
+          const enabled = day.querySelector('[data-avail-enabled]').checked;
+          const start = day.querySelector('[data-avail-start]');
+          const end = day.querySelector('[data-avail-end]');
+          if (enabled && start && end) availability[index] = [{ start: start.value, end: end.value }];
+        });
         return availability;
       }
 
+      function populateBusinessTimeSelect(select, start, end, interval, selected, includeEnd) {
+        const startMinutes = timeToMinutes(start);
+        const endMinutes = timeToMinutes(end);
+        const step = Math.max(15, interval || 30);
+        const options = [];
+        for (let minutes = startMinutes; minutes <= endMinutes; minutes += step) {
+          if (!includeEnd && minutes === endMinutes) continue;
+          const value = minutesToTime24(minutes);
+          options.push(`<option value="${value}" ${value === selected ? 'selected' : ''}>${escapeHtml(formatTime12(value))}</option>`);
+        }
+        select.innerHTML = options.join('');
+      }
+
+      async function saveMyAvailability(event) {
+        event.preventDefault();
+        const availability = readMyAvailabilityForm();
+        const invalid = Object.values(availability).some(blocks => blocks.length && timeToMinutes(blocks[0].end) <= timeToMinutes(blocks[0].start));
+        if (invalid) return showToast('La hora de salida debe ser posterior a la hora de entrada.');
+        const ok = await mutate('saveMyAvailability', { availability }, 'Tu disponibilidad semanal quedo actualizada.');
+        if (ok) renderMyAvailability();
+      }
+
       function renderTimeOff() {
+        renderMyAvailability();
         const users = ((state.data && state.data.users) || [])
           .filter(user => user.active && user.role !== 'developer')
           .filter(user => !can('canManageTimeOff') || user.username !== currentUser().username);
@@ -2931,13 +3604,15 @@
           return;
         }
         $('#timeOffList').innerHTML = requests.map(item => `
-          <article class="blocked-card">
+          <article class="blocked-card ${isNewItemHighlighted('timeoff', item) ? 'new-item-highlight' : ''}">
             <strong>${escapeHtml(item.startDate)}${item.endDate && item.endDate !== item.startDate ? ` - ${escapeHtml(item.endDate)}` : ''}</strong><br>
             <span class="muted">${escapeHtml(item.displayName || item.username)} - ${escapeHtml(item.reason || 'Sin motivo')}</span><br>
             <span class="status ${slug(item.status)}">${escapeHtml(item.status)}</span>
             ${item.adminResponse ? `<p class="muted">${escapeHtml(item.adminResponse)}</p>` : ''}
             <div class="row-actions" style="margin-top: 8px;">
-              <button class="btn secondary mini" data-edit-timeoff="${item.rowNumber}" type="button">Editar</button>
+              ${!can('canManageTimeOff') && ['pendiente', 'mas-informacion', 'mas informacion'].indexOf(slug(item.status)) !== -1
+                ? `<button class="btn secondary mini" data-edit-timeoff="${item.rowNumber}" type="button">Editar</button>`
+                : ''}
               ${can('canManageTimeOff') ? `<button class="btn soft mini" data-timeoff-status="${item.rowNumber}" data-status="Aprobada" type="button">Aprobar</button>
               <button class="btn danger mini" data-timeoff-status="${item.rowNumber}" data-status="Denegada" type="button">Denegar</button>
               <button class="btn secondary mini" data-timeoff-status="${item.rowNumber}" data-status="Mas informacion" type="button">Solicitar mas informacion</button>` : ''}
@@ -2953,7 +3628,7 @@
       }
 
       function renderUsers() {
-        const users = ((state.data && state.data.users) || []).filter(user => user.role !== 'developer');
+        const users = ((state.data && state.data.users) || []).filter(user => user.role !== 'developer' && user.active);
         if (!users.length) {
           $('#userTable').innerHTML = `<div class="empty">${escapeHtml(adminText('noUsers'))}</div>`;
           return;
@@ -2963,25 +3638,31 @@
             <table>
               <thead><tr><th>${escapeHtml(adminText('user'))}</th><th>${escapeHtml(adminText('role'))}</th><th>${escapeHtml(adminText('permissions'))}</th><th>${escapeHtml(adminText('status'))}</th><th></th></tr></thead>
               <tbody>
-                ${users.map(user => `
+                ${users.map(user => {
+                  const isSelf = Number(user.rowNumber) === Number(currentUser().rowNumber) ||
+                    String(user.username || '').toLowerCase() === String(currentUser().username || '').toLowerCase();
+                  return `
                   <tr>
                     <td>
                       <strong>${escapeHtml(user.displayName || user.username)}</strong><br>
                       <span class="muted">${escapeHtml(user.email || user.username)}</span><br>
-                      <span class="muted">${escapeHtml(user.phone || '')}</span>
+                      <span class="muted">${escapeHtml(user.phone || '')}</span><br>
+                      <span class="muted">${escapeHtml(user.position || 'Estilista')}</span>
                     </td>
-                    <td>${escapeHtml(user.role)}</td>
+                    <td>${user.role === 'admin' ? 'Administradora' : 'Trabajadora'}</td>
                     <td>${permissionSummary(user.permissions || {})}</td>
                     <td>${user.accountLocked ? adminText('locked') : (user.active ? adminText('active') : adminText('inactive'))}<br><span class="muted">${adminText('attempts')} ${user.failedAttempts || 0}</span></td>
                     <td>
                       <div class="row-actions">
                         <button class="btn secondary mini" data-edit-user="${user.rowNumber}" type="button">${escapeHtml(adminText('edit'))}</button>
                         ${user.accountLocked ? `<button class="btn soft mini" data-reset-lock="${user.rowNumber}" type="button">${escapeHtml(adminText('reset'))}</button>` : ''}
-                        <button class="btn danger mini" data-delete-user="${user.rowNumber}" type="button">${escapeHtml(adminText('deactivate'))}</button>
+                        ${isSelf
+                          ? '<span class="status">Tu cuenta protegida</span>'
+                          : `<button class="btn danger mini" data-delete-user="${user.rowNumber}" type="button">${escapeHtml(adminText('deactivate'))}</button>`}
                       </div>
                     </td>
                   </tr>
-                `).join('')}
+                `;}).join('')}
               </tbody>
             </table>
           </div>
@@ -3002,34 +3683,165 @@
         if (perms.canEditPage) labels.push(adminText('page'));
         if (perms.canEditAppointments) labels.push(adminText('appointments'));
         if (perms.canEditAllAppointments) labels.push(adminText('allAppointments'));
+        if (perms.canViewClientHistory) labels.push('Historial');
+        if (perms.canUseQr) labels.push('QR');
+        if (perms.canViewEarnings) labels.push('Ganancias propias');
         if (perms.canViewGeneralEarnings) labels.push(adminText('earnings'));
+        if (perms.canManageServices) labels.push('Servicios');
+        if (perms.canManageGallery) labels.push('Galería');
         if (perms.canManageUsers) labels.push(adminText('tabUsers'));
+        if (perms.canManageDevices) labels.push('Dispositivos');
         if (perms.canManagePayments) labels.push(adminText('payments'));
         if (perms.canManageTimeOff) labels.push(adminText('timeOff'));
         return labels.length ? labels.join(', ') : adminText('basic');
       }
 
+      function renderDevices() {
+        const policy = (state.data && state.data.devicePolicy) || {};
+        $('#deviceRequireWifi').checked = Boolean(policy.requireWifi);
+        $('#deviceAllowedWifi').value = policy.allowedWifi || '';
+        $('#deviceRequireLocation').checked = Boolean(policy.requireLocation);
+        $('#deviceSalonLatitude').value = policy.salonLatitude === '' || policy.salonLatitude == null ? '' : policy.salonLatitude;
+        $('#deviceSalonLongitude').value = policy.salonLongitude === '' || policy.salonLongitude == null ? '' : policy.salonLongitude;
+        $('#deviceRadiusMeters').value = policy.radiusMeters || 500;
+        updateDevicePolicyUi();
+
+        const devices = (state.data && state.data.devices) || [];
+        if (!devices.length) {
+          $('#deviceTable').innerHTML = '<div class="empty">Todavía no hay dispositivos registrados. Los teléfonos Android, iPhone, tablets, iPad y computadoras aparecerán aquí después del primer acceso autorizado.</div>';
+          return;
+        }
+        $('#deviceTable').innerHTML = `
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Dispositivo</th><th>Cuenta activa</th><th>Último estado</th><th>Seguridad</th><th></th></tr></thead>
+              <tbody>${devices.map(device => {
+                const hasLocation = device.latitude !== '' && device.longitude !== '' && device.latitude != null && device.longitude != null;
+                const lastSeenDate = new Date(device.lastSeen || '');
+                const isActive = Number.isFinite(lastSeenDate.getTime()) && Math.abs(Date.now() - lastSeenDate.getTime()) <= 4 * 60 * 1000;
+                const mapLink = hasLocation
+                  ? `https://www.google.com/maps?q=${encodeURIComponent(device.latitude)},${encodeURIComponent(device.longitude)}`
+                  : '';
+                return `<tr class="${isNewItemHighlighted('devices', device) ? 'new-item-highlight' : ''}">
+                  <td><strong>${escapeHtml(device.deviceName || 'Dispositivo RESET')}</strong><br><span class="muted">${escapeHtml(device.model || '')}</span><br><span class="muted">${escapeHtml(device.platform || '')} · App ${escapeHtml(device.appVersion || '')}</span></td>
+                  <td><strong>${escapeHtml(device.displayName || device.username || '')}</strong><br><span class="status ${isActive ? 'confirmada' : ''}">${isActive ? 'En uso ahora' : 'Sin actividad reciente'}</span></td>
+                  <td>${escapeHtml(device.lastSeen || 'Sin reporte')}<br><span class="muted">Wi-Fi: ${escapeHtml(device.wifiName || 'No reportado')}</span>${mapLink ? `<br><a href="${mapLink}" target="_blank" rel="noopener">Ver última ubicación</a>` : '<br><span class="muted">Ubicación no disponible</span>'}</td>
+                  <td><span class="status ${device.blocked ? 'cancelada' : 'confirmada'}">${device.blocked ? 'Bloqueada' : 'Permitida'}</span>${device.blockedReason ? `<br><span class="muted">${escapeHtml(device.blockedReason)}</span>` : ''}</td>
+                  <td><div class="actions"><button class="btn ${device.blocked ? 'soft' : 'danger'} mini" data-device-toggle="${escapeHtml(device.deviceId)}" data-device-blocked="${device.blocked ? 'true' : 'false'}" type="button">${device.blocked ? 'Desbloquear' : 'Bloquear'}</button><button class="btn danger mini" data-device-delete="${escapeHtml(device.deviceId)}" data-device-name="${escapeHtml(device.deviceName || 'este dispositivo')}" type="button"><i data-lucide="trash-2" aria-hidden="true"></i>Eliminar</button></div></td>
+                </tr>`;
+              }).join('')}</tbody>
+            </table>
+          </div>`;
+        $$('[data-device-toggle]').forEach(button => {
+          button.addEventListener('click', () => toggleDeviceBlocked(button.dataset.deviceToggle, button.dataset.deviceBlocked === 'true'));
+        });
+        $$('[data-device-delete]').forEach(button => {
+          button.addEventListener('click', () => deleteDevice(button.dataset.deviceDelete, button.dataset.deviceName));
+        });
+        refreshIcons();
+      }
+
+      function showDeviceSecurityInfo() {
+        $('#clientHistoryModalContent').innerHTML = `
+          <div class="panel-head">
+            <div><h2 id="clientHistoryTitle">Protección de dispositivos</h2><div class="muted">Guía clara para la administradora</div></div>
+            <button class="btn secondary mini" type="button" data-close-device-info><i data-lucide="x" aria-hidden="true"></i>Cerrar</button>
+          </div>
+          <article class="history-visit"><strong>1. Bloqueo remoto</strong><p>Bloquear impide que ese dispositivo abra RESET Trabajo cuando vuelva a conectarse.</p></article>
+          <article class="history-visit"><strong>2. Eliminar dispositivo</strong><p>Eliminar quita el dispositivo completamente de la lista. Su sesión deja de reconocerse en el próximo reporte; para usarlo otra vez será necesario volver a iniciar sesión.</p></article>
+          <article class="history-visit"><strong>3. Wi-Fi del salón</strong><p>Si lo activas, la app funciona solamente cuando el dispositivo está conectado al nombre exacto de la red que escribiste.</p></article>
+          <article class="history-visit"><strong>4. Cercanía al salón</strong><p>Si lo activas, el dispositivo debe permanecer dentro del radio indicado alrededor de las coordenadas del local.</p></article>
+          <article class="history-visit"><strong>Alcance real</strong><p>Estas reglas protegen la aplicación RESET. Bloquear por completo Android requiere preparar el teléfono o tablet como equipo administrado con Android Enterprise.</p></article>
+        `;
+        $('#clientHistoryModal').showModal();
+        $('[data-close-device-info]').addEventListener('click', () => $('#clientHistoryModal').close());
+        refreshIcons();
+      }
+
+      function updateDevicePolicyUi() {
+        $('#deviceAllowedWifi').disabled = !$('#deviceRequireWifi').checked;
+        const locationEnabled = $('#deviceRequireLocation').checked;
+        $('#deviceSalonLatitude').disabled = !locationEnabled;
+        $('#deviceSalonLongitude').disabled = !locationEnabled;
+        $('#deviceRadiusMeters').disabled = !locationEnabled;
+      }
+
+      async function saveDevicePolicy(event) {
+        event.preventDefault();
+        const payload = {
+          requireWifi: $('#deviceRequireWifi').checked,
+          allowedWifi: $('#deviceAllowedWifi').value,
+          requireLocation: $('#deviceRequireLocation').checked,
+          salonLatitude: $('#deviceSalonLatitude').value,
+          salonLongitude: $('#deviceSalonLongitude').value,
+          radiusMeters: $('#deviceRadiusMeters').value
+        };
+        await mutate('saveDevicePolicy', payload, 'Protección de dispositivos guardada.');
+      }
+
+      async function toggleDeviceBlocked(deviceId, currentlyBlocked) {
+        const nextBlocked = !currentlyBlocked;
+        if (nextBlocked && !confirm('¿Bloquear este dispositivo? La app cerrará el acceso cuando vuelva a conectarse.')) return;
+        setBusy(true);
+        try {
+          const result = await gas(
+            'setDeviceBlocked',
+            state.secret,
+            deviceId,
+            nextBlocked,
+            nextBlocked ? 'Bloqueada por la administradora' : ''
+          );
+          mergeAdminData(result);
+          state.loadedTabs.devices = true;
+          renderDevices();
+          showToast(nextBlocked ? 'Dispositivo bloqueado.' : 'Dispositivo desbloqueado.');
+        } catch (error) {
+          showToast(error.message || String(error));
+        } finally {
+          setBusy(false);
+        }
+      }
+
+      async function deleteDevice(deviceId, deviceName) {
+        const label = deviceName || 'este dispositivo';
+        if (!confirm(`¿Eliminar ${label} completamente? Se quitará de la lista y su sesión dejará de ser reconocida cuando vuelva a conectarse.`)) return;
+        setBusy(true);
+        try {
+          const result = await gas('deleteDevice', state.secret, deviceId);
+          mergeAdminData(result);
+          state.loadedTabs.devices = true;
+          renderDevices();
+          showToast('Dispositivo eliminado completamente.');
+        } catch (error) {
+          showToast(error.message || String(error));
+        } finally {
+          setBusy(false);
+        }
+      }
+
       function renderSettings() {
         const settings = state.data && state.data.settings ? state.data.settings : {};
         const authRole = state.data && state.data.authRole ? state.data.authRole : 'admin';
-        $('#rolePill').textContent = `${currentUser().displayName || authRole} - ${authRole}`;
-        $('#localName').value = settings.localName || state.data.appName || 'Dominican Hair Salon';
+        const accountLabel = authRole === 'staff' ? 'Trabajadora' : (authRole === 'developer' ? 'Soporte privado' : 'Administradora');
+        $('#rolePill').textContent = `${currentUser().displayName || authRole} · ${accountLabel}`;
+        $('#localName').value = settings.localName || state.data.appName || 'RESET';
         $('#logoUrl').value = settings.logoUrl || '';
         $('#heroImageUrl').value = settings.heroImageUrl || '';
+        if (!state.logoFile) showSettingsImagePreview('logo', settings.logoUrl || '');
+        if (!state.heroImageFile) showSettingsImagePreview('hero', settings.heroImageUrl || '');
         $('#contactVisible').checked = Boolean(settings.contactVisible);
         $('#instagramVisible').checked = Boolean(settings.instagramVisible);
         $('#instagramUrl').value = settings.instagramUrl || '';
         $('#contactPhone').value = settings.contactPhone || '9044223600';
-        $('#contactEmail').value = settings.contactEmail || 'yaleixi20@gmail.com';
+        $('#contactEmail').value = settings.contactEmail || 'hairsalonreset@gmail.com';
+        $('#salonAddress').value = settings.salonAddress || '';
         $('#publicEnabled').checked = settings.publicEnabled !== false;
         $('#adminEnabled').checked = settings.adminEnabled !== false;
         const hours = state.data && state.data.businessHours ? state.data.businessHours : {};
-        $('#businessStart').value = hours.start || '09:00';
-        $('#businessEnd').value = hours.end || '18:00';
+        populateTimeSelect($('#businessStart'), hours.start || '09:00');
+        populateTimeSelect($('#businessEnd'), hours.end || '18:00');
         $('#businessInterval').value = hours.intervalMinutes || 30;
         $('#maintenanceMessage').value = settings.maintenanceMessage || 'La pagina esta temporalmente desactivada.';
-        $('#remindersEnabled').checked = Boolean(settings.remindersEnabled);
-        $('#reminderHours').value = settings.reminderHours || 24;
         $('#qrEnabled').checked = settings.qrEnabled !== false;
         $('#qrIncludeEmail').checked = settings.qrIncludeEmail !== false;
         $('#qrExpirationHours').value = settings.qrExpirationHours || 72;
@@ -3123,7 +3935,7 @@
         const config = state.data.developerConfig || {};
         const client = config.client || {};
         const modules = config.modules || {};
-        $('#developerLocalName').value = client.localName || (state.data.settings && state.data.settings.localName) || state.data.appName || 'Dominican Hair Salon';
+        $('#developerLocalName').value = client.localName || (state.data.settings && state.data.settings.localName) || state.data.appName || 'RESET';
         $('#systemVersion').value = state.data.systemVersion || '';
         const moduleList = Object.keys(modules).map(key => modules[key]);
         $('#developerModuleGrid').innerHTML = moduleList.map(module => `
@@ -3162,15 +3974,15 @@
               steps: [
                 'Usa filtros de nombre, telefono, email, servicio, estado y fecha.',
                 isAdmin ? 'Admin puede confirmar, cancelar, regresar a pendiente y editar cualquier cita.' : 'Tu usuario solo puede editar citas asignadas a ti; las demas se pueden ver sin cambiar.',
-                'Agrega notas internas cuando necesites recordar detalles de la clienta.',
-                'Abre o comparte el PDF del recibo cuando la cita ya tenga recibo generado.'
+                'La lista principal deja solo estados, SMS y WhatsApp para trabajar sin ruido.',
+                can('canViewClientHistory') ? 'Abre la tarjeta única de la clienta para notas, seguimiento, recibos, tratamientos y visitas anteriores.' : 'Tu cuenta no tiene acceso al historial interno de clientas.'
               ]
             },
             {
-              title: 'Cita manual',
+              title: 'Reservas manuales',
               show: can('canEditAppointments'),
               steps: [
-                'Baja al final de Reservas y abre el formulario Cita manual.',
+                'Abre Reservas manuales desde el menú principal.',
                 'Selecciona servicio, fecha, hora y trabajadora asignada.',
                 'El sistema valida disponibilidad, servicio permitido y conflictos de horario.',
                 'Usa Cancelar si no quieres guardar cambios incompletos.'
@@ -3180,7 +3992,7 @@
               title: 'Ganancias y reportes',
               show: moduleEnabled('REPORTS'),
               steps: [
-                can('canViewGeneralEarnings') ? 'Admin ve totales generales, descuentos, propinas y cobrado.' : 'Staff ve solo su produccion asignada, sin ganancias generales, propinas ni descuentos globales.',
+                can('canViewGeneralEarnings') ? 'Admin ve totales generales y el desglose por cada trabajadora.' : 'Staff ve solo su produccion asignada, sin ganancias de otras cuentas.',
                 'Selecciona rango diario, semanal, mensual o personalizado.',
                 'Filtra por trabajadora o servicio si tienes permiso.',
                 'Usa Exportar PDF para descargar el reporte disponible para tu rol.'
@@ -3220,7 +4032,7 @@
               title: 'Descuentos',
               show: can('canManageDiscounts'),
               steps: [
-                'Crea cupon, valor, categoria, dias activos y visibilidad.',
+                'Crea cupon, valor, elige la categoria desde el menu y marca los dias activos.',
                 'Define fecha inicial, fecha final, duracion o sin expiracion.',
                 'Las categorias y servicios se llenan desde los servicios existentes.',
                 'El descuento se valida al reservar por dia y fecha.'
@@ -3228,12 +4040,26 @@
             },
             {
               title: 'Eventos',
+              show: true,
+              steps: can('canEditPage') ? [
+                'Crea dias feriados, aniversarios u otros anuncios.',
+                'Elige visibilidad: clientas, equipo o ambos.',
+                'Marca bloquear reservas solamente si el salon no recibira citas.',
+                'Un evento publico activo aparece automaticamente y se oculta al vencer.'
+              ] : [
+                'Revisa aqui los anuncios y fechas importantes compartidos por la administracion.',
+                'Solo veras eventos dirigidos al equipo o a todos.',
+                'Los anuncios desaparecen automaticamente cuando termina su vigencia.'
+              ]
+            },
+            {
+              title: 'Testimonios',
               show: can('canEditPage'),
               steps: [
-                'Crea Holidays, Aniversarios u Otros.',
-                'Elige visibilidad: clientas, usuarios o ambos.',
-                'Marca bloquear reservas si el evento debe cerrar citas.',
-                'Mantener activo controla si aparece o afecta la agenda.'
+                'La clienta comparte nombre, estrellas y comentario desde el recibo final.',
+                'Publicar muestra el testimonio en la pagina principal inmediatamente.',
+                'Ocultar lo retira de la pagina sin borrarlo.',
+                'Cada cita completada admite una sola experiencia.'
               ]
             },
             {
@@ -3250,10 +4076,30 @@
               title: 'Usuarios',
               show: can('canManageUsers') && moduleEnabled('WORKERS'),
               steps: [
-                'Crea usuarios con nombre, correo, telefono, contrasena, rol y estado.',
-                'Asigna servicios permitidos y disponibilidad por dia/hora.',
+                'Crea usuarios con nombre, correo, telefono, contraseña temporal, posicion y tipo de cuenta.',
+                'Asigna permisos específicos: citas, historial, QR, ganancias, caja, contenido, equipo o dispositivos.',
                 'Rehabilita cuentas bloqueadas por intentos fallidos.',
-                'Developer no se muestra ni se administra desde esta seccion.'
+                'Eliminar revoca el acceso pero conserva las citas historicas del negocio.'
+              ]
+            },
+            {
+              title: 'Preguntas frecuentes (FAQ)',
+              show: can('canEditPage'),
+              steps: [
+                'Crea la pregunta y la respuesta en español; el inglés se completa automáticamente si lo dejas vacío.',
+                'Usa Orden para decidir cuál aparece primero.',
+                'Marca Mostrar en la página pública para publicarla; las preguntas ocultas se conservan solo en administración.',
+                'Si no hay preguntas visibles, la sección FAQ no aparece en la página de clientas.'
+              ]
+            },
+            {
+              title: 'Dispositivos del salón',
+              show: can('canManageDevices'),
+              steps: [
+                'Revisa ultima conexion, usuaria, Wi-Fi y ubicacion reportada.',
+                'Bloquea o desbloquea RESET Trabajo a distancia.',
+                'Usa el icono Como funciona antes de activar Wi-Fi o cercania.',
+                'El bloqueo completo del sistema Android requiere Android Enterprise.'
               ]
             },
             {
@@ -3262,7 +4108,7 @@
               steps: [
                 'Actualiza telefono, email, horarios y mensaje de mantenimiento.',
                 'Activa mantenimiento para bloquear reservas publicas mientras editas.',
-                'Configura recordatorios y ejecutalos manualmente cuando necesites probar.',
+                'Los avisos de 24 horas y 1 hora se procesan automaticamente.',
                 'Los dias bloqueados pueden usarse para cierres especificos.'
               ]
             }
@@ -3340,12 +4186,26 @@
             },
             {
               title: 'Events',
+              show: true,
+              steps: can('canEditPage') ? [
+                'Create holidays, anniversaries or other announcements.',
+                'Choose visibility: clients, staff or both.',
+                'Block bookings only when the salon will not receive appointments.',
+                'An active public event appears automatically and hides when it expires.'
+              ] : [
+                'Review announcements and important dates shared by administration.',
+                'You only see events intended for staff or everyone.',
+                'Announcements disappear automatically after their end date.'
+              ]
+            },
+            {
+              title: 'Testimonials',
               show: can('canEditPage'),
               steps: [
-                'Create Holidays, Anniversaries or Other events.',
-                'Choose visibility: clients, users or both.',
-                'Enable booking block if the event should close appointment slots.',
-                'Active controls whether it appears or affects the calendar.'
+                'The client shares her name, stars and comment from the final receipt.',
+                'Publish displays the testimonial on the public page immediately.',
+                'Hide removes it from the public page without deleting it.',
+                'Each completed appointment accepts one experience.'
               ]
             },
             {
@@ -3374,7 +4234,7 @@
               steps: [
                 'Update phone, email, hours and maintenance message.',
                 'Turn maintenance on to block public booking while editing.',
-                'Configure reminders and run them manually when testing.',
+                'The 24-hour and 1-hour reminders are processed automatically.',
                 'Blocked days can be used for specific closures.'
               ]
             }
@@ -3441,6 +4301,9 @@
         $('#serviceOrder').value = item.order === 9999 ? '' : item.order;
         $('#serviceImage').value = item.image;
         $('#serviceVisible').checked = item.visible;
+        state.serviceFile = null;
+        $('#serviceImageFile').value = '';
+        showServiceImagePreview(item.image);
       }
 
       function editPhoto(rowNumber) {
@@ -3551,32 +4414,40 @@
         $('#userDisplayName').value = item.displayName;
         $('#userEmail').value = item.email || '';
         $('#userPhone').value = item.phone || '';
-        $('#userPassword').value = item.password || '';
+        $('#userPosition').value = item.position || '';
+        $('#userPassword').value = '';
         $('#userRole').value = item.role || 'staff';
         $('#userActive').checked = Boolean(item.active);
         setPermissionForm(item.permissions || {});
-        setAllowedServiceChecks(item.allowedServices || 'Todos');
-        setAvailabilityForm(item.availability || '');
         setTab('users');
       }
 
       async function saveService(event) {
         event.preventDefault();
-        const ok = await mutate('saveAdminService', {
-          rowNumber: $('#serviceRow').value,
-          category: $('#serviceCategory').value,
-          categoryEn: $('#serviceCategoryEn').value,
-          service: $('#serviceName').value,
-          serviceEn: $('#serviceNameEn').value,
-          description: $('#serviceDescription').value,
-          descriptionEn: $('#serviceDescriptionEn').value,
-          price: $('#servicePrice').value,
-          duration: $('#serviceDuration').value,
-          order: $('#serviceOrder').value,
-          image: $('#serviceImage').value,
-          visible: $('#serviceVisible').checked
-        }, 'Servicio guardado.');
-        if (ok) resetServiceForm();
+        try {
+          const imageDataUrl = state.serviceFile
+            ? await cropImage(state.serviceFile, '4:5', 50, 50)
+            : '';
+          const ok = await mutate('saveAdminService', {
+            rowNumber: $('#serviceRow').value,
+            category: $('#serviceCategory').value,
+            categoryEn: $('#serviceCategoryEn').value,
+            service: $('#serviceName').value,
+            serviceEn: $('#serviceNameEn').value,
+            description: $('#serviceDescription').value,
+            descriptionEn: $('#serviceDescriptionEn').value,
+            price: $('#servicePrice').value,
+            duration: $('#serviceDuration').value,
+            order: $('#serviceOrder').value,
+            image: $('#serviceImage').value,
+            imageDataUrl,
+            imageFileName: state.serviceFile ? state.serviceFile.name : '',
+            visible: $('#serviceVisible').checked
+          }, 'Servicio guardado.');
+          if (ok) resetServiceForm();
+        } catch (error) {
+          showToast(error.message || String(error));
+        }
       }
 
       async function saveDiscount(event) {
@@ -3636,10 +4507,8 @@
         const response = prompt(`Respuesta para marcar como ${status}:`, '');
         setBusy(true);
         try {
-          mergeAdminData(await gas('updateTimeOffRequestStatus', state.secret, rowNumber, status, response || ''));
-          state.loadedTabs.timeoff = false;
+          applyFullAdminData(await gas('updateTimeOffRequestStatus', state.secret, rowNumber, status, response || ''));
           showToast(`Solicitud marcada como ${status}.`);
-          await loadAdminTab('timeoff', true);
         } catch (error) {
           showToast(error.message || String(error));
         } finally {
@@ -3649,25 +4518,52 @@
 
       async function saveUser(event) {
         event.preventDefault();
-        const ok = await mutate('saveAdminUser', {
-          rowNumber: $('#userRow').value,
+        const rowNumber = $('#userRow').value;
+        const originalUser = ((state.data && state.data.users) || []).find(user =>
+          Number(user.rowNumber) === Number(rowNumber)
+        );
+        const payload = {
+          rowNumber,
           username: $('#userName').value,
           displayName: $('#userDisplayName').value,
           email: $('#userEmail').value,
           phone: $('#userPhone').value,
+          position: $('#userPosition').value,
           password: $('#userPassword').value,
           role: $('#userRole').value,
           active: $('#userActive').checked,
-          allowedServices: readAllowedServices(),
-          availability: readAvailabilityForm(),
+          allowedServices: originalUser ? (originalUser.allowedServices || 'Todos') : 'Todos',
+          availability: originalUser ? (originalUser.availability || '') : JSON.stringify({0: [], 1: [], 2: [], 3: [], 4: [], 5: [], 6: []}),
           permissions: readPermissionForm()
-        }, 'Usuario guardado.');
+        };
+        const isSelf = Number(payload.rowNumber) === Number(currentUser().rowNumber) ||
+          String(originalUser && originalUser.username || '').toLowerCase() === String(currentUser().username || '').toLowerCase();
+        let ok = false;
+        if (!isSelf) {
+          ok = await mutate('saveAdminUser', payload, 'Usuario guardado.');
+        } else {
+          setBusy(true);
+          try {
+            const previousCredentials = JSON.parse(state.secret || '{}');
+            const nextPassword = payload.password || previousCredentials.password || '';
+            const result = await gas('saveAdminUser', state.secret, payload);
+            state.secret = JSON.stringify({ username: payload.username, password: nextPassword });
+            storageSet('sessionStorage', AUTH_STORAGE_KEY, state.secret);
+            applyFullAdminData(result);
+            showToast('Tu perfil y tus nuevas credenciales quedaron actualizados.');
+            ok = true;
+          } catch (error) {
+            showToast(error.message || String(error));
+          } finally {
+            setBusy(false);
+          }
+        }
         if (ok) resetUserForm();
       }
 
       async function deleteUser(rowNumber) {
-        if (!confirm('Desactivar este usuario?')) return;
-        await mutate('deleteAdminUser', rowNumber, null, 'Usuario desactivado.');
+        if (!confirm('Eliminar esta trabajadora y quitarle el acceso inmediatamente? Sus citas anteriores se conservaran en el historial.')) return;
+        await mutate('deleteAdminUser', rowNumber, null, 'Trabajadora eliminada y acceso revocado.');
       }
 
       async function resetUserLock(rowNumber) {
@@ -3679,40 +4575,88 @@
         await mutate('deleteSpecialEvent', rowNumber, null, 'Evento borrado.');
       }
 
+      async function updateTestimonialStatus(rowNumber, status) {
+        setBusy(true);
+        try {
+          const result = await gas('updateTestimonialStatus', state.secret, rowNumber, status);
+          mergeAdminData(result || {});
+          state.loadedTabs.testimonials = true;
+          renderTestimonialsAdmin();
+          showToast(status === 'aprobado' ? 'Testimonio publicado en la página principal.' : 'Testimonio ocultado de la página principal.');
+        } catch (error) {
+          showToast(error.message || String(error));
+        } finally {
+          setBusy(false);
+        }
+      }
+
+      async function deleteTestimonial(rowNumber) {
+        if (!confirm('¿Borrar este testimonio de forma permanente?')) return;
+        setBusy(true);
+        try {
+          const result = await gas('deleteTestimonial', state.secret, rowNumber);
+          mergeAdminData(result || {});
+          state.loadedTabs.testimonials = true;
+          renderTestimonialsAdmin();
+          showToast('Testimonio eliminado.');
+        } catch (error) {
+          showToast(error.message || String(error));
+        } finally {
+          setBusy(false);
+        }
+      }
+
       async function saveSettings(event) {
         event.preventDefault();
-        await mutate('saveAdminSettings', {
-          localName: $('#localName').value,
-          logoUrl: $('#logoUrl').value,
-          heroImageUrl: $('#heroImageUrl').value,
-          contactVisible: $('#contactVisible').checked,
-          contactPhone: $('#contactPhone').value,
-          contactEmail: $('#contactEmail').value,
-          instagramVisible: $('#instagramVisible').checked,
-          instagramUrl: $('#instagramUrl').value,
-          businessStart: $('#businessStart').value,
-          businessEnd: $('#businessEnd').value,
-          businessInterval: $('#businessInterval').value,
-          openDays: $$('#openDays input:checked').map(input => input.value),
-          maintenanceMessage: $('#maintenanceMessage').value,
-          remindersEnabled: $('#remindersEnabled').checked,
-          reminderHours: $('#reminderHours').value,
-          qrEnabled: $('#qrEnabled').checked,
-          qrIncludeEmail: $('#qrIncludeEmail').checked,
-          qrExpirationHours: $('#qrExpirationHours').value,
-          qrStatus: $('#qrStatus').value,
-          paymentsEnabledPublic: $('#paymentsEnabledPublic').checked,
-          paymentProvider: $('#paymentProvider').value,
-          paymentLink: $('#paymentLink').value,
-          paymentType: $('#paymentType').value,
-          paymentDepositPercent: $('#paymentDepositPercent').value,
-          paymentDepositAmount: $('#paymentDepositAmount').value,
-          paymentAllowCash: $('#paymentAllowCash').checked,
-          paymentManualMethod: $('#paymentManualMethod').value,
-          paymentInstructions: $('#paymentInstructions').value,
-          publicEnabled: $('#publicEnabled').checked,
-          adminEnabled: $('#adminEnabled').checked
-        }, 'Ajustes guardados.');
+        try {
+          const logoDataUrl = state.logoFile ? await cropImage(state.logoFile, '1:1', 50, 50) : '';
+          const heroImageDataUrl = state.heroImageFile ? await cropImage(state.heroImageFile, '16:9', 50, 50) : '';
+          const ok = await mutate('saveAdminSettings', {
+            localName: $('#localName').value,
+            logoUrl: $('#logoUrl').value,
+            logoDataUrl,
+            logoFileName: state.logoFile ? state.logoFile.name : '',
+            heroImageUrl: $('#heroImageUrl').value,
+            heroImageDataUrl,
+            heroImageFileName: state.heroImageFile ? state.heroImageFile.name : '',
+            contactVisible: $('#contactVisible').checked,
+            contactPhone: $('#contactPhone').value,
+            contactEmail: $('#contactEmail').value,
+            salonAddress: $('#salonAddress').value,
+            instagramVisible: $('#instagramVisible').checked,
+            instagramUrl: $('#instagramUrl').value,
+            businessStart: $('#businessStart').value,
+            businessEnd: $('#businessEnd').value,
+            businessInterval: $('#businessInterval').value,
+            openDays: $$('#openDays input:checked').map(input => input.value),
+            maintenanceMessage: $('#maintenanceMessage').value,
+            remindersEnabled: true,
+            reminderHours: 24,
+            qrEnabled: $('#qrEnabled').checked,
+            qrIncludeEmail: $('#qrIncludeEmail').checked,
+            qrExpirationHours: $('#qrExpirationHours').value,
+            qrStatus: $('#qrStatus').value,
+            paymentsEnabledPublic: $('#paymentsEnabledPublic').checked,
+            paymentProvider: $('#paymentProvider').value,
+            paymentLink: $('#paymentLink').value,
+            paymentType: $('#paymentType').value,
+            paymentDepositPercent: $('#paymentDepositPercent').value,
+            paymentDepositAmount: $('#paymentDepositAmount').value,
+            paymentAllowCash: $('#paymentAllowCash').checked,
+            paymentManualMethod: $('#paymentManualMethod').value,
+            paymentInstructions: $('#paymentInstructions').value,
+            publicEnabled: $('#publicEnabled').checked,
+            adminEnabled: $('#adminEnabled').checked
+          }, 'Ajustes guardados.');
+          if (ok) {
+            state.logoFile = null;
+            state.heroImageFile = null;
+            $('#logoFile').value = '';
+            $('#heroImageFile').value = '';
+          }
+        } catch (error) {
+          showToast(error.message || String(error));
+        }
       }
 
       async function changePassword(event) {
@@ -3729,7 +4673,7 @@
         if (ok) {
           if (state.data.authRole !== 'developer') {
             state.secret = JSON.stringify({ username: currentUser().username || $('#username').value.trim(), password: newPassword });
-            storageSet('sessionStorage', 'angels_admin_secret', state.secret);
+            storageSet('sessionStorage', AUTH_STORAGE_KEY, state.secret);
           }
           $('#passwordForm').reset();
         }
@@ -3745,7 +4689,7 @@
         const ok = await mutate('changeDeveloperPin', { newDeveloperPin }, 'PIN developer actualizado.');
         if (ok) {
           state.secret = JSON.stringify({ username: 'Developer', password: newDeveloperPin });
-          storageSet('sessionStorage', 'angels_admin_secret', state.secret);
+          storageSet('sessionStorage', AUTH_STORAGE_KEY, state.secret);
           $('#developerPinForm').reset();
         }
       }
@@ -3827,10 +4771,8 @@
         if (!input) return;
         setBusy(true);
         try {
-          mergeAdminData(await gas('saveAdminReservationNote', state.secret, rowNumber, input.value));
-          state.loadedTabs.reservations = false;
+          applyFullAdminData(await gas('saveAdminReservationNote', state.secret, rowNumber, input.value));
           showToast('Nota interna guardada.');
-          await loadAdminTab('reservations', true);
         } catch (error) {
           showToast(error.message || String(error));
         } finally {
@@ -3857,10 +4799,8 @@
         setBusy(true);
         try {
           const result = await gas('runAdminReminders', state.secret);
-          if (result && result.data) mergeAdminData(result.data);
-          state.loadedTabs.reservations = false;
+          if (result && result.data) applyFullAdminData(result.data);
           showToast(result.message || 'Recordatorios procesados.');
-          await loadAdminTab(state.tab || 'reservations', true);
         } catch (error) {
           showToast(error.message || String(error));
         } finally {
@@ -3912,7 +4852,7 @@
         setBusy(true);
         try {
           const payload = {
-            title: 'Reporte Dominican Hair Salon',
+            title: 'Reporte RESET',
             from: $('#reportFrom').value,
             to: $('#reportTo').value,
             worker: $('#reportWorker').value,
@@ -3994,7 +4934,7 @@
             <div class="panel-head">
               <div>
                 <h3>${escapeHtml(reservation.clientName || 'Clienta')}</h3>
-                <div class="muted">${escapeHtml(reservation.service || '')} - ${escapeHtml(reservation.date || '')} ${escapeHtml(reservation.time || '')}</div>
+                <div class="muted">${escapeHtml(reservation.service || '')} - ${escapeHtml(reservation.date || '')} ${escapeHtml(formatTime12(reservation.time || ''))}</div>
               </div>
               <span class="status confirmada">${escapeHtml(reservation.serviceStatus || reservation.arrivalStatus || reservation.status || 'Pendiente')}</span>
             </div>
@@ -4316,10 +5256,16 @@
           deleteBlockedDay: 'settings',
           saveTimeOffRequest: 'timeoff',
           updateTimeOffRequestStatus: 'timeoff',
+          saveMyAvailability: 'timeoff',
           saveSpecialEvent: 'events',
           deleteSpecialEvent: 'events',
+          updateTestimonialStatus: 'testimonials',
+          deleteTestimonial: 'testimonials',
+          saveAdminFaq: 'faqs',
+          deleteAdminFaq: 'faqs',
           saveAdminUser: 'users',
           deleteAdminUser: 'users',
+          saveDevicePolicy: 'devices',
           resetUserLoginLock: 'users',
           disableAllStaffUsers: 'users',
           deleteAdminPhoto: 'photos',
@@ -4342,14 +5288,16 @@
             result = await gas(functionName, state.secret, payloadOrRow);
             showToast(maybeMessage || statusOrExtra);
           }
-          if (result && typeof result === 'object') mergeAdminData(result);
+          if (result && typeof result === 'object') applyFullAdminData(result);
           const affectedTab = mutationTabFor(functionName);
-          state.loadedTabs[affectedTab] = false;
-          if (affectedTab !== state.tab && (affectedTab === 'services' || affectedTab === 'users')) {
-            state.loadedTabs.reservations = false;
-            state.loadedTabs.qr = false;
+          if (!result || typeof result !== 'object') {
+            state.loadedTabs[affectedTab] = false;
+            if (affectedTab !== state.tab && (affectedTab === 'services' || affectedTab === 'users')) {
+              state.loadedTabs.reservations = false;
+              state.loadedTabs.qr = false;
+            }
+            await loadAdminTab(state.tab || affectedTab, true);
           }
-          await loadAdminTab(state.tab || affectedTab, true);
           return true;
         } catch (error) {
           showToast(error.message || String(error));
@@ -4362,9 +5310,12 @@
       function resetServiceForm() {
         $('#serviceForm').reset();
         $('#serviceRow').value = '';
+        $('#serviceImage').value = '';
         $('#serviceDuration').value = 60;
         $('#serviceOrder').value = 1;
         $('#serviceVisible').checked = true;
+        state.serviceFile = null;
+        showServiceImagePreview('');
       }
 
       function resetDiscountForm() {
@@ -4407,9 +5358,15 @@
         $('#userRow').value = '';
         $('#userRole').value = 'staff';
         $('#userActive').checked = true;
-        setAllowedServiceChecks('Todos');
-        setAvailabilityForm(defaultAvailability());
         applyRoleDefaults();
+      }
+
+      function resetFaqForm() {
+        $('#faqAdminForm').reset();
+        $('#faqRow').value = '';
+        $('#faqId').value = '';
+        $('#faqOrder').value = Math.max(1, ((state.data && state.data.faqs) || []).length + 1);
+        $('#faqVisible').checked = true;
       }
 
       function applyRoleDefaults() {
@@ -4419,12 +5376,20 @@
             canEditPage: true,
             canEditAppointments: true,
             canEditAllAppointments: true,
+            canViewClientHistory: true,
+            canViewEarnings: true,
             canViewGeneralEarnings: true,
+            canExportReports: true,
+            canUseQr: true,
+            canManageServices: true,
+            canManageGallery: true,
             canManageUsers: true,
+            canManageDevices: true,
             canManageDiscounts: true,
             canManageTimeOff: true,
             canManageBlockedDays: true,
-            canManagePayments: true
+            canManagePayments: true,
+            canManageSettings: true
           });
           return;
         }
@@ -4432,12 +5397,20 @@
           canEditPage: false,
           canEditAppointments: true,
           canEditAllAppointments: false,
+          canViewClientHistory: true,
+          canViewEarnings: true,
           canViewGeneralEarnings: false,
+          canExportReports: false,
+          canUseQr: true,
+          canManageServices: false,
+          canManageGallery: false,
           canManageUsers: false,
+          canManageDevices: false,
           canManageDiscounts: false,
           canManageTimeOff: false,
           canManageBlockedDays: false,
-          canManagePayments: false
+          canManagePayments: false,
+          canManageSettings: false
         });
       }
 
@@ -4446,12 +5419,20 @@
           canEditPage: $('#permEditPage').checked,
           canEditAppointments: $('#permEditAppointments').checked,
           canEditAllAppointments: $('#permEditAllAppointments').checked,
+          canViewClientHistory: $('#permViewClientHistory').checked,
+          canViewEarnings: $('#permViewEarnings').checked,
           canViewGeneralEarnings: $('#permViewGeneralEarnings').checked,
+          canExportReports: $('#permExportReports').checked,
+          canUseQr: $('#permUseQr').checked,
+          canManageServices: $('#permManageServices').checked,
+          canManageGallery: $('#permManageGallery').checked,
           canManageUsers: $('#permManageUsers').checked,
+          canManageDevices: $('#permManageDevices').checked,
           canManageDiscounts: $('#permManageDiscounts').checked,
           canManageTimeOff: $('#permManageTimeOff').checked,
           canManageBlockedDays: $('#permManageBlockedDays').checked,
-          canManagePayments: $('#permManagePayments').checked
+          canManagePayments: $('#permManagePayments').checked,
+          canManageSettings: $('#permManageSettings').checked
         };
       }
 
@@ -4459,12 +5440,20 @@
         $('#permEditPage').checked = Boolean(perms.canEditPage);
         $('#permEditAppointments').checked = Boolean(perms.canEditAppointments);
         $('#permEditAllAppointments').checked = Boolean(perms.canEditAllAppointments);
+        $('#permViewClientHistory').checked = perms.canViewClientHistory === undefined ? Boolean(perms.canEditAppointments) : Boolean(perms.canViewClientHistory);
+        $('#permViewEarnings').checked = perms.canViewEarnings === undefined ? Boolean(perms.canViewGeneralEarnings) : Boolean(perms.canViewEarnings);
         $('#permViewGeneralEarnings').checked = Boolean(perms.canViewGeneralEarnings);
+        $('#permExportReports').checked = perms.canExportReports === undefined ? Boolean(perms.canViewGeneralEarnings) : Boolean(perms.canExportReports);
+        $('#permUseQr').checked = perms.canUseQr === undefined ? Boolean(perms.canEditAppointments) : Boolean(perms.canUseQr);
+        $('#permManageServices').checked = perms.canManageServices === undefined ? Boolean(perms.canEditPage) : Boolean(perms.canManageServices);
+        $('#permManageGallery').checked = perms.canManageGallery === undefined ? Boolean(perms.canEditPage) : Boolean(perms.canManageGallery);
         $('#permManageUsers').checked = Boolean(perms.canManageUsers);
+        $('#permManageDevices').checked = perms.canManageDevices === undefined ? Boolean(perms.canManageUsers) : Boolean(perms.canManageDevices);
         $('#permManageDiscounts').checked = Boolean(perms.canManageDiscounts);
         $('#permManageTimeOff').checked = Boolean(perms.canManageTimeOff);
         $('#permManageBlockedDays').checked = Boolean(perms.canManageBlockedDays);
         $('#permManagePayments').checked = Boolean(perms.canManagePayments);
+        $('#permManageSettings').checked = perms.canManageSettings === undefined ? Boolean(perms.canEditPage) : Boolean(perms.canManageSettings);
       }
 
       function resetPhotoForm() {
@@ -4513,6 +5502,7 @@
           beforeAfter: resetBeforeAfterForm,
           blocked: resetBlockedDayForm,
           event: resetEventForm,
+          faq: resetFaqForm,
           settings: renderSettings
         };
         if (map[name]) map[name]();
@@ -4535,6 +5525,58 @@
         const reader = new FileReader();
         reader.onload = () => showPreview(reader.result);
         reader.readAsDataURL(file);
+      }
+
+      function handleServiceImageFile(event) {
+        const file = event.target.files && event.target.files[0];
+        state.serviceFile = null;
+        if (!file) {
+          showServiceImagePreview($('#serviceImage').value);
+          return;
+        }
+        if (!isAllowedImageFile(file)) {
+          event.target.value = '';
+          showServiceImagePreview($('#serviceImage').value);
+          showToast('Usa una imagen JPG, PNG o WebP.');
+          return;
+        }
+        state.serviceFile = file;
+        const reader = new FileReader();
+        reader.onload = () => showServiceImagePreview(reader.result);
+        reader.readAsDataURL(file);
+      }
+
+      function handleSettingsImageFile(event, kind) {
+        const file = event.target.files && event.target.files[0];
+        if (kind === 'logo') state.logoFile = null;
+        if (kind === 'hero') state.heroImageFile = null;
+        if (!file) {
+          showSettingsImagePreview(kind, kind === 'logo' ? $('#logoUrl').value : $('#heroImageUrl').value);
+          return;
+        }
+        if (!isAllowedImageFile(file)) {
+          event.target.value = '';
+          showSettingsImagePreview(kind, kind === 'logo' ? $('#logoUrl').value : $('#heroImageUrl').value);
+          showToast('Usa una imagen JPG, PNG o WebP.');
+          return;
+        }
+        if (kind === 'logo') state.logoFile = file;
+        if (kind === 'hero') state.heroImageFile = file;
+        const reader = new FileReader();
+        reader.onload = () => showSettingsImagePreview(kind, reader.result);
+        reader.readAsDataURL(file);
+      }
+
+      function showSettingsImagePreview(kind, src) {
+        const preview = kind === 'logo' ? $('#logoPreview') : $('#heroImagePreview');
+        preview.src = src || '';
+        preview.classList.toggle('show', Boolean(src));
+      }
+
+      function showServiceImagePreview(src) {
+        const preview = $('#serviceImagePreview');
+        preview.src = src || '';
+        preview.classList.toggle('show', Boolean(src));
       }
 
       function handleBeforeAfterFile(event, side) {
@@ -4768,6 +5810,69 @@
         const number = Number(value);
         const safe = Number.isFinite(number) && Math.abs(number) <= 10000000 ? number : 0;
         return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(safe);
+      }
+
+      function normalizeTime24(value) {
+        const raw = String(value || '').trim().toUpperCase();
+        const match = raw.match(/^(\d{1,2}):(\d{2})(?:\s*([AP]M))?$/);
+        if (!match) return '';
+        let hour = Number(match[1]);
+        const minute = Number(match[2]);
+        if (!Number.isInteger(hour) || !Number.isInteger(minute) || minute < 0 || minute > 59) return '';
+        if (match[3]) {
+          if (hour < 1 || hour > 12) return '';
+          if (match[3] === 'AM') hour = hour === 12 ? 0 : hour;
+          else hour = hour === 12 ? 12 : hour + 12;
+        }
+        if (hour < 0 || hour > 23) return '';
+        return `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
+      }
+
+      function formatTime12(value) {
+        const normalized = normalizeTime24(value);
+        if (!normalized) return String(value || '');
+        const parts = normalized.split(':').map(Number);
+        const displayHour = parts[0] % 12 || 12;
+        return `${displayHour}:${String(parts[1]).padStart(2, '0')} ${parts[0] < 12 ? 'AM' : 'PM'}`;
+      }
+
+      function timeToMinutes(value) {
+        const normalized = normalizeTime24(value);
+        if (!normalized) return 0;
+        const parts = normalized.split(':').map(Number);
+        return parts[0] * 60 + parts[1];
+      }
+
+      function minutesToTime24(value) {
+        const minutes = Math.max(0, Math.min(1439, Number(value) || 0));
+        return `${String(Math.floor(minutes / 60)).padStart(2, '0')}:${String(minutes % 60).padStart(2, '0')}`;
+      }
+
+      function timeOptionsHtml(selectedValue) {
+        const selected = normalizeTime24(selectedValue) || '09:00';
+        const choices = [];
+        for (let minute = 0; minute < 24 * 60; minute += 15) {
+          choices.push(`${String(Math.floor(minute / 60)).padStart(2, '0')}:${String(minute % 60).padStart(2, '0')}`);
+        }
+        if (choices.indexOf(selected) === -1) choices.push(selected);
+        choices.sort((left, right) => (
+          Number(left.slice(0, 2)) * 60 + Number(left.slice(3)) -
+          Number(right.slice(0, 2)) * 60 - Number(right.slice(3))
+        ));
+        return choices.map(value => `<option value="${value}" ${value === selected ? 'selected' : ''}>${formatTime12(value)}</option>`).join('');
+      }
+
+      function populateTimeSelect(select, value) {
+        if (!select) return;
+        const normalized = normalizeTime24(value) || '09:00';
+        select.innerHTML = timeOptionsHtml(normalized);
+        select.value = normalized;
+      }
+
+      function prepareTimeSelects() {
+        populateTimeSelect($('#manualTime'), '09:00');
+        populateTimeSelect($('#businessStart'), '09:00');
+        populateTimeSelect($('#businessEnd'), '18:00');
       }
 
       function showToast(message) {

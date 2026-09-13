@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#42513a">
+    <title>Portal de trabajadoras | Hair Salon Reset</title>
+    <style>
+      * { box-sizing: border-box; }
+      html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+      body { background: #f5f2e5; font-family: Arial, sans-serif; }
+      iframe { width: 100%; height: 100%; border: 0; background: #f5f2e5; }
+      .fallback {
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        display: grid;
+        place-items: center;
+        color: #42513a;
+        text-align: center;
+      }
+      .fallback img { width: 92px; height: 92px; border-radius: 50%; object-fit: cover; }
+      .fallback h1 { margin: 14px 0 5px; font-family: Georgia, serif; }
+    </style>
+  </head>
+  <body>
+    <div class="fallback">
+      <div>
+        <img src="assets/hair-salon-reset-logo.jpeg" alt="Hair Salon Reset">
+        <h1>Portal de trabajadoras</h1>
+        <p>Cargando acceso seguro...</p>
+      </div>
+    </div>
+    <iframe src="admin.html?portal=staff" title="Portal de trabajadoras" allow="camera" referrerpolicy="same-origin"></iframe>
+  </body>
+</html>
