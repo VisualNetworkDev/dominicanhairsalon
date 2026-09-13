@@ -2378,6 +2378,10 @@
 
       function applyAdminLanguage() {
         document.documentElement.lang = state.language;
+        if (STAFF_PORTAL_MODE && !state.data) {
+          $('#brandName').textContent = state.language === 'en' ? 'RESET | Staff' : 'RESET | Trabajadoras';
+          document.title = state.language === 'en' ? 'RESET Staff Portal' : 'RESET | Portal de trabajadoras';
+        }
         $$('[data-admin-lang]').forEach(button => {
           button.classList.toggle('active', button.dataset.adminLang === state.language);
         });
