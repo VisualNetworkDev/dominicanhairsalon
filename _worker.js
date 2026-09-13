@@ -37,9 +37,25 @@ async function cachedAppsScriptRead(request, context, functionName, args, ttlSec
     if (ageMs <= ttlSeconds * 1000) {
       return withRuntimeHeaders(cached, 'HIT');
     }
-    context.waitUntil(cache.delete(cacheKey));
+    context.waitUntil(refreshAppsScriptCache(cache, cacheKey, functionName, args, ttlSeconds));
+    return withRuntimeHeaders(cached, 'STALE');
   }
 
+  const response = await fetchAppsScriptResponse(functionName, args, ttlSeconds);
+  if (response.ok) context.waitUntil(cache.put(cacheKey, response.clone()));
+  return response;
+}
+
+async function refreshAppsScriptCache(cache, cacheKey, functionName, args, ttlSeconds) {
+  try {
+    const response = await fetchAppsScriptResponse(functionName, args, ttlSeconds);
+    if (response.ok) await cache.put(cacheKey, response.clone());
+  } catch (error) {
+    console.warn('RESET cache refresh failed:', error && error.message ? error.message : error);
+  }
+}
+
+async function fetchAppsScriptResponse(functionName, args, ttlSeconds) {
   const upstreamUrl = new URL(PUBLIC_API);
   upstreamUrl.searchParams.set('fn', functionName);
   upstreamUrl.searchParams.set('args', JSON.stringify(args));
@@ -84,7 +100,7 @@ async function cachedAppsScriptRead(request, context, functionName, args, ttlSec
   }
   const headers = new Headers({
     'content-type': 'application/json; charset=utf-8',
-    'cache-control': `public, max-age=0, s-maxage=${ttlSeconds}, stale-while-revalidate=300`,
+    'cache-control': 'public, max-age=0, s-maxage=86400, stale-while-revalidate=86400',
     'x-reset-cache': 'MISS',
     'x-reset-cached-at': String(Date.now()),
     'x-reset-upstream-ms': String(Date.now() - startedAt),
@@ -92,7 +108,6 @@ async function cachedAppsScriptRead(request, context, functionName, args, ttlSec
     'referrer-policy': 'no-referrer'
   });
   const response = new Response(body, { status: upstream.ok ? 200 : 502, headers });
-  if (upstream.ok) context.waitUntil(cache.put(cacheKey, response.clone()));
   return response;
 }
 

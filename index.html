@@ -3853,7 +3853,7 @@
             if (requestSequence !== state.slotRequestSequence) return;
           }
           const matrixFresh = state.availabilityMatrix &&
-            Date.now() - Date.parse(state.availabilityMatrix.generatedAt || 0) < 360000;
+            Date.now() - Date.parse(state.availabilityMatrix.generatedAt || 0) < 900000;
           const matrixDate = matrixFresh && state.availabilityMatrix.dates
             ? state.availabilityMatrix.dates[date]
             : null;
@@ -4303,13 +4303,15 @@
         const currentMatrix = state.availabilityMatrix;
         if (currentMatrix &&
             currentMatrix.catalogVersion === (state.data.catalogVersion || '') &&
-            Date.now() - Date.parse(currentMatrix.generatedAt || 0) < 360000) {
+            Date.now() - Date.parse(currentMatrix.generatedAt || 0) < 900000) {
           return currentMatrix;
         }
         if (state.availabilityMatrixPromise) return state.availabilityMatrixPromise;
 
+        const matrixStart = makeLocalDate(state.data.today || toIsoDate(new Date()));
+        matrixStart.setDate(matrixStart.getDate() - matrixStart.getDay());
         const params = new URLSearchParams({
-          startDate: state.data.today || toIsoDate(new Date()),
+          startDate: toIsoDate(matrixStart),
           days: '21'
         });
         state.availabilityMatrixPromise = fetchEdgeEnvelope(`/api/availability-matrix?${params.toString()}`)
