@@ -1,382 +1,336 @@
 {
-    "appName":  "RESET",
-    "appSubtitle":  "by Yaleixi",
-    "currency":  "USD",
-    "localName":  "RESET",
-    "logoUrl":  "",
-    "heroImageUrl":  "",
-    "modules":  {
-                    "qr":  true,
-                    "qrAdvanced":  true,
-                    "onlinePayments":  true,
-                    "showPrices":  true,
-                    "workers":  true,
-                    "reminders":  true,
-                    "receiptsAdvanced":  true,
-                    "extrasInAppointment":  true
-                },
-    "paymentSettings":  {
-                            "enabled":  true,
-                            "provider":  "none",
-                            "providerLabel":  "Pago en local",
-                            "paymentLink":  "",
-                            "paymentType":  "cash",
-                            "depositPercent":  0,
-                            "depositAmount":  0,
-                            "instructions":  "Todos los pagos se realizan presencialmente en el salon.",
-                            "allowCash":  true,
-                            "allowOnline":  false,
-                            "status":  "Pago en local"
-                        },
-    "qrSettings":  {
-                       "enabled":  true,
-                       "includeEmail":  true,
-                       "expirationHours":  72,
-                       "status":  "Activo"
-                   },
-    "contact":  {
-                    "phone":  "9044223600",
-                    "email":  "hairsalonreset@gmail.com",
-                    "address":  "",
-                    "instagramUrl":  "",
-                    "showContact":  true,
-                    "showInstagram":  false
-                },
-    "siteStatus":  {
-                       "publicEnabled":  true,
-                       "maintenanceMessage":  "La pagina esta temporalmente desactivada."
-                   },
-    "agreementText":  "Confirmo que la informacion proporcionada para esta solicitud de cita es correcta. Entiendo que Hair Salon Reset By Yaleixi reserva un espacio de tiempo exclusivo para mi servicio y que debo comunicarme con anticipacion si necesito cancelar, llegar tarde o reprogramar.\n\nPOLITICA DE CANCELACION: Para cancelar o reprogramar sin penalidad, debo llamar o comunicarme con al menos 24 horas de anticipacion. Si cancelo con menos de 24 horas, no asisto o hago cambios de ultimo momento que impidan usar el espacio reservado, Hair Salon Reset By Yaleixi podra aplicar un cargo administrativo del 5% del valor de la cita. Este cargo ayuda a cubrir el tiempo profesional reservado, la preparacion del servicio y la disponibilidad perdida para otra clienta.\n\nAcepto que el precio final puede variar si solicito cambios, agregados, tratamientos o servicios adicionales durante la cita. Reconozco que debo informar alergias, sensibilidad del cuero cabelludo, tratamientos recientes, decoloraciones, alisados, extensiones o cualquier condicion que pueda afectar el servicio. Autorizo el uso de mi firma como confirmacion de este acuerdo y entiendo que esta solicitud queda pendiente hasta ser confirmada por el salon.",
-    "agreementTexts":  {
-                           "es":  "Confirmo que la informacion proporcionada para esta solicitud de cita es correcta. Entiendo que Hair Salon Reset By Yaleixi reserva un espacio de tiempo exclusivo para mi servicio y que debo comunicarme con anticipacion si necesito cancelar, llegar tarde o reprogramar.\n\nPOLITICA DE CANCELACION: Para cancelar o reprogramar sin penalidad, debo llamar o comunicarme con al menos 24 horas de anticipacion. Si cancelo con menos de 24 horas, no asisto o hago cambios de ultimo momento que impidan usar el espacio reservado, Hair Salon Reset By Yaleixi podra aplicar un cargo administrativo del 5% del valor de la cita. Este cargo ayuda a cubrir el tiempo profesional reservado, la preparacion del servicio y la disponibilidad perdida para otra clienta.\n\nAcepto que el precio final puede variar si solicito cambios, agregados, tratamientos o servicios adicionales durante la cita. Reconozco que debo informar alergias, sensibilidad del cuero cabelludo, tratamientos recientes, decoloraciones, alisados, extensiones o cualquier condicion que pueda afectar el servicio. Autorizo el uso de mi firma como confirmacion de este acuerdo y entiendo que esta solicitud queda pendiente hasta ser confirmada por el salon.",
-                           "en":  "I confirm that the information provided for this appointment request is accurate. I understand that Hair Salon Reset By Yaleixi reserves dedicated time for my service and that I should contact the salon in advance if I need to cancel, arrive late, or reschedule.\n\nCANCELLATION POLICY: To cancel or reschedule without penalty, I must call or contact the salon at least 24 hours in advance. If I cancel with less than 24 hours\u0027 notice, do not attend, or make last-minute changes that prevent the reserved time from being used, Hair Salon Reset By Yaleixi may apply a 5% administrative fee based on the appointment value. This fee helps cover the professional time reserved, service preparation, and availability lost for another client.\n\nI accept that the final price may change if I request changes, add-ons, treatments, or additional services during the appointment. I acknowledge that I must disclose allergies, scalp sensitivity, recent treatments, color, relaxers, extensions, or any condition that may affect the service. I authorize the use of my signature as confirmation of this agreement and understand that this request remains pending until confirmed by the salon."
-                       },
-    "hours":  {
-                  "start":  "09:00",
-                  "end":  "18:00",
-                  "intervalMinutes":  30,
-                  "openDays":  [
-                                   1,
-                                   2,
-                                   3,
-                                   4,
-                                   5,
-                                   6
-                               ]
-              },
-    "mapLink":  "",
-    "mapIframeSrc":  "",
-    "tourIframeSrc":  "",
-    "staff":  [
-                  {
-                      "username":  "worker-9bea04a285401b1f1d21",
-                      "displayName":  "Yaleixi Paula",
-                      "services":  "Todos",
-                      "availability":  {
-                                           "0":  [
-
-                                                 ],
-                                           "1":  [
-                                                     {
-                                                         "start":  "09:00",
-                                                         "end":  "18:00"
-                                                     }
-                                                 ],
-                                           "2":  [
-                                                     {
-                                                         "start":  "09:00",
-                                                         "end":  "18:00"
-                                                     }
-                                                 ],
-                                           "3":  [
-                                                     {
-                                                         "start":  "09:00",
-                                                         "end":  "18:00"
-                                                     }
-                                                 ],
-                                           "4":  [
-                                                     {
-                                                         "start":  "09:00",
-                                                         "end":  "18:00"
-                                                     }
-                                                 ],
-                                           "5":  [
-                                                     {
-                                                         "start":  "09:00",
-                                                         "end":  "18:00"
-                                                     }
-                                                 ],
-                                           "6":  [
-                                                     {
-                                                         "start":  "09:00",
-                                                         "end":  "18:00"
-                                                     }
-                                                 ]
-                                       },
-                      "temporarilyUnavailable":  false
-                  },
-                  {
-                      "username":  "worker-6db24b22f8313e2e6196",
-                      "displayName":  "Yaleixi Paula",
-                      "services":  "Todos",
-                      "availability":  {
-                                           "0":  [
-
-                                                 ],
-                                           "1":  [
-                                                     {
-                                                         "start":  "09:00",
-                                                         "end":  "18:00"
-                                                     }
-                                                 ],
-                                           "2":  [
-                                                     {
-                                                         "start":  "09:00",
-                                                         "end":  "18:00"
-                                                     }
-                                                 ],
-                                           "3":  [
-                                                     {
-                                                         "start":  "09:00",
-                                                         "end":  "18:00"
-                                                     }
-                                                 ],
-                                           "4":  [
-                                                     {
-                                                         "start":  "09:00",
-                                                         "end":  "18:00"
-                                                     }
-                                                 ],
-                                           "5":  [
-                                                     {
-                                                         "start":  "09:00",
-                                                         "end":  "18:00"
-                                                     }
-                                                 ],
-                                           "6":  [
-                                                     {
-                                                         "start":  "09:00",
-                                                         "end":  "18:00"
-                                                     }
-                                                 ]
-                                       },
-                      "temporarilyUnavailable":  false
-                  }
-              ],
-    "specialEvents":  [
-
-                      ],
-    "pageSections":  {
-                         "about":  {
-                                       "es":  "Bienvenida a RESET by Yaleixi, un espacio creado con amor, intención y dedicación para cuidar, transformar y devolverle vida a tu cabello.\n\nAquí creemos que un cabello hermoso comienza con un cabello saludable. Por eso, cada servicio está pensado para respetar la condición de tu cabello y ayudarte a alcanzar el resultado que deseas de una manera personalizada.\n\nDesde tratamientos de hidratación y reparación, hasta transformaciones de color, balayage, highlights y experiencias de Hair Spa, cada visita es una oportunidad para hacer una pausa, desconectarte y volver a ti.\n\nRestore. Refresh. Renew.\n\nTu cabello cambia.\nTu energía cambia.\nTú haces RESET.\n\n✨ I can’t wait to welcome you.",
-                                       "en":  "Welcome to RESET by Yaleixi, a space created with love, intention and dedication to care for, transform and bring your hair back to life.\n\nWe believe beautiful hair begins with healthy hair. Every service is designed to respect your hair’s condition and help you reach the result you want through personalized care.\n\nFrom hydration and repair treatments to color transformations, balayage, highlights and Hair Spa experiences, every visit is an opportunity to pause, disconnect and return to yourself.\n\nRestore. Refresh. Renew.\n\nYour hair changes.\nYour energy changes.\nYou RESET.\n\n✨ I can’t wait to welcome you."
-                                   },
-                         "vip":  {
-                                     "es":  "El VIP Club estara disponible proximamente. El admin podra agregar aqui una foto o promocion especial cuando este listo.",
-                                     "en":  "The VIP Club will be available soon. Admin will be able to add a photo or special promo here when ready."
-                                 },
-                         "testimonials":  [],
-                         "faq":  []
-                     },
-    "blockedDates":  [
-
-                     ],
-    "beforeAfter":  [
-
-                    ],
-    "policyText":  {
-                       "es":  "Para cancelar o reprogramar sin penalidad, comunicate con al menos 24 horas de anticipacion. Cancelaciones tardias, ausencia o cambios de ultimo momento pueden generar un cargo administrativo entre el 5% y el 10% del valor de la cita.",
-                       "en":  "To cancel or reschedule without penalty, please contact the salon at least 24 hours in advance. Late cancellations, no-shows, or last-minute changes may result in an administrative fee between 5% and 10% of the appointment value."
-                   },
-    "categories":  [
-                       "Color y mechas",
-                       "Tratamientos",
-                       "Cortes y peinados",
-                       "Lavado y blower"
-                   ],
-    "categoryTranslations":  {
-                                 "Color y mechas":  {
-                                                        "en":  "Color and highlights"
-                                                    },
-                                 "Tratamientos":  {
-                                                      "en":  "Treatments"
-                                                  },
-                                 "Cortes y peinados":  {
-                                                           "en":  "Cuts and styling"
-                                                       },
-                                 "Lavado y blower":  {
-                                                         "en":  "Dominican blowout"
-                                                     }
-                             },
-    "services":  [
-                     {
-                         "id":  "color-y-mechas-retoque-de-color",
-                         "category":  "Color y mechas",
-                         "categoryEn":  "Color and highlights",
-                         "name":  "Retoque de color",
-                         "nameEn":  "Color touch-up",
-                         "description":  "Retoque de raiz o color completo segun evaluacion.",
-                         "descriptionEn":  "Root touch-up or full color after consultation.",
-                         "price":  85,
-                         "duration":  120,
-                         "order":  1,
-                         "image":  "https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?auto=format\u0026fit=crop\u0026w=1400\u0026q=80",
-                         "visible":  true
-                     },
-                     {
-                         "id":  "color-y-mechas-mechas-o-balayage",
-                         "category":  "Color y mechas",
-                         "categoryEn":  "Color and highlights",
-                         "name":  "Mechas o balayage",
-                         "nameEn":  "Highlights or balayage",
-                         "description":  "Iluminacion personalizada con acabado natural.",
-                         "descriptionEn":  "Custom brightness with a natural finish.",
-                         "price":  160,
-                         "duration":  180,
-                         "order":  2,
-                         "image":  "https://images.unsplash.com/photo-1605497788044-5a32c7078486?auto=format\u0026fit=crop\u0026w=1400\u0026q=80",
-                         "visible":  true
-                     },
-                     {
-                         "id":  "tratamientos-hidratacion-profunda",
-                         "category":  "Tratamientos",
-                         "categoryEn":  "Treatments",
-                         "name":  "Hidratacion profunda",
-                         "nameEn":  "Deep hydration",
-                         "description":  "Tratamiento nutritivo para suavidad, brillo y manejo.",
-                         "descriptionEn":  "Nourishing treatment for softness, shine and manageability.",
-                         "price":  65,
-                         "duration":  75,
-                         "order":  1,
-                         "image":  "https://images.unsplash.com/photo-1633681926022-84c23e8cb2d6?auto=format\u0026fit=crop\u0026w=1400\u0026q=80",
-                         "visible":  true
-                     },
-                     {
-                         "id":  "tratamientos-keratina",
-                         "category":  "Tratamientos",
-                         "categoryEn":  "Treatments",
-                         "name":  "Keratina",
-                         "nameEn":  "Keratin treatment",
-                         "description":  "Tratamiento suavizante para controlar frizz y mejorar brillo.",
-                         "descriptionEn":  "Smoothing treatment to control frizz and improve shine.",
-                         "price":  180,
-                         "duration":  180,
-                         "order":  2,
-                         "image":  "https://images.unsplash.com/photo-1519699047748-de8e457a634e?auto=format\u0026fit=crop\u0026w=1400\u0026q=80",
-                         "visible":  true
-                     },
-                     {
-                         "id":  "cortes-y-peinados-corte-de-puntas",
-                         "category":  "Cortes y peinados",
-                         "categoryEn":  "Cuts and styling",
-                         "name":  "Corte de puntas",
-                         "nameEn":  "Trim",
-                         "description":  "Corte de mantenimiento para sanear y dar forma.",
-                         "descriptionEn":  "Maintenance cut to refresh ends and shape.",
-                         "price":  35,
-                         "duration":  45,
-                         "order":  1,
-                         "image":  "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format\u0026fit=crop\u0026w=1400\u0026q=80",
-                         "visible":  true
-                     },
-                     {
-                         "id":  "cortes-y-peinados-peinado-para-evento",
-                         "category":  "Cortes y peinados",
-                         "categoryEn":  "Cuts and styling",
-                         "name":  "Peinado para evento",
-                         "nameEn":  "Event styling",
-                         "description":  "Ondas, recogido o estilo elegante para ocasion especial.",
-                         "descriptionEn":  "Waves, updo or elegant style for a special occasion.",
-                         "price":  95,
-                         "duration":  90,
-                         "order":  2,
-                         "image":  "https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?auto=format\u0026fit=crop\u0026w=1400\u0026q=80",
-                         "visible":  true
-                     },
-                     {
-                         "id":  "lavado-y-blower-blower-dominicano",
-                         "category":  "Lavado y blower",
-                         "categoryEn":  "Dominican blowout",
-                         "name":  "Blower dominicano",
-                         "nameEn":  "Dominican blowout",
-                         "description":  "Lavado, secado y brillo con movimiento natural.",
-                         "descriptionEn":  "Wash, blowout and shine with natural movement.",
-                         "price":  45,
-                         "duration":  60,
-                         "order":  1,
-                         "image":  "https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format\u0026fit=crop\u0026w=1400\u0026q=80",
-                         "visible":  true
-                     },
-                     {
-                         "id":  "lavado-y-blower-blower-con-rolos",
-                         "category":  "Lavado y blower",
-                         "categoryEn":  "Dominican blowout",
-                         "name":  "Blower con rolos",
-                         "nameEn":  "Roller set blowout",
-                         "description":  "Preparacion con rolos y acabado pulido de larga duracion.",
-                         "descriptionEn":  "Roller-set prep with a polished long-lasting finish.",
-                         "price":  55,
-                         "duration":  90,
-                         "order":  2,
-                         "image":  "https://images.unsplash.com/photo-1522337660859-02fbefca4702?auto=format\u0026fit=crop\u0026w=1400\u0026q=80",
-                         "visible":  true
-                     },
-                     {
-                         "id":  "lavado-y-blower-silk-press",
-                         "category":  "Lavado y blower",
-                         "categoryEn":  "Dominican blowout",
-                         "name":  "Silk press",
-                         "nameEn":  "Silk press",
-                         "description":  "Alisado temporal con plancha y proteccion termica.",
-                         "descriptionEn":  "Temporary smooth finish with heat protection.",
-                         "price":  75,
-                         "duration":  120,
-                         "order":  3,
-                         "image":  "https://images.unsplash.com/photo-1519699047748-de8e457a634e?auto=format\u0026fit=crop\u0026w=1400\u0026q=80",
-                         "visible":  true
-                     }
-                 ],
-    "photos":  {
-                   "Cortes y peinados":  [
-                                             "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format\u0026fit=crop\u0026w=1400\u0026q=80",
-                                             "https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?auto=format\u0026fit=crop\u0026w=1400\u0026q=80"
-                                         ],
-                   "Color y mechas":  [
-                                          "https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?auto=format\u0026fit=crop\u0026w=1400\u0026q=80",
-                                          "https://images.unsplash.com/photo-1605497788044-5a32c7078486?auto=format\u0026fit=crop\u0026w=1400\u0026q=80"
-                                      ],
-                   "Lavado y blower":  [
-                                           "https://images.unsplash.com/photo-1522337660859-02fbefca4702?auto=format\u0026fit=crop\u0026w=1400\u0026q=80",
-                                           "https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format\u0026fit=crop\u0026w=1400\u0026q=80"
-                                       ],
-                   "Tratamientos":  [
-                                        "https://images.unsplash.com/photo-1519699047748-de8e457a634e?auto=format\u0026fit=crop\u0026w=1400\u0026q=80",
-                                        "https://images.unsplash.com/photo-1633681926022-84c23e8cb2d6?auto=format\u0026fit=crop\u0026w=1400\u0026q=80"
-                                    ],
-                   "Blowouts y lavado":  [
-
-                                         ],
-                   "Cortes y styling":  [
-
-                                        ],
-                   "Belleza y spa":  [
-
-                                     ]
-               },
-    "publicDiscounts":  [
-                            {
-                                "code":  "BIENVENIDA10",
-                                "days":  "Todos",
-                                "daysEn":  "Every day",
-                                "category":  "Todas",
-                                "categoryEn":  "All",
-                                "value":  10,
-                                "visible":  true,
-                                "startDate":  "",
-                                "endDate":  "",
-                                "noExpiration":  false
-                            }
-                        ],
-    "today":  "2026-08-23",
-    "catalogVersion":  "e1f35419e34509ed0ae2b9f0"
+  "appName": "RESET",
+  "appSubtitle": "by Yaleixi",
+  "currency": "USD",
+  "localName": "RESET",
+  "logoUrl": "",
+  "heroImageUrl": "",
+  "modules": {
+    "qr": true,
+    "qrAdvanced": true,
+    "onlinePayments": false,
+    "showPrices": true,
+    "workers": true,
+    "reminders": true,
+    "receiptsAdvanced": true,
+    "extrasInAppointment": true
+  },
+  "paymentSettings": {
+    "enabled": true,
+    "provider": "none",
+    "providerLabel": "Pago en local",
+    "paymentLink": "",
+    "paymentType": "cash",
+    "depositPercent": 0,
+    "depositAmount": 0,
+    "instructions": "Todos los pagos se realizan presencialmente en el salon.",
+    "allowCash": true,
+    "allowOnline": false,
+    "status": "Pago en local"
+  },
+  "qrSettings": {
+    "enabled": true,
+    "includeEmail": true,
+    "expirationHours": 72,
+    "status": "Activo"
+  },
+  "contact": {
+    "phone": "9044223600",
+    "email": "hairsalonreset@gmail.com",
+    "address": "",
+    "instagramUrl": "",
+    "showContact": true,
+    "showInstagram": false
+  },
+  "siteStatus": {
+    "publicEnabled": true,
+    "maintenanceMessage": "La pagina esta temporalmente desactivada."
+  },
+  "agreementText": "Confirmo que la informacion proporcionada para esta solicitud de cita es correcta. Entiendo que Hair Salon Reset By Yaleixi reserva un espacio de tiempo exclusivo para mi servicio y que debo comunicarme con anticipacion si necesito cancelar, llegar tarde o reprogramar.\n\nPOLITICA DE CANCELACION: Para cancelar o reprogramar sin penalidad, debo llamar o comunicarme con al menos 24 horas de anticipacion. Si cancelo con menos de 24 horas, no asisto o hago cambios de ultimo momento que impidan usar el espacio reservado, Hair Salon Reset By Yaleixi podra aplicar un cargo administrativo del 5% del valor de la cita. Este cargo ayuda a cubrir el tiempo profesional reservado, la preparacion del servicio y la disponibilidad perdida para otra clienta.\n\nAcepto que el precio final puede variar si solicito cambios, agregados, tratamientos o servicios adicionales durante la cita. Reconozco que debo informar alergias, sensibilidad del cuero cabelludo, tratamientos recientes, decoloraciones, alisados, extensiones o cualquier condicion que pueda afectar el servicio. Autorizo el uso de mi firma como confirmacion de este acuerdo y entiendo que esta solicitud queda pendiente hasta ser confirmada por el salon.",
+  "agreementTexts": {
+    "es": "Confirmo que la informacion proporcionada para esta solicitud de cita es correcta. Entiendo que Hair Salon Reset By Yaleixi reserva un espacio de tiempo exclusivo para mi servicio y que debo comunicarme con anticipacion si necesito cancelar, llegar tarde o reprogramar.\n\nPOLITICA DE CANCELACION: Para cancelar o reprogramar sin penalidad, debo llamar o comunicarme con al menos 24 horas de anticipacion. Si cancelo con menos de 24 horas, no asisto o hago cambios de ultimo momento que impidan usar el espacio reservado, Hair Salon Reset By Yaleixi podra aplicar un cargo administrativo del 5% del valor de la cita. Este cargo ayuda a cubrir el tiempo profesional reservado, la preparacion del servicio y la disponibilidad perdida para otra clienta.\n\nAcepto que el precio final puede variar si solicito cambios, agregados, tratamientos o servicios adicionales durante la cita. Reconozco que debo informar alergias, sensibilidad del cuero cabelludo, tratamientos recientes, decoloraciones, alisados, extensiones o cualquier condicion que pueda afectar el servicio. Autorizo el uso de mi firma como confirmacion de este acuerdo y entiendo que esta solicitud queda pendiente hasta ser confirmada por el salon.",
+    "en": "I confirm that the information provided for this appointment request is accurate. I understand that Hair Salon Reset By Yaleixi reserves dedicated time for my service and that I should contact the salon in advance if I need to cancel, arrive late, or reschedule.\n\nCANCELLATION POLICY: To cancel or reschedule without penalty, I must call or contact the salon at least 24 hours in advance. If I cancel with less than 24 hours' notice, do not attend, or make last-minute changes that prevent the reserved time from being used, Hair Salon Reset By Yaleixi may apply a 5% administrative fee based on the appointment value. This fee helps cover the professional time reserved, service preparation, and availability lost for another client.\n\nI accept that the final price may change if I request changes, add-ons, treatments, or additional services during the appointment. I acknowledge that I must disclose allergies, scalp sensitivity, recent treatments, color, relaxers, extensions, or any condition that may affect the service. I authorize the use of my signature as confirmation of this agreement and understand that this request remains pending until confirmed by the salon."
+  },
+  "hours": {
+    "start": "09:00",
+    "end": "18:00",
+    "intervalMinutes": 30,
+    "openDays": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ]
+  },
+  "mapLink": "",
+  "mapIframeSrc": "",
+  "tourIframeSrc": "https://www.google.com/maps/embed?pb=!4v1779689165658!6m8!1m7!1sCAoSF0NJSE0wb2dLRUlDQWdJRGhfZUNKaUFF!2m2!1d30.18883987282961!2d-81.71896530246175!3f287.98121047851686!4f-5.310838020822786!5f0.7820865974627469",
+  "staff": [
+    {
+      "username": "worker-83b4db50e7acc606995a",
+      "displayName": "Yaleixi Paula",
+      "services": "Todos",
+      "availability": {
+        "0": [],
+        "1": [
+          {
+            "start": "09:00",
+            "end": "18:00"
+          }
+        ],
+        "2": [
+          {
+            "start": "09:00",
+            "end": "18:00"
+          }
+        ],
+        "3": [
+          {
+            "start": "09:00",
+            "end": "18:00"
+          }
+        ],
+        "4": [
+          {
+            "start": "09:00",
+            "end": "18:00"
+          }
+        ],
+        "5": [
+          {
+            "start": "09:00",
+            "end": "18:00"
+          }
+        ],
+        "6": [
+          {
+            "start": "09:00",
+            "end": "18:00"
+          }
+        ]
+      },
+      "temporarilyUnavailable": false
+    },
+    {
+      "username": "worker-d9391cfb5023f461af3a",
+      "displayName": "test1",
+      "services": "Todos",
+      "availability": {
+        "0": [],
+        "1": [],
+        "2": [],
+        "3": [],
+        "4": [],
+        "5": [],
+        "6": []
+      },
+      "temporarilyUnavailable": true
+    }
+  ],
+  "specialEvents": [],
+  "pageSections": {
+    "about": {
+      "es": "Bienvenida a RESET by Yaleixi, un espacio creado con amor, intención y dedicación para cuidar, transformar y devolverle vida a tu cabello.\n\nAquí creemos que un cabello hermoso comienza con un cabello saludable. Por eso, cada servicio está pensado para respetar la condición de tu cabello y ayudarte a alcanzar el resultado que deseas de una manera personalizada.\n\nDesde tratamientos de hidratación y reparación, hasta transformaciones de color, balayage, highlights y experiencias de Hair Spa, cada visita es una oportunidad para hacer una pausa, desconectarte y volver a ti.\n\nRestore. Refresh. Renew.\n\nTu cabello cambia.\nTu energía cambia.\nTú haces RESET.\n\n✨ I can’t wait to welcome you.",
+      "en": "Welcome to RESET by Yaleixi, a space created with love, intention and dedication to care for, transform and bring your hair back to life.\n\nWe believe beautiful hair begins with healthy hair. Every service is designed to respect your hair’s condition and help you reach the result you want through personalized care.\n\nFrom hydration and repair treatments to color transformations, balayage, highlights and Hair Spa experiences, every visit is an opportunity to pause, disconnect and return to yourself.\n\nRestore. Refresh. Renew.\n\nYour hair changes.\nYour energy changes.\nYou RESET.\n\n✨ I can’t wait to welcome you."
+    },
+    "vip": {
+      "es": "El VIP Club estara disponible proximamente. El admin podra agregar aqui una foto o promocion especial cuando este listo.",
+      "en": "The VIP Club will be available soon. Admin will be able to add a photo or special promo here when ready."
+    },
+    "testimonials": [],
+    "faq": []
+  },
+  "blockedDates": [],
+  "beforeAfter": [],
+  "policyText": {
+    "es": "Para cancelar o reprogramar sin penalidad, comunicate con al menos 24 horas de anticipacion. Cancelaciones tardias, ausencia o cambios de ultimo momento pueden generar un cargo administrativo entre el 5% y el 10% del valor de la cita.",
+    "en": "To cancel or reschedule without penalty, please contact the salon at least 24 hours in advance. Late cancellations, no-shows, or last-minute changes may result in an administrative fee between 5% and 10% of the appointment value."
+  },
+  "categories": [
+    "Color y mechas",
+    "Tratamientos",
+    "Cortes y peinados",
+    "Lavado y blower"
+  ],
+  "categoryTranslations": {
+    "Color y mechas": {
+      "en": "Color and highlights"
+    },
+    "Tratamientos": {
+      "en": "Treatments"
+    },
+    "Cortes y peinados": {
+      "en": "Cuts and styling"
+    },
+    "Lavado y blower": {
+      "en": "Dominican blowout"
+    }
+  },
+  "services": [
+    {
+      "id": "color-y-mechas-retoque-de-color",
+      "category": "Color y mechas",
+      "categoryEn": "Color and highlights",
+      "name": "Retoque de color",
+      "nameEn": "Color touch-up",
+      "description": "Retoque de raiz o color completo segun evaluacion.",
+      "descriptionEn": "Root touch-up or full color after consultation.",
+      "price": 85,
+      "duration": 120,
+      "order": 1,
+      "image": "https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?auto=format&fit=crop&w=1400&q=80",
+      "visible": true
+    },
+    {
+      "id": "color-y-mechas-mechas-o-balayage",
+      "category": "Color y mechas",
+      "categoryEn": "Color and highlights",
+      "name": "Mechas o balayage",
+      "nameEn": "Highlights or balayage",
+      "description": "Iluminacion personalizada con acabado natural.",
+      "descriptionEn": "Custom brightness with a natural finish.",
+      "price": 160,
+      "duration": 180,
+      "order": 2,
+      "image": "https://images.unsplash.com/photo-1605497788044-5a32c7078486?auto=format&fit=crop&w=1400&q=80",
+      "visible": true
+    },
+    {
+      "id": "tratamientos-hidratacion-profunda",
+      "category": "Tratamientos",
+      "categoryEn": "Treatments",
+      "name": "Hidratacion profunda",
+      "nameEn": "Deep hydration",
+      "description": "Tratamiento nutritivo para suavidad, brillo y manejo.",
+      "descriptionEn": "Nourishing treatment for softness, shine and manageability.",
+      "price": 65,
+      "duration": 75,
+      "order": 1,
+      "image": "https://images.unsplash.com/photo-1633681926022-84c23e8cb2d6?auto=format&fit=crop&w=1400&q=80",
+      "visible": true
+    },
+    {
+      "id": "tratamientos-keratina",
+      "category": "Tratamientos",
+      "categoryEn": "Treatments",
+      "name": "Keratina",
+      "nameEn": "Keratin treatment",
+      "description": "Tratamiento suavizante para controlar frizz y mejorar brillo.",
+      "descriptionEn": "Smoothing treatment to control frizz and improve shine.",
+      "price": 180,
+      "duration": 180,
+      "order": 2,
+      "image": "https://images.unsplash.com/photo-1519699047748-de8e457a634e?auto=format&fit=crop&w=1400&q=80",
+      "visible": true
+    },
+    {
+      "id": "cortes-y-peinados-corte-de-puntas",
+      "category": "Cortes y peinados",
+      "categoryEn": "Cuts and styling",
+      "name": "Corte de puntas",
+      "nameEn": "Trim",
+      "description": "Corte de mantenimiento para sanear y dar forma.",
+      "descriptionEn": "Maintenance cut to refresh ends and shape.",
+      "price": 35,
+      "duration": 45,
+      "order": 1,
+      "image": "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1400&q=80",
+      "visible": true
+    },
+    {
+      "id": "cortes-y-peinados-peinado-para-evento",
+      "category": "Cortes y peinados",
+      "categoryEn": "Cuts and styling",
+      "name": "Peinado para evento",
+      "nameEn": "Event styling",
+      "description": "Ondas, recogido o estilo elegante para ocasion especial.",
+      "descriptionEn": "Waves, updo or elegant style for a special occasion.",
+      "price": 95,
+      "duration": 90,
+      "order": 2,
+      "image": "https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?auto=format&fit=crop&w=1400&q=80",
+      "visible": true
+    },
+    {
+      "id": "lavado-y-blower-blower-dominicano",
+      "category": "Lavado y blower",
+      "categoryEn": "Dominican blowout",
+      "name": "Blower dominicano",
+      "nameEn": "Dominican blowout",
+      "description": "Lavado, secado y brillo con movimiento natural.",
+      "descriptionEn": "Wash, blowout and shine with natural movement.",
+      "price": 45,
+      "duration": 60,
+      "order": 1,
+      "image": "https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=1400&q=80",
+      "visible": true
+    },
+    {
+      "id": "lavado-y-blower-blower-con-rolos",
+      "category": "Lavado y blower",
+      "categoryEn": "Dominican blowout",
+      "name": "Blower con rolos",
+      "nameEn": "Roller set blowout",
+      "description": "Preparacion con rolos y acabado pulido de larga duracion.",
+      "descriptionEn": "Roller-set prep with a polished long-lasting finish.",
+      "price": 55,
+      "duration": 90,
+      "order": 2,
+      "image": "https://images.unsplash.com/photo-1522337660859-02fbefca4702?auto=format&fit=crop&w=1400&q=80",
+      "visible": true
+    },
+    {
+      "id": "lavado-y-blower-silk-press",
+      "category": "Lavado y blower",
+      "categoryEn": "Dominican blowout",
+      "name": "Silk press",
+      "nameEn": "Silk press",
+      "description": "Alisado temporal con plancha y proteccion termica.",
+      "descriptionEn": "Temporary smooth finish with heat protection.",
+      "price": 75,
+      "duration": 120,
+      "order": 3,
+      "image": "https://images.unsplash.com/photo-1519699047748-de8e457a634e?auto=format&fit=crop&w=1400&q=80",
+      "visible": true
+    }
+  ],
+  "photos": {
+    "Cortes y peinados": [
+      "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1400&q=80",
+      "https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?auto=format&fit=crop&w=1400&q=80"
+    ],
+    "Color y mechas": [
+      "https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?auto=format&fit=crop&w=1400&q=80",
+      "https://images.unsplash.com/photo-1605497788044-5a32c7078486?auto=format&fit=crop&w=1400&q=80"
+    ],
+    "Lavado y blower": [
+      "https://images.unsplash.com/photo-1522337660859-02fbefca4702?auto=format&fit=crop&w=1400&q=80",
+      "https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&w=1400&q=80"
+    ],
+    "Tratamientos": [
+      "https://images.unsplash.com/photo-1519699047748-de8e457a634e?auto=format&fit=crop&w=1400&q=80",
+      "https://images.unsplash.com/photo-1633681926022-84c23e8cb2d6?auto=format&fit=crop&w=1400&q=80"
+    ],
+    "Blowouts y lavado": [],
+    "Cortes y styling": [],
+    "Belleza y spa": []
+  },
+  "publicDiscounts": [
+    {
+      "code": "BIENVENIDA10",
+      "days": "Todos",
+      "daysEn": "Every day",
+      "category": "Todas",
+      "categoryEn": "All",
+      "value": 10,
+      "visible": true,
+      "startDate": "",
+      "endDate": "",
+      "noExpiration": false
+    }
+  ],
+  "today": "2026-09-13",
+  "catalogVersion": "94cec48699f96cd4df24d097"
 }

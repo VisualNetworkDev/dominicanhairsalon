@@ -19,15 +19,9 @@ export default {
       return cachedAppsScriptRead(request, context, 'getBookingAvailability', [payload], 60);
     }
     if (request.method === 'GET' && url.pathname === '/api/availability-matrix') {
-      return new Response(JSON.stringify({ ok: true, data: null }), {
-        status: 200,
-        headers: {
-          'content-type': 'application/json; charset=utf-8',
-          'cache-control': 'no-store',
-          'x-reset-cache': 'DISABLED',
-          'x-content-type-options': 'nosniff'
-        }
-      });
+      const startDate = url.searchParams.get('startDate') || '';
+      const requestedDays = Math.max(1, Math.min(31, Number(url.searchParams.get('days') || 21)));
+      return cachedAppsScriptRead(request, context, 'getAvailabilityMatrix', [startDate, requestedDays], 120);
     }
     return env.ASSETS.fetch(request);
   }

@@ -2628,6 +2628,7 @@
         slotRequestSequence: 0,
         slotAbortController: null,
         availabilityMatrix: null,
+        availabilityMatrixPromise: null,
         language: storageGet('localStorage', 'lumina_language', 'es'),
         calendarDate: new Date()
       };
@@ -2952,6 +2953,7 @@
           state.data = normalizeAppData(snapshot);
           renderApp();
           renderedSnapshot = true;
+          window.setTimeout(() => prefetchAvailabilityMatrix(), 150);
         } catch (snapshotError) {
           console.warn('No se pudo abrir la copia rápida del catálogo:', snapshotError.message || snapshotError);
         }
@@ -2964,6 +2966,7 @@
           if (!renderedSnapshot || !state.userInteracted || catalogChanged) {
             if (catalogChanged) {
               state.availabilityMatrix = null;
+              state.availabilityMatrixPromise = null;
               closeBooking();
             }
             renderApp();
@@ -2972,6 +2975,7 @@
             showToast(state.language === 'en'
               ? 'The service list was updated before booking.'
               : 'La lista de servicios se actualizó antes de reservar.');
+            window.setTimeout(() => prefetchAvailabilityMatrix(), 150);
           }
         } catch (backendError) {
           if (!renderedSnapshot) {
@@ -3025,7 +3029,8 @@
         data.mapLink = data.mapLink || '';
         data.mapIframeSrc = data.mapIframeSrc || '';
         data.tourIframeSrc = data.tourIframeSrc || '';
-        data.today = data.today || toIsoDate(new Date());
+        const browserToday = toIsoDate(new Date());
+        data.today = !data.today || data.today < browserToday ? browserToday : data.today;
         data.catalogVersion = data.catalogVersion || '';
         return data;
       }
@@ -3775,7 +3780,10 @@
         syncSalonSelect($('#modalService'));
         fillWorkerSelect();
         renderPaymentOptions();
-        $('#date').value = $('#date').value || state.data.today;
+        const requestedDate = $('#date').value || state.data.today;
+        $('#date').value = isBookableCalendarDate(requestedDate)
+          ? requestedDate
+          : findNextBookableDate(state.data.today);
         state.calendarDate = makeLocalDate($('#date').value);
         state.selectedTime = '';
         renderCalendar();
@@ -3795,6 +3803,28 @@
       function closeReceipt() {
         $('#receiptModal').classList.remove('open');
         $('#receiptModal').setAttribute('aria-hidden', 'true');
+      }
+
+      function isBookableCalendarDate(dateIso) {
+        if (!dateIso || !state.data) return false;
+        const today = state.data.today || toIsoDate(new Date());
+        const openDays = state.data.hours && Array.isArray(state.data.hours.openDays)
+          ? state.data.hours.openDays
+          : [1, 2, 3, 4, 5, 6];
+        const blockedDates = Array.isArray(state.data.blockedDates) ? state.data.blockedDates : [];
+        const date = makeLocalDate(dateIso);
+        return dateIso >= today && openDays.indexOf(date.getDay()) !== -1 && blockedDates.indexOf(dateIso) === -1;
+      }
+
+      function findNextBookableDate(startDateIso) {
+        const start = makeLocalDate(startDateIso || toIsoDate(new Date()));
+        for (let offset = 0; offset < 90; offset += 1) {
+          const candidate = new Date(start);
+          candidate.setDate(start.getDate() + offset);
+          const candidateIso = toIsoDate(candidate);
+          if (isBookableCalendarDate(candidateIso)) return candidateIso;
+        }
+        return state.data.today || toIsoDate(new Date());
       }
 
       async function loadSlots() {
@@ -3818,6 +3848,10 @@
           const selectedService = findService(category, service);
           if (!selectedService) throw new Error(t('noServicesInCategory'));
           const preferredWorker = $('#preferredWorker').value;
+          if (!state.availabilityMatrix && state.availabilityMatrixPromise) {
+            await state.availabilityMatrixPromise;
+            if (requestSequence !== state.slotRequestSequence) return;
+          }
           const matrixFresh = state.availabilityMatrix &&
             Date.now() - Date.parse(state.availabilityMatrix.generatedAt || 0) < 360000;
           const matrixDate = matrixFresh && state.availabilityMatrix.dates
@@ -4265,7 +4299,34 @@
       }
 
       async function prefetchAvailabilityMatrix() {
-        return;
+        if (!state.data || !shouldUseApiBackend()) return null;
+        const currentMatrix = state.availabilityMatrix;
+        if (currentMatrix &&
+            currentMatrix.catalogVersion === (state.data.catalogVersion || '') &&
+            Date.now() - Date.parse(currentMatrix.generatedAt || 0) < 360000) {
+          return currentMatrix;
+        }
+        if (state.availabilityMatrixPromise) return state.availabilityMatrixPromise;
+
+        const params = new URLSearchParams({
+          startDate: state.data.today || toIsoDate(new Date()),
+          days: '21'
+        });
+        state.availabilityMatrixPromise = fetchEdgeEnvelope(`/api/availability-matrix?${params.toString()}`)
+          .then(matrix => {
+            if (matrix && matrix.catalogVersion === (state.data.catalogVersion || '')) {
+              state.availabilityMatrix = matrix;
+            }
+            return state.availabilityMatrix;
+          })
+          .catch(error => {
+            console.warn('La precarga de horarios continuará bajo demanda:', error.message || error);
+            return null;
+          })
+          .finally(() => {
+            state.availabilityMatrixPromise = null;
+          });
+        return state.availabilityMatrixPromise;
       }
 
       async function fetchEdgeEnvelope(url, signal) {
