@@ -2122,7 +2122,7 @@
       .image-viewer-dialog {
         position: relative;
         width: min(1500px, 100%);
-        height: min(940px, calc(100dvh - 28px));
+        height: min(820px, 82dvh);
         display: grid;
         grid-template-rows: minmax(0, 1fr) auto;
         gap: 0;
@@ -2297,7 +2297,7 @@
 
       @media (max-width: 620px) {
         .image-viewer { padding: 6px; }
-        .image-viewer-dialog { height: calc(100dvh - 12px); border-radius: 18px; }
+        .image-viewer-dialog { height: min(720px, 82dvh); border-radius: 18px; }
         .image-viewer-stage { padding: 6px; border-radius: 14px; }
         .image-viewer-head { top: 12px; right: 12px; left: 12px; }
         .image-viewer-title {
@@ -2799,7 +2799,7 @@
       <div class="image-viewer-dialog" role="dialog" aria-modal="true" aria-labelledby="imageViewerTitle">
         <div class="image-viewer-head">
           <h2 id="imageViewerTitle" class="image-viewer-title">RESET by Yaleixi</h2>
-          <button class="btn secondary icon" type="button" id="closeImageViewer" aria-label="Cerrar">
+          <button class="btn secondary icon modal-close" type="button" id="closeImageViewer" aria-label="Cerrar">
             <i data-lucide="x" aria-hidden="true"></i>
           </button>
         </div>
