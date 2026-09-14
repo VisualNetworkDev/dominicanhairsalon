@@ -2147,7 +2147,7 @@
         left: clamp(14px, 2vw, 24px);
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: center;
         gap: 14px;
         pointer-events: none;
       }
@@ -2167,17 +2167,27 @@
         font-size: clamp(15px, 2vw, 20px);
         text-overflow: ellipsis;
         white-space: nowrap;
+        text-align: center;
         pointer-events: auto;
       }
 
       .image-viewer-head .modal-close {
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 20;
         flex: 0 0 auto;
+        width: 48px;
+        height: 48px;
+        min-width: 48px;
+        min-height: 48px;
         border-color: rgba(255, 255, 255, .28);
         color: #fff;
         background: rgba(17, 24, 18, .78);
         -webkit-backdrop-filter: blur(14px);
         backdrop-filter: blur(14px);
         pointer-events: auto;
+        touch-action: manipulation;
       }
 
       .image-viewer-stage {
@@ -2289,7 +2299,15 @@
         .image-viewer { padding: 6px; }
         .image-viewer-dialog { height: calc(100dvh - 12px); border-radius: 18px; }
         .image-viewer-stage { padding: 6px; border-radius: 14px; }
-        .image-viewer-title { padding: 7px 11px; }
+        .image-viewer-head { top: 12px; right: 12px; left: 12px; }
+        .image-viewer-title {
+          max-width: calc(100% - 112px);
+          padding: 7px 11px;
+        }
+        .image-viewer-head .modal-close {
+          width: 48px;
+          height: 48px;
+        }
         .viewer-comparison { min-height: 260px; }
       }
 
@@ -3325,7 +3343,18 @@
         $('#closeBooking').addEventListener('click', closeBooking);
         $('#cancelBooking').addEventListener('click', closeBooking);
         $('#closeReceipt').addEventListener('click', closeReceipt);
-        $('#closeImageViewer').addEventListener('click', closeImageViewer);
+        const closeImageViewerButton = $('#closeImageViewer');
+        closeImageViewerButton.addEventListener('click', event => {
+          event.preventDefault();
+          event.stopPropagation();
+          closeImageViewer();
+        });
+        closeImageViewerButton.addEventListener('pointerup', event => {
+          if (event.pointerType === 'mouse') return;
+          event.preventDefault();
+          event.stopPropagation();
+          closeImageViewer();
+        });
         $('#imageViewer').addEventListener('click', event => {
           if (event.target === $('#imageViewer')) closeImageViewer();
         });
