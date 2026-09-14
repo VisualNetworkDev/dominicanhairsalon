@@ -4,7 +4,7 @@ export default {
   async fetch(request, env, context) {
     const url = new URL(request.url);
     if (request.method === 'GET' && url.pathname === '/api/public-data') {
-      return cachedAppsScriptRead(request, context, 'getAppData', [], 90);
+      return cachedAppsScriptRead(request, context, 'getAppData', [], 30);
     }
     if (request.method === 'GET' && url.pathname === '/api/booking-availability') {
       const payload = {
@@ -29,30 +29,22 @@ export default {
 
 async function cachedAppsScriptRead(request, context, functionName, args, ttlSeconds) {
   const cache = caches.default;
-  const cacheKey = new Request(request.url, { method: 'GET' });
+  const cacheUrl = new URL(request.url);
+  const forceFresh = cacheUrl.searchParams.has('fresh');
+  cacheUrl.searchParams.delete('fresh');
+  const cacheKey = new Request(cacheUrl.toString(), { method: 'GET' });
   const cached = await cache.match(cacheKey);
-  if (cached) {
+  if (cached && !forceFresh) {
     const cachedAt = Number(cached.headers.get('x-reset-cached-at') || 0);
     const ageMs = cachedAt ? Date.now() - cachedAt : Number.POSITIVE_INFINITY;
     if (ageMs <= ttlSeconds * 1000) {
       return withRuntimeHeaders(cached, 'HIT');
     }
-    context.waitUntil(refreshAppsScriptCache(cache, cacheKey, functionName, args, ttlSeconds));
-    return withRuntimeHeaders(cached, 'STALE');
   }
 
   const response = await fetchAppsScriptResponse(functionName, args, ttlSeconds);
   if (response.ok) context.waitUntil(cache.put(cacheKey, response.clone()));
   return response;
-}
-
-async function refreshAppsScriptCache(cache, cacheKey, functionName, args, ttlSeconds) {
-  try {
-    const response = await fetchAppsScriptResponse(functionName, args, ttlSeconds);
-    if (response.ok) await cache.put(cacheKey, response.clone());
-  } catch (error) {
-    console.warn('RESET cache refresh failed:', error && error.message ? error.message : error);
-  }
 }
 
 async function fetchAppsScriptResponse(functionName, args, ttlSeconds) {

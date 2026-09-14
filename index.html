@@ -4596,7 +4596,15 @@
         } else if (/^[a-zA-Z0-9._]{2,30}$/.test(text)) {
           text = `https://www.instagram.com/${text}`;
         }
-        return /^https?:\/\/(www\.)?instagram\.com\/[a-zA-Z0-9._/?=&%-]*$/i.test(text) ? text : '';
+        try {
+          const url = new URL(text);
+          const host = url.hostname.toLowerCase();
+          return /^https?:$/.test(url.protocol) && (host === 'instagram.com' || host === 'www.instagram.com')
+            ? url.toString()
+            : '';
+        } catch (error) {
+          return '';
+        }
       }
 
       async function gas(functionName, ...args) {

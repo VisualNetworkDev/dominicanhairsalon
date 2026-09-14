@@ -1,25 +1,20 @@
 {
-  "version": "1.3.12",
-  "publishedAt": "2026-09-14T01:23:00Z",
+  "version": "1.3.13",
+  "publishedAt": "2026-09-14T01:57:06Z",
   "notes": [
-    "Servicios asignables y eliminación definitiva.",
-    "Catálogo de servicios disponible para trabajadoras.",
-    "Extras de cita recalculados al agregar o retirar.",
-    "Actualizaciones más confiables para Windows y Android.",
-    "La dirección del salón se muestra solo cuando la administradora la activa.",
-    "Android abre correctamente el instalador después de verificar la descarga.",
-    "El modo quiosco permite el instalador oficial durante actualizaciones verificadas.",
-    "Windows actualiza la aplicación sin exigir privilegios de administrador.",
-    "El instalador actualiza primero la copia activa en AppData."
+    "Guardado comprobado de Instagram y sus enlaces.",
+    "Elección entre Apple Maps y Google Maps en iPhone y iPad.",
+    "Google Maps directo en Android y Windows.",
+    "Actualización más rápida de los datos públicos de contacto."
   ],
   "platforms": {
     "windows-x86_64": {
-      "url": "https://github.com/VisualNetworkDev/dominicanhairsalon/releases/download/v1.3.12/Hair-Salon-Reset-Admin-Installer-1.3.12.exe",
-      "sha256": "F65FF9877BFD63ED23BEE0D4960BBFA30DAA570773D79EB270685A5CBD4D0098"
+      "url": "https://github.com/VisualNetworkDev/dominicanhairsalon/releases/download/v1.3.13/Hair-Salon-Reset-Admin-Installer-1.3.13.exe",
+      "sha256": "1C041F763D228EC4D0AB45B8EFF900CF81D0CBA5E8B5AD4F357575757AA0BE6A"
     },
     "android": {
-      "url": "https://github.com/VisualNetworkDev/dominicanhairsalon/releases/download/v1.3.12/Hair-Salon-Reset-Admin-Android-1.3.12.apk",
-      "sha256": "3453F655AB641E17A390597BB80F52E2777DD2D14A51567D035F116317E81395"
+      "url": "https://github.com/VisualNetworkDev/dominicanhairsalon/releases/download/v1.3.13/Hair-Salon-Reset-Admin-Android-1.3.13.apk",
+      "sha256": "D04BC5B20E8F547D880179E2E0713E0DD5ED01DB9C9816128F9F12C857E2ED7C"
     }
   }
 }

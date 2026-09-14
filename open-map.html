@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#31452f">
+  <title>Cómo llegar | RESET by Yaleixi</title>
+  <style>
+    :root { color-scheme: light; --green:#31452f; --gold:#b8872d; --cream:#fffaf0; --line:#ead8a7; --muted:#65715f; }
+    * { box-sizing:border-box; }
+    body { min-height:100svh; margin:0; display:grid; place-items:center; padding:max(22px,env(safe-area-inset-top)) 18px max(22px,env(safe-area-inset-bottom)); background:radial-gradient(circle at 50% 4%,#fff8d9 0,transparent 42%),linear-gradient(145deg,#f8edc8,#fffdf8 58%,#efe0ab); color:var(--green); font-family:Arial,Helvetica,sans-serif; }
+    main { width:min(520px,100%); padding:clamp(24px,7vw,42px); border:1px solid rgba(184,135,45,.42); border-radius:28px; background:rgba(255,253,248,.94); box-shadow:0 28px 80px rgba(49,69,47,.18); text-align:center; }
+    img { width:92px; height:92px; border-radius:50%; object-fit:cover; border:2px solid #ead38f; box-shadow:0 12px 28px rgba(184,135,45,.22); }
+    .eyebrow { margin:18px 0 7px; color:var(--gold); font-weight:800; font-size:12px; letter-spacing:.16em; text-transform:uppercase; }
+    h1 { margin:0; font-family:Georgia,serif; font-size:clamp(30px,8vw,44px); line-height:1.05; }
+    p { margin:14px auto 0; color:var(--muted); line-height:1.6; }
+    #address { max-width:390px; font-weight:700; color:var(--green); }
+    .choices { display:grid; gap:12px; margin-top:26px; }
+    a { min-height:52px; display:flex; align-items:center; justify-content:center; gap:10px; border-radius:999px; padding:13px 20px; font-weight:800; text-decoration:none; }
+    .primary { color:#fff; background:var(--green); box-shadow:0 12px 25px rgba(49,69,47,.2); }
+    .secondary { color:var(--green); border:1px solid var(--line); background:#fff; }
+    .back { display:inline-block; margin-top:18px; color:var(--muted); font-size:14px; text-decoration:underline; }
+    [hidden] { display:none !important; }
+  </style>
+</head>
+<body>
+  <main>
+    <img src="assets/hair-salon-reset-logo.jpeg" alt="RESET by Yaleixi">
+    <div class="eyebrow">RESET by Yaleixi</div>
+    <h1 id="title">¿Dónde deseas abrir la dirección?</h1>
+    <p id="copy">Elige la aplicación de mapas que prefieras.</p>
+    <p id="address"></p>
+    <div id="choices" class="choices" hidden>
+      <a id="appleMaps" class="primary" href="#">Apple Maps</a>
+      <a id="googleMaps" class="secondary" href="#">Google Maps</a>
+    </div>
+    <a class="back" href="/" id="back">Volver a RESET</a>
+  </main>
+  <script>
+    (() => {
+      const address = new URLSearchParams(location.search).get('address')?.trim() || '';
+      const english = /^en\b/i.test(navigator.language || '');
+      const isiOS = /iPhone|iPad|iPod/i.test(navigator.userAgent) ||
+        (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      const googleUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+      const appleUrl = `https://maps.apple.com/?q=${encodeURIComponent(address)}`;
+      document.documentElement.lang = english ? 'en' : 'es';
+      document.querySelector('#address').textContent = address;
+      document.querySelector('#googleMaps').href = googleUrl;
+      document.querySelector('#appleMaps').href = appleUrl;
+      if (english) {
+        document.querySelector('#title').textContent = 'Where would you like to open the address?';
+        document.querySelector('#copy').textContent = 'Choose your preferred maps application.';
+        document.querySelector('#back').textContent = 'Back to RESET';
+      }
+      if (!address) {
+        document.querySelector('#title').textContent = english ? 'Address unavailable' : 'Dirección no disponible';
+        document.querySelector('#copy').textContent = english ? 'Return to RESET and try again.' : 'Regresa a RESET e inténtalo nuevamente.';
+        return;
+      }
+      if (!isiOS) {
+        location.replace(googleUrl);
+        return;
+      }
+      document.querySelector('#choices').hidden = false;
+    })();
+  </script>
+</body>
+</html>
