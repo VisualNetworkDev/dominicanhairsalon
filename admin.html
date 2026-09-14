@@ -1430,10 +1430,7 @@
                   <label for="servicePrice">Precio</label>
                   <input id="servicePrice" type="number" min="0" step="0.01" required>
                 </div>
-                <div class="field">
-                  <label for="serviceDuration">Duracion min</label>
-                  <input id="serviceDuration" type="number" min="15" step="5" value="60">
-                </div>
+                <input id="serviceDuration" type="hidden" value="60">
                 <div class="field">
                   <label for="serviceOrder">Orden</label>
                   <input id="serviceOrder" type="number" min="1" step="1" value="1">
@@ -1442,6 +1439,15 @@
                   <input id="serviceVisible" type="checkbox" checked>
                   Visible
                 </label>
+                <label class="check full">
+                  <input id="serviceAssignAll" type="checkbox" checked>
+                  Asignar este servicio a todas las trabajadoras
+                </label>
+                <div class="field full">
+                  <label>Trabajadoras asignadas</label>
+                  <div id="serviceWorkerAssignments" class="day-picker"></div>
+                  <small>Si desmarcas “todas”, elige quiénes realizan este servicio.</small>
+                </div>
                 <input id="serviceImage" type="hidden">
                 <div class="field full">
                   <label for="serviceImageFile">Imagen principal</label>
@@ -1454,6 +1460,7 @@
               </div>
               <div class="row-actions">
                 <button class="btn" type="submit"><i data-lucide="save" aria-hidden="true"></i>Guardar servicio</button>
+                <button class="btn danger" type="button" id="deleteServiceBtn" hidden><i data-lucide="trash-2" aria-hidden="true"></i>Borrar servicio</button>
                 <button class="btn secondary" type="button" data-reset-form="service"><i data-lucide="x" aria-hidden="true"></i>Cancelar</button>
               </div>
             </form>
@@ -2272,6 +2279,8 @@
         $('#newManualReservationBtn').addEventListener('click', resetManualReservationForm);
         $('#manualCategory').addEventListener('change', fillManualServiceSelect);
         $('#serviceForm').addEventListener('submit', saveService);
+        $('#serviceAssignAll').addEventListener('change', () => renderServiceAssignments());
+        $('#deleteServiceBtn').addEventListener('click', deleteCurrentService);
         $('#discountForm').addEventListener('submit', saveDiscount);
         $('#eventForm').addEventListener('submit', saveEvent);
         $('#faqAdminForm').addEventListener('submit', saveFaq);
@@ -2730,7 +2739,7 @@
           manual: can('canEditAppointments'),
           earnings: moduleEnabled('REPORTS') && can('canViewEarnings'),
           timeoff: true,
-          services: can('canManageServices'),
+          services: true,
           photos: can('canManageGallery'),
           discounts: can('canManageDiscounts'),
           events: true,
@@ -2752,6 +2761,8 @@
         });
         if (!access[state.tab]) setTab('reservations');
         if ($('#openEarningsBtn')) $('#openEarningsBtn').hidden = !access.earnings;
+        $('#serviceForm').hidden = !can('canManageServices');
+        $('#newServiceBtn').hidden = !can('canManageServices');
         $$('.payment-only').forEach(node => {
           node.classList.toggle('hidden-by-permission', !can('canManagePayments'));
         });
@@ -3217,6 +3228,8 @@
 
       function renderServices() {
         const services = (state.data && state.data.services) || [];
+        const canEditServices = can('canManageServices');
+        if (!$('#serviceRow').value) renderServiceAssignments([]);
         if (!services.length) {
           $('#serviceTable').innerHTML = '<div class="empty">No hay servicios.</div>';
           return;
@@ -3224,7 +3237,7 @@
         $('#serviceTable').innerHTML = `
           <div class="table-wrap">
             <table>
-              <thead><tr><th>Servicio</th><th>Precio</th><th>Visible</th><th></th></tr></thead>
+              <thead><tr><th>Servicio</th><th>Precio</th><th>Asignación</th><th>Visible</th>${canEditServices ? '<th></th>' : ''}</tr></thead>
               <tbody>
                 ${services.map(item => `
                   <tr>
@@ -3232,9 +3245,10 @@
                       <strong>${escapeHtml(item.category)} - ${escapeHtml(item.service)}</strong><br>
                       <span class="muted">${escapeHtml(item.serviceEn || '')}</span>
                     </td>
-                    <td>${formatMoney(item.price)}<br><span class="muted">${item.duration} min</span></td>
+                    <td>${formatMoney(item.price)}</td>
+                    <td>${item.assignToAll ? 'Todas las trabajadoras' : escapeHtml(((item.assignedUsers || []).join(', ')) || 'Sin asignar')}</td>
                     <td>${item.visible ? 'Si' : 'No'}</td>
-                    <td><button class="btn secondary mini" data-edit-service="${item.rowNumber}" type="button">Editar</button></td>
+                    ${canEditServices ? `<td><button class="btn secondary mini" data-edit-service="${item.rowNumber}" type="button">Editar</button></td>` : ''}
                   </tr>
                 `).join('')}
               </tbody>
@@ -4291,6 +4305,7 @@
       }
 
       function editService(rowNumber) {
+        if (!can('canManageServices')) return;
         const item = state.data.services.find(service => service.rowNumber === rowNumber);
         if (!item) return;
         $('#serviceRow').value = item.rowNumber;
@@ -4305,6 +4320,9 @@
         $('#serviceOrder').value = item.order === 9999 ? '' : item.order;
         $('#serviceImage').value = item.image;
         $('#serviceVisible').checked = item.visible;
+        $('#serviceAssignAll').checked = Boolean(item.assignToAll);
+        renderServiceAssignments(item.assignedUsers || []);
+        $('#deleteServiceBtn').hidden = false;
         state.serviceFile = null;
         $('#serviceImageFile').value = '';
         showServiceImagePreview(item.image);
@@ -4446,7 +4464,9 @@
             image: $('#serviceImage').value,
             imageDataUrl,
             imageFileName: state.serviceFile ? state.serviceFile.name : '',
-            visible: $('#serviceVisible').checked
+            visible: $('#serviceVisible').checked,
+            assignToAll: $('#serviceAssignAll').checked,
+            assignedUsers: readServiceAssignments()
           }, 'Servicio guardado.');
           if (ok) resetServiceForm();
         } catch (error) {
@@ -4563,6 +4583,37 @@
           }
         }
         if (ok) resetUserForm();
+      }
+
+      function serviceAssignmentUsers() {
+        return ((state.data && state.data.users) || [])
+          .filter(user => user.active !== false && user.role !== 'developer');
+      }
+
+      function renderServiceAssignments(selectedUsers) {
+        const selected = new Set((selectedUsers || readServiceAssignments()).map(value => String(value).toLowerCase()));
+        const all = $('#serviceAssignAll').checked;
+        const users = serviceAssignmentUsers();
+        $('#serviceWorkerAssignments').innerHTML = users.length ? users.map(user => `
+          <label class="day-option">
+            <input type="checkbox" data-service-worker value="${escapeHtml(user.username)}"
+              ${all || selected.has(String(user.username).toLowerCase()) ? 'checked' : ''} ${all ? 'disabled' : ''}>
+            <span>${escapeHtml(user.displayName || user.username)}</span>
+          </label>
+        `).join('') : '<span class="muted">No hay trabajadoras activas.</span>';
+      }
+
+      function readServiceAssignments() {
+        return $$('[data-service-worker]:checked').map(input => input.value);
+      }
+
+      async function deleteCurrentService() {
+        const rowNumber = Number($('#serviceRow').value || 0);
+        if (!rowNumber) return;
+        const serviceName = $('#serviceName').value.trim() || 'este servicio';
+        if (!window.confirm(`¿Borrar definitivamente ${serviceName}? Esta acción no lo dejará oculto: lo eliminará del catálogo.`)) return;
+        const ok = await mutate('deleteAdminService', rowNumber, 'Servicio borrado definitivamente.');
+        if (ok) resetServiceForm();
       }
 
       async function deleteUser(rowNumber) {
@@ -4917,6 +4968,7 @@
         const extraTotal = Number(reservation.extraTotal || extras.reduce((sum, item) => sum + Number(item.price || 0), 0));
         const totalUpdated = Number(reservation.totalUpdated || reservation.total || 0);
         const balance = Number(reservation.balancePending || totalUpdated || 0);
+        const qrCompleted = ['completada', 'completed'].includes(String(reservation.serviceStatus || reservation.status || '').toLowerCase());
         const serviceOptions = (state.data.services || [])
           .filter(service => service.visible !== false)
           .map(service => {
@@ -4925,11 +4977,12 @@
           })
           .join('');
         const extrasRows = extras.length
-          ? `<table><thead><tr><th>Extra</th><th>Pago</th><th>Precio</th></tr></thead><tbody>${extras.map(extra => `
+          ? `<table><thead><tr><th>Extra</th><th>Pago</th><th>Precio</th>${qrCompleted ? '' : '<th></th>'}</tr></thead><tbody>${extras.map(extra => `
               <tr>
                 <td>${escapeHtml(extra.name || '')}${extra.notes ? `<br><span class="muted">${escapeHtml(extra.notes)}</span>` : ''}</td>
                 <td>${escapeHtml(extra.paymentMethod || 'Pago local')}</td>
                 <td>${formatMoney(extra.price || 0)}</td>
+                ${qrCompleted ? '' : `<td><button class="btn danger mini" type="button" data-delete-qr-extra="${escapeHtml(extra.id || '')}">Retirar</button></td>`}
               </tr>`).join('')}</tbody></table>`
           : '<div class="empty">No hay servicios extras agregados.</div>';
         const canAddExtras = moduleEnabled('EXTRAS_IN_APPOINTMENT') || moduleEnabled('QR_ADVANCED');
@@ -4958,7 +5011,7 @@
               <h3>Servicios extras</h3>
               <p class="muted">Todo extra agregado durante la cita se marca como pago local y se suma al recibo final.</p>
               ${extrasRows}
-              ${canAddExtras ? `
+              ${canAddExtras && !qrCompleted ? `
                 <div class="form-grid" style="margin-top:12px;">
                   <div class="field full">
                     <label for="qrExtraService">Servicio extra activo</label>
@@ -4997,6 +5050,7 @@
         }
         if ($('#qrAddExtraBtn')) $('#qrAddExtraBtn').addEventListener('click', saveQrExtra);
         if ($('#qrFinishBtn')) $('#qrFinishBtn').addEventListener('click', finishQrAppointment);
+        $$('[data-delete-qr-extra]').forEach(button => button.addEventListener('click', () => deleteQrExtra(button.dataset.deleteQrExtra)));
         refreshIcons();
       }
 
@@ -5034,6 +5088,25 @@
           state.loadedTabs.reservations = false;
           state.loadedTabs.earnings = false;
           showToast('Extra agregado al recibo como pago local.');
+          await validateQr($('#qrText').value.trim());
+          renderCurrentTab('qr');
+        } catch (error) {
+          showToast(error.message || String(error));
+        } finally {
+          setBusy(false);
+        }
+      }
+
+      async function deleteQrExtra(extraId) {
+        if (!state.qrReservation || !extraId) return;
+        if (!confirm('¿Retirar este servicio extra y calcular nuevamente el total de la cita?')) return;
+        setBusy(true);
+        try {
+          mergeAdminData(await gas('deleteQrAppointmentExtra', state.secret, state.qrReservation.rowNumber, extraId));
+          state.loadedTabs.qr = false;
+          state.loadedTabs.reservations = false;
+          state.loadedTabs.earnings = false;
+          showToast('Servicio retirado. El total fue actualizado.');
           await validateQr($('#qrText').value.trim());
           renderCurrentTab('qr');
         } catch (error) {
@@ -5248,6 +5321,7 @@
       function mutationTabFor(functionName) {
         const map = {
           saveAdminService: 'services',
+          deleteAdminService: 'services',
           saveAdminDiscount: 'discounts',
           saveAdminPhoto: 'photos',
           reorderAdminPhotos: 'photos',
@@ -5275,6 +5349,7 @@
           deleteAdminPhoto: 'photos',
           saveAdminSettings: 'settings',
           saveQrAppointmentExtra: 'qr',
+          deleteQrAppointmentExtra: 'qr',
           finishQrAppointment: 'qr',
           updateQrReservationStage: 'qr'
         };
@@ -5318,6 +5393,9 @@
         $('#serviceDuration').value = 60;
         $('#serviceOrder').value = 1;
         $('#serviceVisible').checked = true;
+        $('#serviceAssignAll').checked = true;
+        $('#deleteServiceBtn').hidden = true;
+        renderServiceAssignments([]);
         state.serviceFile = null;
         showServiceImagePreview('');
       }

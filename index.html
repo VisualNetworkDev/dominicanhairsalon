@@ -2088,6 +2088,167 @@
         box-shadow: 0 28px 72px rgba(79, 61, 20, .14);
       }
 
+      .photo-frame[data-lightbox],
+      .before-after-card[data-comparison] {
+        cursor: zoom-in;
+      }
+
+      .photo-frame[data-lightbox]:focus-visible,
+      .before-after-card[data-comparison]:focus-visible {
+        outline: 3px solid rgba(183, 110, 121, 0.55);
+        outline-offset: 4px;
+      }
+
+      .image-viewer {
+        position: fixed;
+        inset: 0;
+        z-index: 1200;
+        display: grid;
+        place-items: center;
+        padding: clamp(14px, 3vw, 36px);
+        background: rgba(20, 28, 21, 0.88);
+        -webkit-backdrop-filter: blur(18px);
+        backdrop-filter: blur(18px);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 280ms ease, visibility 280ms ease;
+      }
+
+      .image-viewer.open {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .image-viewer-dialog {
+        position: relative;
+        width: min(1120px, 100%);
+        height: min(820px, calc(100vh - 40px));
+        display: grid;
+        grid-template-rows: auto minmax(0, 1fr) auto;
+        gap: 14px;
+        padding: clamp(14px, 2vw, 24px);
+        border: 1px solid rgba(218, 184, 103, 0.45);
+        border-radius: 24px;
+        background: linear-gradient(145deg, rgba(255, 253, 245, 0.98), rgba(245, 236, 208, 0.96));
+        box-shadow: 0 32px 90px rgba(0, 0, 0, 0.42);
+        transform: translateY(20px) scale(0.97);
+        transition: transform 420ms cubic-bezier(.2,.8,.2,1);
+      }
+
+      .image-viewer.open .image-viewer-dialog {
+        transform: translateY(0) scale(1);
+      }
+
+      .image-viewer-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+      }
+
+      .image-viewer-title {
+        margin: 0;
+        color: var(--sage);
+        font-family: Georgia, serif;
+        font-size: clamp(20px, 3vw, 30px);
+      }
+
+      .image-viewer-stage {
+        min-height: 0;
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+        border-radius: 18px;
+        background: #182119;
+      }
+
+      .viewer-single-image {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        animation: viewerImageIn 520ms cubic-bezier(.2,.8,.2,1) both;
+      }
+
+      .viewer-comparison {
+        --split: 50%;
+        position: relative;
+        width: 100%;
+        height: 100%;
+        min-height: 320px;
+        overflow: hidden;
+        touch-action: none;
+        user-select: none;
+      }
+
+      .viewer-comparison img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+
+      .viewer-comparison .viewer-before {
+        clip-path: inset(0 calc(100% - var(--split)) 0 0);
+      }
+
+      .viewer-comparison-handle {
+        position: absolute;
+        left: var(--split);
+        top: 0;
+        bottom: 0;
+        width: 3px;
+        background: #fff;
+        box-shadow: 0 0 18px rgba(0,0,0,0.45);
+        transform: translateX(-50%);
+        pointer-events: none;
+      }
+
+      .viewer-comparison-handle::after {
+        content: "↔";
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        display: grid;
+        place-items: center;
+        width: 48px;
+        height: 48px;
+        border: 4px solid rgba(255,255,255,0.85);
+        border-radius: 50%;
+        color: #fff;
+        background: linear-gradient(135deg, var(--rose), var(--sage));
+        transform: translate(-50%, -50%);
+        font-weight: 900;
+      }
+
+      .viewer-label {
+        position: absolute;
+        top: 16px;
+        z-index: 2;
+        padding: 7px 12px;
+        border-radius: 999px;
+        color: #fff;
+        background: rgba(20, 28, 21, 0.7);
+        font-size: 12px;
+        font-weight: 900;
+        letter-spacing: .08em;
+      }
+
+      .viewer-label.before { left: 16px; }
+      .viewer-label.after { right: 16px; }
+      .viewer-range { width: min(560px, 90%); margin: 0 auto; accent-color: var(--rose); }
+
+      @keyframes viewerImageIn {
+        from { opacity: 0; transform: scale(1.035); filter: blur(7px); }
+        to { opacity: 1; transform: scale(1); filter: blur(0); }
+      }
+
+      @media (max-width: 620px) {
+        .image-viewer { padding: 8px; }
+        .image-viewer-dialog { height: calc(100dvh - 16px); border-radius: 18px; }
+        .viewer-comparison { min-height: 260px; }
+      }
+
       .contact-links {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2572,6 +2733,19 @@
       </div>
     </section>
 
+    <section id="imageViewer" class="image-viewer" aria-hidden="true">
+      <div class="image-viewer-dialog" role="dialog" aria-modal="true" aria-labelledby="imageViewerTitle">
+        <div class="image-viewer-head">
+          <h2 id="imageViewerTitle" class="image-viewer-title">RESET by Yaleixi</h2>
+          <button class="btn secondary icon" type="button" id="closeImageViewer" aria-label="Cerrar">
+            <i data-lucide="x" aria-hidden="true"></i>
+          </button>
+        </div>
+        <div id="imageViewerStage" class="image-viewer-stage"></div>
+        <input id="imageViewerRange" class="viewer-range" type="range" min="0" max="100" value="50" aria-label="Deslizar entre antes y después" hidden>
+      </div>
+    </section>
+
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
     <script id="initialAppData" type="application/json">null</script>
@@ -2697,6 +2871,7 @@
           payInSalon: 'Pagar cash en local',
           payOnline: 'Pagar online',
           priceConsult: 'Consultar',
+          startingAt: 'Empezando en',
           optional: 'Opcional',
           firstVisit: 'Es mi primera cita',
           firstVisitNeedsContact: 'Escribe tu telefono y un email valido para verificar el descuento.',
@@ -2846,6 +3021,7 @@
           payInSalon: 'Pay cash in salon',
           payOnline: 'Pay online',
           priceConsult: 'Ask for price',
+          startingAt: 'Starting at',
           optional: 'Optional',
           firstVisit: 'This is my first visit',
           firstVisitNeedsContact: 'Enter your phone number and a valid email to verify the discount.',
@@ -3105,14 +3281,29 @@
         $('#closeBooking').addEventListener('click', closeBooking);
         $('#cancelBooking').addEventListener('click', closeBooking);
         $('#closeReceipt').addEventListener('click', closeReceipt);
+        $('#closeImageViewer').addEventListener('click', closeImageViewer);
+        $('#imageViewer').addEventListener('click', event => {
+          if (event.target === $('#imageViewer')) closeImageViewer();
+        });
+        $('#imageViewerRange').addEventListener('input', updateImageComparison);
         $('#clearSignature').addEventListener('click', clearSignature);
         document.addEventListener('click', handleInternalNav);
+        document.addEventListener('click', handleImageViewerClick);
         document.addEventListener('pointerdown', event => {
           if (activeSalonSelect && !activeSalonSelect.control.contains(event.target)) {
             closeSalonSelect(activeSalonSelect);
           }
         });
         document.addEventListener('keydown', event => {
+          if (event.key === 'Escape' && $('#imageViewer').classList.contains('open')) {
+            closeImageViewer();
+            return;
+          }
+          if ((event.key === 'Enter' || event.key === ' ') && event.target.closest && event.target.closest('[data-lightbox], [data-comparison]')) {
+            event.preventDefault();
+            openViewerFromElement(event.target.closest('[data-lightbox], [data-comparison]'));
+            return;
+          }
           if (event.key === 'Escape' && activeSalonSelect) {
             const current = activeSalonSelect;
             closeSalonSelect(current);
@@ -3123,6 +3314,84 @@
           button.addEventListener('click', () => setLanguage(button.dataset.lang));
         });
         window.addEventListener('resize', debounce(resizeSignatureCanvas, 180));
+      }
+
+      function handleImageViewerClick(event) {
+        const trigger = event.target.closest && event.target.closest('[data-lightbox], [data-comparison]');
+        if (trigger) openViewerFromElement(trigger);
+      }
+
+      function openViewerFromElement(trigger) {
+        if (trigger.hasAttribute('data-comparison')) {
+          const images = trigger.querySelectorAll('img');
+          openImageComparison(
+            images[0] ? (images[0].currentSrc || images[0].src) : trigger.dataset.before,
+            images[1] ? (images[1].currentSrc || images[1].src) : trigger.dataset.after,
+            trigger.dataset.title || 'Antes y después'
+          );
+          return;
+        }
+        const image = trigger.querySelector('img');
+        if (image) openSingleImage(image.currentSrc || image.src, trigger.dataset.title || image.alt);
+      }
+
+      function openSingleImage(url, title) {
+        $('#imageViewerTitle').textContent = title || 'RESET by Yaleixi';
+        $('#imageViewerStage').innerHTML = `<img class="viewer-single-image" src="${escapeHtml(url)}" alt="${escapeHtml(title || '')}">`;
+        $('#imageViewerRange').hidden = true;
+        showImageViewer();
+      }
+
+      function openImageComparison(beforeUrl, afterUrl, title) {
+        $('#imageViewerTitle').textContent = title || (state.language === 'en' ? 'Before and after' : 'Antes y después');
+        $('#imageViewerStage').innerHTML = `
+          <div id="fullscreenComparison" class="viewer-comparison">
+            <img src="${escapeHtml(afterUrl)}" alt="${escapeHtml(t('after'))}">
+            <img class="viewer-before" src="${escapeHtml(beforeUrl)}" alt="${escapeHtml(t('before'))}">
+            <span class="viewer-label before">${escapeHtml(t('before'))}</span>
+            <span class="viewer-label after">${escapeHtml(t('after'))}</span>
+            <span class="viewer-comparison-handle" aria-hidden="true"></span>
+          </div>`;
+        const range = $('#imageViewerRange');
+        range.value = 50;
+        range.hidden = false;
+        updateImageComparison();
+        const comparison = $('#fullscreenComparison');
+        const updateFromPointer = event => {
+          const bounds = comparison.getBoundingClientRect();
+          range.value = Math.max(0, Math.min(100, ((event.clientX - bounds.left) / bounds.width) * 100));
+          updateImageComparison();
+        };
+        comparison.addEventListener('pointerdown', event => {
+          comparison.setPointerCapture(event.pointerId);
+          updateFromPointer(event);
+        });
+        comparison.addEventListener('pointermove', event => {
+          if (comparison.hasPointerCapture(event.pointerId)) updateFromPointer(event);
+        });
+        showImageViewer();
+      }
+
+      function updateImageComparison() {
+        const comparison = $('#fullscreenComparison');
+        if (comparison) comparison.style.setProperty('--split', `${$('#imageViewerRange').value}%`);
+      }
+
+      function showImageViewer() {
+        const viewer = $('#imageViewer');
+        viewer.classList.add('open');
+        viewer.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        $('#closeImageViewer').focus();
+        refreshIcons();
+      }
+
+      function closeImageViewer() {
+        const viewer = $('#imageViewer');
+        viewer.classList.remove('open');
+        viewer.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        setTimeout(() => { $('#imageViewerStage').innerHTML = ''; }, 280);
       }
 
       function handleInternalNav(event) {
@@ -3357,7 +3626,7 @@
         $('#beforeAfterSection').hidden = !pairs.length;
         if (!pairs.length) return;
         $('#beforeAfterGrid').innerHTML = pairs.map(pair => `
-          <article class="before-after-card reveal">
+          <article class="before-after-card reveal" role="button" tabindex="0" data-comparison data-before="${escapeHtml(pair.beforeImageUrl)}" data-after="${escapeHtml(pair.afterImageUrl)}" data-title="${escapeHtml(state.language === 'en' && pair.titleEn ? pair.titleEn : pair.title)}">
             <div class="comparison">
               <figure>
                 ${renderPublicImage(pair.beforeImageUrl, t('before'), '')}
@@ -3500,7 +3769,6 @@
           <article class="service-card reveal">
             <h3>${escapeHtml(serviceName(service))}</h3>
             <p>${escapeHtml(serviceDescription(service) || t('customService'))}</p>
-            <div class="duration"><i data-lucide="clock-3" aria-hidden="true"></i>${service.duration} min</div>
             <div class="service-meta">
               <span>${priceLabel(service.price)}</span>
               <button class="btn icon" type="button" aria-label="${escapeHtml(t('book'))} ${escapeHtml(serviceName(service))}" title="${escapeHtml(t('book'))}" onclick="openBookingById('${escapeAttrJs(service.id)}')">
@@ -3518,7 +3786,7 @@
           : '';
         const imageMarkup = `<img src="${escapeHtml(url)}" alt="${escapeHtml(alt)}" loading="lazy" decoding="async" referrerpolicy="no-referrer"${fallbackAttrs}>`;
         if (!className) return imageMarkup;
-        return `<figure class="${escapeHtml(`photo-frame ${className}`)}">${imageMarkup}</figure>`;
+        return `<figure class="${escapeHtml(`photo-frame ${className}`)}" role="button" tabindex="0" data-lightbox data-title="${escapeHtml(alt)}">${imageMarkup}</figure>`;
       }
 
       window.handlePublicImageError = function(image) {
@@ -3567,7 +3835,7 @@
       function fillServiceSelect(select, category) {
         const services = state.data.services.filter(service => service.category === category);
         select.innerHTML = services.map(service => (
-          `<option value="${escapeHtml(service.name)}">${escapeHtml(serviceName(service))}${showPrices() ? ` - ${formatMoney(service.price)}` : ''}</option>`
+          `<option value="${escapeHtml(service.name)}">${escapeHtml(serviceName(service))}${showPrices() ? ` - ${escapeHtml(t('startingAt'))} ${formatMoney(service.price)}` : ''}</option>`
         )).join('');
         syncSalonSelect(select);
       }
@@ -4654,7 +4922,7 @@
       }
 
       function priceLabel(value) {
-        return showPrices() ? formatMoney(value) : t('priceConsult');
+        return showPrices() ? `${t('startingAt')} ${formatMoney(value)}` : t('priceConsult');
       }
 
       function paymentLabel(value) {

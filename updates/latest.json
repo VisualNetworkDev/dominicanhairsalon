@@ -1,0 +1,21 @@
+{
+  "version": "1.3.8",
+  "publishedAt": "2026-09-14T00:20:49Z",
+  "notes": [
+    "Servicios asignables y eliminación definitiva.",
+    "Catálogo de servicios disponible para trabajadoras.",
+    "Extras de cita recalculados al agregar o retirar.",
+    "Actualizaciones más confiables para Windows y Android.",
+    "Windows solicita la autorización oficial antes de instalar la actualización."
+  ],
+  "platforms": {
+    "windows-x86_64": {
+      "url": "https://github.com/VisualNetworkDev/dominicanhairsalon/releases/download/v1.3.8/Hair-Salon-Reset-Admin-Installer-1.3.8.exe",
+      "sha256": "5F7056343BA5D2112C6E96DDBBFD0D0989D32D4850048F9297097CB04AE6FB4A"
+    },
+    "android": {
+      "url": "https://github.com/VisualNetworkDev/dominicanhairsalon/releases/download/v1.3.8/Hair-Salon-Reset-Admin-Android-1.3.8.apk",
+      "sha256": "A0A4681CA38DD03529D097A00E9396164880A035430190E77BA58F395D3EE11D"
+    }
+  }
+}
