@@ -1853,8 +1853,12 @@
                 <div class="field full">
                   <label for="salonAddress">Dirección del salón</label>
                   <input id="salonAddress" autocomplete="street-address" placeholder="Número, calle, ciudad, estado y código postal">
-                  <small>Esta dirección aparecerá en los recibos y abrirá la ubicación correcta en Google Maps.</small>
+                  <small>Guarda la dirección aquí y actívala cuando esté lista para publicarse.</small>
                 </div>
+                <label class="check full">
+                  <input id="addressVisible" type="checkbox">
+                  Mostrar la dirección en Contacto y en los recibos
+                </label>
                 <label class="check full">
                   <input id="instagramVisible" type="checkbox">
                   Mostrar boton de Instagram
@@ -3853,6 +3857,7 @@
         $('#contactPhone').value = settings.contactPhone || '9044223600';
         $('#contactEmail').value = settings.contactEmail || 'hairsalonreset@gmail.com';
         $('#salonAddress').value = settings.salonAddress || '';
+        $('#addressVisible').checked = Boolean(settings.addressVisible);
         $('#publicEnabled').checked = settings.publicEnabled !== false;
         $('#adminEnabled').checked = settings.adminEnabled !== false;
         const hours = state.data && state.data.businessHours ? state.data.businessHours : {};
@@ -4678,6 +4683,7 @@
             contactPhone: $('#contactPhone').value,
             contactEmail: $('#contactEmail').value,
             salonAddress: $('#salonAddress').value,
+            addressVisible: $('#addressVisible').checked,
             instagramVisible: $('#instagramVisible').checked,
             instagramUrl: $('#instagramUrl').value,
             businessStart: $('#businessStart').value,
