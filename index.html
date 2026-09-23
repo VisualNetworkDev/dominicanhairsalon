@@ -2926,7 +2926,8 @@
       const INITIAL_APP_DATA = readJsonElement('initialAppData', null);
       const APP_VERSION = '20260824-reset6';
       const APP_CONFIG = Object.assign({
-        apiBaseUrl: 'https://script.google.com/macros/s/AKfycbzunUZqlntWZWulmE3ORRnrJszzaIWv4nfZX0-ZnXdZx2V7N_gCpSUwn7lXIZXH5t0K/exec',
+        apiBaseUrl: 'https://reset-salon-api.2808joel.workers.dev',
+        compatUrl: '/api/compat',
         dataUrl: '/data/site-data.json',
         mode: 'api'
       }, window.ANGELS_SITE_DATA || {});
@@ -3374,7 +3375,7 @@
             return await fetchPublicDataFast(false);
           } catch (edgeError) {
             try {
-              return await postToAppsScript('getAppData', []);
+              return await postToCloudflareBackend('getAppData', []);
             } catch (error) {
               console.warn('API no disponible, usando modo seguro:', error.message || error);
             }
@@ -4775,7 +4776,7 @@
       }
 
       async function callBackend(functionName, args) {
-        return postToAppsScript(functionName, args);
+        return postToCloudflareBackend(functionName, args);
       }
 
       async function fetchPublicDataFast(forceFresh) {
@@ -4841,68 +4842,41 @@
         return envelope.data;
       }
 
-      function postToAppsScript(functionName, args) {
-        const endpoint = String(APP_CONFIG.apiBaseUrl || '').trim();
-        if (!endpoint) throw new Error('La conexion con el backend todavia no esta configurada.');
-
-        return new Promise((resolve, reject) => {
-          const requestId = `angels_${Date.now()}_${Math.random().toString(16).slice(2)}`;
-          const iframeName = `frame_${requestId}`;
-          const iframe = document.createElement('iframe');
-          const form = document.createElement('form');
-          const timeout = setTimeout(() => finish(null, new Error('La conexion esta tardando mas de lo normal.')), apiTimeoutFor(functionName));
-
-          iframe.name = iframeName;
-          iframe.hidden = true;
-          iframe.style.display = 'none';
-
-          form.method = 'POST';
-          form.action = endpoint;
-          form.target = iframeName;
-          form.style.display = 'none';
-
-          addHiddenField(form, 'requestId', requestId);
-          addHiddenField(form, 'fn', functionName);
-          addHiddenField(form, 'args', JSON.stringify(args || []));
-
-          function onMessage(event) {
-            const message = event.data || {};
-            if (!message.angelsApi || message.requestId !== requestId) return;
-            if (message.ok) finish(message.data);
-            else finish(null, new Error(message.error || 'No se pudo completar la solicitud.'));
+      async function postToCloudflareBackend(functionName, args) {
+        const endpoint = String(APP_CONFIG.compatUrl || '/api/compat').trim();
+        if (!endpoint) throw new Error('La conexión con el backend todavía no está configurada.');
+        const abortController = typeof AbortController !== 'undefined' ? new AbortController() : null;
+        const timeout = window.setTimeout(() => {
+          if (abortController) abortController.abort();
+        }, apiTimeoutFor(functionName));
+        try {
+          const response = await fetch(endpoint, {
+            method: 'POST',
+            cache: 'no-store',
+            headers: { 'content-type': 'application/json', accept: 'application/json' },
+            body: JSON.stringify({
+              requestId: `reset_${Date.now()}_${Math.random().toString(16).slice(2)}`,
+              functionName,
+              args: args || []
+            }),
+            signal: abortController ? abortController.signal : undefined
+          });
+          const envelope = await response.json().catch(() => null);
+          if (!response.ok || !envelope || envelope.ok !== true) {
+            throw new Error(envelope && envelope.error ? envelope.error : 'No se pudo completar la operación.');
           }
-
-          function finish(data, error) {
-            clearTimeout(timeout);
-            window.removeEventListener('message', onMessage);
-            removeNode(form);
-            removeNode(iframe);
-            if (error) reject(error);
-            else resolve(data);
-          }
-
-          window.addEventListener('message', onMessage);
-          document.body.appendChild(iframe);
-          document.body.appendChild(form);
-          form.submit();
-        });
-      }
-
-      function addHiddenField(form, name, value) {
-        const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = name;
-        input.value = value;
-        form.appendChild(input);
-      }
-
-      function removeNode(node) {
-        if (node && node.parentNode) node.parentNode.removeChild(node);
+          return envelope.data;
+        } catch (error) {
+          if (error && error.name === 'AbortError') throw new Error('La operación está tardando más de lo normal. Intenta nuevamente.');
+          throw error;
+        } finally {
+          window.clearTimeout(timeout);
+        }
       }
 
       function apiTimeoutFor(functionName) {
-        if (functionName === 'createReservation') return 90000;
-        return 35000;
+        if (functionName === 'createReservation') return 30000;
+        return 15000;
       }
 
       function getAvailableSlotsStatic(category, serviceName, dateIso, preferredWorker) {
