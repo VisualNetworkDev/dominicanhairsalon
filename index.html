@@ -3061,6 +3061,7 @@
           noServicesInCategory: 'No hay servicios disponibles en esta categoría.',
           chooseServiceDate: 'Selecciona servicio y fecha.',
           searchingSlots: 'Buscando horarios...',
+          slotsTimeout: 'La disponibilidad está tardando más de lo normal. Vuelve a seleccionar la fecha.',
           noSlots: 'No hay horarios disponibles para esa fecha.',
           chooseTime: 'Selecciona una hora disponible.',
           missingSignature: 'Falta tu firma.',
@@ -3211,6 +3212,7 @@
           noServicesInCategory: 'There are no services available in this category.',
           chooseServiceDate: 'Select a service and date.',
           searchingSlots: 'Searching available times...',
+          slotsTimeout: 'Availability is taking longer than expected. Please try the date again.',
           noSlots: 'No available times for that date.',
           chooseTime: 'Select an available time.',
           missingSignature: 'Your signature is missing.',
@@ -4273,15 +4275,17 @@
         if (state.slotAbortController) state.slotAbortController.abort();
         const slotAbortController = typeof AbortController !== 'undefined' ? new AbortController() : null;
         state.slotAbortController = slotAbortController;
+        const slotTimeout = slotAbortController
+          ? window.setTimeout(() => {
+              slotAbortController.resetTimedOut = true;
+              slotAbortController.abort();
+            }, 20000)
+          : null;
         slotGrid.innerHTML = `<div class="empty">${escapeHtml(t('searchingSlots'))}</div>`;
         try {
           const selectedService = findService(category, service);
           if (!selectedService) throw new Error(t('noServicesInCategory'));
           const preferredWorker = $('#preferredWorker').value;
-          if (!state.availabilityMatrix && state.availabilityMatrixPromise) {
-            await state.availabilityMatrixPromise;
-            if (requestSequence !== state.slotRequestSequence) return;
-          }
           const matrixFresh = state.availabilityMatrix &&
             Date.now() - Date.parse(state.availabilityMatrix.generatedAt || 0) < 900000;
           const matrixDate = matrixFresh && state.availabilityMatrix.dates
@@ -4339,9 +4343,15 @@
           renderSlotButtons(slotGrid, slots);
           if (usedMatrix) refreshCanonicalAvailability(requestSequence, availabilityPayload);
         } catch (error) {
-          if (error && error.name === 'AbortError') return;
+          if (error && error.name === 'AbortError') {
+            if (slotAbortController && slotAbortController.resetTimedOut && requestSequence === state.slotRequestSequence) {
+              slotGrid.innerHTML = `<div class="empty">${escapeHtml(t('slotsTimeout'))}</div>`;
+            }
+            return;
+          }
           slotGrid.innerHTML = `<div class="empty">${escapeHtml(error.message || error)}</div>`;
         } finally {
+          if (slotTimeout) window.clearTimeout(slotTimeout);
           if (state.slotAbortController === slotAbortController) state.slotAbortController = null;
         }
       }
@@ -4739,6 +4749,7 @@
 
       async function prefetchAvailabilityMatrix() {
         if (!state.data || !shouldUseApiBackend()) return null;
+        if (window.matchMedia && window.matchMedia('(max-width: 720px)').matches) return null;
         const currentMatrix = state.availabilityMatrix;
         if (currentMatrix &&
             currentMatrix.catalogVersion === (state.data.catalogVersion || '') &&
