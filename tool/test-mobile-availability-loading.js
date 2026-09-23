@@ -34,5 +34,13 @@ expectPattern(
   /catalogRetryVersion === availabilityPayload\.catalogVersion[\s\S]*?slotsTimeout/,
   'Repeated stale catalog responses must stop with a retry message instead of looping forever.',
 );
+expectPattern(
+  /const bookingWasOpen = \$\('#bookingModal'\)\.classList\.contains\('open'\);[\s\S]*?restoreBookingSelection\([\s\S]*?window\.setTimeout\(loadSlots, 0\);/,
+  'A live catalog refresh must preserve and restart an in-progress booking lookup.',
+);
+expectPattern(
+  /function restoreBookingSelection\([\s\S]*?serviceId[\s\S]*?preferredWorker[\s\S]*?renderCalendar\(\);/,
+  'Catalog refreshes must preserve the selected service, worker, date, and calendar.',
+);
 
 console.log('Mobile availability loading safeguards are present.');

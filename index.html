@@ -3278,6 +3278,12 @@
 
         try {
           const previousVersion = state.data && state.data.catalogVersion;
+          const bookingWasOpen = $('#bookingModal').classList.contains('open');
+          const bookingService = bookingWasOpen
+            ? findService($('#modalCategory').value, $('#modalService').value)
+            : null;
+          const bookingDate = bookingWasOpen ? $('#date').value : '';
+          const bookingWorker = bookingWasOpen ? $('#preferredWorker').value : '';
           const liveData = normalizeAppData(await loadAppData());
           const catalogChanged = Boolean(previousVersion && liveData.catalogVersion && previousVersion !== liveData.catalogVersion);
           state.data = liveData;
@@ -3285,9 +3291,18 @@
             if (catalogChanged) {
               state.availabilityMatrix = null;
               state.availabilityMatrixPromise = null;
-              closeBooking();
             }
             renderApp();
+            if (bookingWasOpen && catalogChanged) {
+              restoreBookingSelection(
+                bookingService && bookingService.id,
+                bookingService && bookingService.category,
+                bookingService && bookingService.name,
+                bookingWorker,
+                bookingDate
+              );
+              window.setTimeout(loadSlots, 0);
+            }
           }
           if (catalogChanged) {
             showToast(state.language === 'en'
@@ -4019,6 +4034,27 @@
         syncSalonSelect($('#preferredWorker'));
       }
 
+      function restoreBookingSelection(serviceId, category, serviceNameValue, preferredWorker, date) {
+        const refreshedService = state.data.services.find(item => item.id === serviceId)
+          || findService(category, serviceNameValue)
+          || state.data.services[0];
+        if (!refreshedService) return false;
+        $('#modalCategory').value = refreshedService.category;
+        syncSalonSelect($('#modalCategory'));
+        fillServiceSelect($('#modalService'), refreshedService.category);
+        $('#modalService').value = refreshedService.name;
+        syncSalonSelect($('#modalService'));
+        if (date && isBookableCalendarDate(date)) $('#date').value = date;
+        fillWorkerSelect();
+        if (preferredWorker && Array.from($('#preferredWorker').options).some(option => option.value === preferredWorker && !option.disabled)) {
+          $('#preferredWorker').value = preferredWorker;
+          syncSalonSelect($('#preferredWorker'));
+        }
+        state.calendarDate = makeLocalDate($('#date').value || state.data.today);
+        renderCalendar();
+        return true;
+      }
+
       function setupSalonSelects() {
         ['quickCategory', 'quickService', 'modalCategory', 'modalService', 'preferredWorker'].forEach(id => {
           enhanceSalonSelect(document.getElementById(id));
@@ -4335,19 +4371,7 @@
             state.catalogRetryVersion = availabilityPayload.catalogVersion;
             state.data = normalizeAppData(await fetchPublicDataFast(true));
             renderApp();
-            const refreshedService = state.data.services.find(item => item.id === selectedService.id);
-            if (refreshedService) {
-              $('#modalCategory').value = refreshedService.category;
-              syncSalonSelect($('#modalCategory'));
-              fillServiceSelect($('#modalService'), refreshedService.category);
-              $('#modalService').value = refreshedService.name;
-              syncSalonSelect($('#modalService'));
-              fillWorkerSelect();
-              if (preferredWorker && Array.from($('#preferredWorker').options).some(option => option.value === preferredWorker && !option.disabled)) {
-                $('#preferredWorker').value = preferredWorker;
-                syncSalonSelect($('#preferredWorker'));
-              }
-            }
+            restoreBookingSelection(selectedService.id, category, service, preferredWorker, date);
             showToast(state.language === 'en'
               ? 'The service list changed. It was refreshed and availability is being checked again.'
               : 'La lista de servicios cambió. Ya fue actualizada y se están verificando los horarios nuevamente.');
