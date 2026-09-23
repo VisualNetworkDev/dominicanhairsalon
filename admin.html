@@ -2118,9 +2118,9 @@
       const STAFF_PORTAL_MODE = new URLSearchParams(window.location.search).get('portal') === 'staff';
       const AUTH_STORAGE_KEY = STAFF_PORTAL_MODE ? 'hair_salon_staff_secret' : 'angels_admin_secret';
       const ADMIN_CONFIG = Object.assign({
-        apiBaseUrl: 'https://script.google.com/macros/s/AKfycbycUu_K-Ms4xzGVDWcYgoia0WZp_jamPC0O9YmXpZHdztJ7ENC6hb7Zlk5wN6ZkVGwX/exec',
-        adminApiUrl: 'https://script.google.com/macros/s/AKfycbycUu_K-Ms4xzGVDWcYgoia0WZp_jamPC0O9YmXpZHdztJ7ENC6hb7Zlk5wN6ZkVGwX/exec',
-        publicApiUrl: 'https://script.google.com/macros/s/AKfycbzunUZqlntWZWulmE3ORRnrJszzaIWv4nfZX0-ZnXdZx2V7N_gCpSUwn7lXIZXH5t0K/exec',
+        apiBaseUrl: '/api/compat',
+        adminApiUrl: '/api/compat',
+        publicApiUrl: '/api/compat',
         developerApiUrl: '',
         developerDashboardUrl: '',
         publicUrl: './',
@@ -5910,68 +5910,43 @@
       }
 
       function gas(functionName, ...args) {
-        return postToAppsScript(functionName, args);
+        return postToCloudflareBackend(functionName, args);
       }
 
-      function postToAppsScript(functionName, args) {
-        const endpoint = String(ADMIN_CONFIG.apiBaseUrl || '').trim();
+      async function postToCloudflareBackend(functionName, args) {
+        const endpoint = String(ADMIN_CONFIG.apiBaseUrl || '/api/compat').trim();
         if (!endpoint) {
-          throw new Error('Configura apiBaseUrl en assets/admin-config.js con el link /exec de Apps Script.');
+          throw new Error('La conexión con el backend todavía no está configurada.');
         }
-
-        return new Promise((resolve, reject) => {
-          const requestId = `angels_${Date.now()}_${Math.random().toString(16).slice(2)}`;
-          const iframeName = `frame_${requestId}`;
-          const iframe = document.createElement('iframe');
-          const form = document.createElement('form');
-          const timeout = setTimeout(() => finish(null, new Error('La conexion esta tardando mas de lo normal. Endpoint usado: ' + endpoint)), apiTimeoutFor(functionName));
-
-          iframe.name = iframeName;
-          iframe.hidden = true;
-          iframe.style.display = 'none';
-
-          form.method = 'POST';
-          form.action = endpoint;
-          form.target = iframeName;
-          form.style.display = 'none';
-
-          addHiddenField(form, 'requestId', requestId);
-          addHiddenField(form, 'fn', functionName);
-          addHiddenField(form, 'args', JSON.stringify(args || []));
-
-          function onMessage(event) {
-            const message = event.data || {};
-            if (!message.angelsApi || message.requestId !== requestId) return;
-            if (message.ok) finish(message.data);
-            else finish(null, new Error(message.error || 'No se pudo completar la solicitud.'));
+        const abortController = typeof AbortController !== 'undefined' ? new AbortController() : null;
+        const timeout = window.setTimeout(() => {
+          if (abortController) abortController.abort();
+        }, apiTimeoutFor(functionName));
+        try {
+          const response = await fetch(endpoint, {
+            method: 'POST',
+            cache: 'no-store',
+            headers: { 'content-type': 'application/json', accept: 'application/json' },
+            body: JSON.stringify({
+              requestId: `reset_admin_${Date.now()}_${Math.random().toString(16).slice(2)}`,
+              functionName,
+              args: args || []
+            }),
+            signal: abortController ? abortController.signal : undefined
+          });
+          const envelope = await response.json().catch(() => null);
+          if (!response.ok || !envelope || envelope.ok !== true) {
+            throw new Error(envelope && envelope.error ? envelope.error : 'No se pudo completar la solicitud.');
           }
-
-          function finish(data, error) {
-            clearTimeout(timeout);
-            window.removeEventListener('message', onMessage);
-            removeNode(form);
-            removeNode(iframe);
-            if (error) reject(error);
-            else resolve(data);
+          return envelope.data;
+        } catch (error) {
+          if (error && error.name === 'AbortError') {
+            throw new Error('La operación está tardando más de lo normal. Intenta nuevamente.');
           }
-
-          window.addEventListener('message', onMessage);
-          document.body.appendChild(iframe);
-          document.body.appendChild(form);
-          form.submit();
-        });
-      }
-
-      function addHiddenField(form, name, value) {
-        const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = name;
-        input.value = value;
-        form.appendChild(input);
-      }
-
-      function removeNode(node) {
-        if (node && node.parentNode) node.parentNode.removeChild(node);
+          throw error;
+        } finally {
+          window.clearTimeout(timeout);
+        }
       }
 
       function apiTimeoutFor(functionName) {

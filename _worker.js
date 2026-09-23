@@ -81,7 +81,7 @@ async function fetchCoreJson(coreApi, upstreamPath, businessId, ttlSeconds, time
 
 async function proxyCompatMutation(request, coreApi, businessId) {
   const contentLength = Number(request.headers.get('content-length') || 0);
-  if (contentLength > 1024 * 1024) return errorResponse(413, 'La solicitud supera el tamaño permitido.', businessId, 0);
+  if (contentLength > 18 * 1024 * 1024) return errorResponse(413, 'La solicitud supera el tamaño permitido.', businessId, 0);
   const startedAt = Date.now();
   const abortController = new AbortController();
   const timeout = setTimeout(() => abortController.abort(), 45000);
