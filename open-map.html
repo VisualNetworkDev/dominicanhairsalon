@@ -37,11 +37,24 @@
     <a class="back" href="/" id="back">Volver a RESET</a>
   </main>
   <script>
-    (() => {
-      const address = new URLSearchParams(location.search).get('address')?.trim() || '';
+    (async () => {
+      let address = new URLSearchParams(location.search).get('address')?.trim() || '';
       const english = /^en\b/i.test(navigator.language || '');
       const isiOS = /iPhone|iPad|iPod/i.test(navigator.userAgent) ||
         (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      if (!address) {
+        try {
+          const response = await fetch('/api/public-data?fresh=1', { cache: 'no-store' });
+          if (response.ok) {
+            const payload = await response.json();
+            const data = payload?.data || payload?.result || payload || {};
+            const contact = data.contact || {};
+            if (contact.showAddress && contact.address) address = String(contact.address).trim();
+          }
+        } catch (error) {
+          // The unavailable state below remains the safe fallback when the API cannot respond.
+        }
+      }
       const googleUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
       const appleUrl = `https://maps.apple.com/?q=${encodeURIComponent(address)}`;
       document.documentElement.lang = english ? 'en' : 'es';

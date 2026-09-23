@@ -3676,6 +3676,9 @@
       function renderContact() {
         const contact = state.data.contact || {};
         const instagramUrl = normalizeInstagramUrl(contact.instagramUrl);
+        const mapHref = contact.address
+          ? `/open-map.html?address=${encodeURIComponent(contact.address)}`
+          : '';
         const showSection = Boolean(contact.showContact || contact.showAddress || (contact.showInstagram && instagramUrl));
         $('#contactSection').hidden = !showSection;
         if (!showSection) return;
@@ -3685,10 +3688,10 @@
         $('#phoneLink').href = contact.phone ? `tel:${contact.phone}` : '#';
         $('#emailLink').href = contact.email ? `mailto:${contact.email}` : '#';
         $('#contactAddressText').textContent = contact.address || '';
-        $('#addressLink').href = contact.address && state.data.mapLink ? state.data.mapLink : '#';
+        $('#addressLink').href = mapHref || '#';
         $('#phoneLink').hidden = !contact.phone || !contact.showContact;
         $('#emailLink').hidden = !contact.email || !contact.showContact;
-        $('#addressLink').hidden = !contact.address || !state.data.mapLink || !contact.showAddress;
+        $('#addressLink').hidden = !mapHref || !contact.showAddress;
         $('#instagramLink').hidden = !contact.showInstagram || !instagramUrl;
         $('#instagramLink').href = instagramUrl || '#';
       }
