@@ -4024,14 +4024,22 @@
         const selectedDate = $('#date').value || state.data.today;
         const selectedDay = makeLocalDate(selectedDate).getDay();
         $('#preferredWorker').closest('.field').hidden = state.data.modules.workers === false;
-        $('#preferredWorker').innerHTML = [`<option value="">${escapeHtml(t('anyWorker'))}</option>`]
-          .concat(workers.map(worker => {
-            const blocks = (worker.availability || {})[String(selectedDay)] || [];
-            const unavailable = !blocks.length || (selectedDate === state.data.today && worker.temporarilyUnavailable);
-            const label = `${worker.displayName || worker.username}${unavailable ? ` — ${t('unavailableNow')}` : ''}`;
-            return `<option value="${escapeHtml(worker.username)}" ${unavailable ? 'disabled' : ''}>${escapeHtml(label)}</option>`;
-          }))
+        const workerOptions = workers.map(worker => {
+          const blocks = (worker.availability || {})[String(selectedDay)] || [];
+          const unavailable = worker.role !== 'admin' && (!blocks.length || (selectedDate === state.data.today && worker.temporarilyUnavailable));
+          const label = `${worker.displayName || worker.username}${unavailable ? ` — ${t('unavailableNow')}` : ''}`;
+          return `<option value="${escapeHtml(worker.username)}" ${unavailable ? 'disabled' : ''}>${escapeHtml(label)}</option>`;
+        });
+        const activeWorkers = workers.filter(worker => {
+          const blocks = (worker.availability || {})[String(selectedDay)] || [];
+          return worker.role === 'admin' || (blocks.length && !(selectedDate === state.data.today && worker.temporarilyUnavailable));
+        });
+        $('#preferredWorker').innerHTML = (activeWorkers.length === 1
+          ? []
+          : [`<option value="">${escapeHtml(t('anyWorker'))}</option>`])
+          .concat(workerOptions)
           .join('');
+        if (activeWorkers.length === 1) $('#preferredWorker').value = activeWorkers[0].username;
         syncSalonSelect($('#preferredWorker'));
       }
 
@@ -4211,10 +4219,14 @@
 
       function workerCanDoService(worker, service) {
         if (!worker || !service) return false;
-        const allowed = normalizeText(worker.services || 'Todos');
-        if (!allowed || allowed === 'todos' || allowed === 'all') return true;
-        const parts = allowed.split(',').map(item => item.trim()).filter(Boolean);
-        const serviceKeys = [service.name, service.category, service.nameEn, service.categoryEn].map(normalizeText);
+        const rawServices = Array.isArray(worker.services)
+          ? worker.services
+          : String(worker.services || '').split(',');
+        const parts = rawServices.map(normalizeText).filter(Boolean);
+        if (!parts.length || parts.some(part => ['*', 'todos', 'todas', 'all'].includes(part))) return true;
+        const serviceKeys = [service.id, service.name, service.category, service.nameEn, service.categoryEn]
+          .map(normalizeText)
+          .filter(Boolean);
         return parts.some(part => serviceKeys.indexOf(part) !== -1);
       }
 
@@ -4380,7 +4392,11 @@
             return;
           }
           state.catalogRetryVersion = '';
-          const slots = availability && Array.isArray(availability.slots) ? availability.slots : [];
+          const slots = sanitizeAvailabilitySlots(
+            availability && Array.isArray(availability.slots) ? availability.slots : [],
+            selectedService,
+            date
+          );
           if (!slots.length) {
             slotGrid.innerHTML = `<div class="empty">${escapeHtml(t('noSlots'))}</div>`;
             return;
@@ -4417,6 +4433,36 @@
         });
       }
 
+      function salonHoursForDate(dateIso) {
+        const hours = state.data && state.data.hours ? state.data.hours : {};
+        const weekday = makeLocalDate(dateIso).getDay();
+        const day = hours.days && hours.days[String(weekday)] ? hours.days[String(weekday)] : null;
+        if (day && day.open === false) return null;
+        return {
+          start: day && day.start ? day.start : (hours.start || '09:00'),
+          end: day && day.end ? day.end : (hours.end || '18:00')
+        };
+      }
+
+      function sanitizeAvailabilitySlots(slots, service, dateIso) {
+        const dayHours = salonHoursForDate(dateIso);
+        if (!dayHours || !service) return [];
+        const opening = timeToMinutes(dayHours.start);
+        const closing = timeToMinutes(dayHours.end);
+        const duration = Math.max(1, Number(service.duration || 60));
+        const seen = new Set();
+        return (slots || [])
+          .filter(slot => {
+            const value = String(slot && slot.value || '');
+            const start = timeToMinutes(value);
+            if (!/^\d{2}:\d{2}$/.test(value) || seen.has(value)) return false;
+            if (start < opening || start + duration > closing) return false;
+            seen.add(value);
+            return true;
+          })
+          .sort((left, right) => timeToMinutes(left.value) - timeToMinutes(right.value));
+      }
+
       async function refreshCanonicalAvailability(requestSequence, payload) {
         try {
           const availability = await gas('getBookingAvailability', payload);
@@ -4431,7 +4477,12 @@
             return;
           }
           const slotGrid = $('#slotGrid');
-          const slots = availability && Array.isArray(availability.slots) ? availability.slots : [];
+          const selectedService = findService(payload.category, payload.service);
+          const slots = sanitizeAvailabilitySlots(
+            availability && Array.isArray(availability.slots) ? availability.slots : [],
+            selectedService,
+            payload.date
+          );
           if (!slots.length) {
             state.selectedTime = '';
             slotGrid.innerHTML = `<div class="empty">${escapeHtml(t('noSlots'))}</div>`;
@@ -4889,8 +4940,10 @@
         const date = makeLocalDate(dateIso);
         if (openDays.indexOf(date.getDay()) === -1) return [];
 
-        const start = timeToMinutes(hours.start || '09:00');
-        const end = timeToMinutes(hours.end || '18:00');
+        const dayHours = salonHoursForDate(dateIso);
+        if (!dayHours) return [];
+        const start = timeToMinutes(dayHours.start);
+        const end = timeToMinutes(dayHours.end);
         const interval = Number(hours.intervalMinutes || 30);
         const duration = Number(service.duration || 60);
         const slots = [];
@@ -4956,6 +5009,12 @@
       }
 
       function workerAvailableStatic(worker, dateIso, time24, duration) {
+        if (worker && worker.role === 'admin') {
+          const dayHours = salonHoursForDate(dateIso);
+          if (!dayHours) return false;
+          const start = timeToMinutes(time24);
+          return start >= timeToMinutes(dayHours.start) && start + duration <= timeToMinutes(dayHours.end);
+        }
         const availability = worker.availability || {};
         const day = makeLocalDate(dateIso).getDay();
         const blocks = availability[String(day)] || [];
