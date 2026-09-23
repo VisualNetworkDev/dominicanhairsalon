@@ -26,5 +26,13 @@ expectPattern(
   /resetTimedOut[\s\S]*?slotGrid\.innerHTML = `<div class="empty">\$\{escapeHtml\(t\('slotsTimeout'\)\)\}<\/div>`/,
   'A timed-out request must replace the loading message with a retry instruction.',
 );
+expectPattern(
+  /if \(availability && availability\.staleCatalog\)[\s\S]*?fetchPublicDataFast\(true\)[\s\S]*?window\.setTimeout\(loadSlots, 0\);/,
+  'A refreshed service catalog must automatically retry the interrupted availability lookup.',
+);
+expectPattern(
+  /catalogRetryVersion === availabilityPayload\.catalogVersion[\s\S]*?slotsTimeout/,
+  'Repeated stale catalog responses must stop with a retry message instead of looping forever.',
+);
 
 console.log('Mobile availability loading safeguards are present.');

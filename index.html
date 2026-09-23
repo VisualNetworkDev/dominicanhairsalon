@@ -2940,6 +2940,7 @@
         userInteracted: false,
         slotRequestSequence: 0,
         slotAbortController: null,
+        catalogRetryVersion: '',
         availabilityMatrix: null,
         availabilityMatrixPromise: null,
         language: storageGet('localStorage', 'lumina_language', 'es'),
@@ -4327,13 +4328,33 @@
           }
           if (requestSequence !== state.slotRequestSequence) return;
           if (availability && availability.staleCatalog) {
+            if (state.catalogRetryVersion === availabilityPayload.catalogVersion) {
+              slotGrid.innerHTML = `<div class="empty">${escapeHtml(t('slotsTimeout'))}</div>`;
+              return;
+            }
+            state.catalogRetryVersion = availabilityPayload.catalogVersion;
             state.data = normalizeAppData(await fetchPublicDataFast(true));
             renderApp();
+            const refreshedService = state.data.services.find(item => item.id === selectedService.id);
+            if (refreshedService) {
+              $('#modalCategory').value = refreshedService.category;
+              syncSalonSelect($('#modalCategory'));
+              fillServiceSelect($('#modalService'), refreshedService.category);
+              $('#modalService').value = refreshedService.name;
+              syncSalonSelect($('#modalService'));
+              fillWorkerSelect();
+              if (preferredWorker && Array.from($('#preferredWorker').options).some(option => option.value === preferredWorker && !option.disabled)) {
+                $('#preferredWorker').value = preferredWorker;
+                syncSalonSelect($('#preferredWorker'));
+              }
+            }
             showToast(state.language === 'en'
-              ? 'The service list changed. It has been refreshed; please choose the service again.'
-              : 'La lista de servicios cambió. Ya fue actualizada; selecciona el servicio nuevamente.');
+              ? 'The service list changed. It was refreshed and availability is being checked again.'
+              : 'La lista de servicios cambió. Ya fue actualizada y se están verificando los horarios nuevamente.');
+            window.setTimeout(loadSlots, 0);
             return;
           }
+          state.catalogRetryVersion = '';
           const slots = availability && Array.isArray(availability.slots) ? availability.slots : [];
           if (!slots.length) {
             slotGrid.innerHTML = `<div class="empty">${escapeHtml(t('noSlots'))}</div>`;
