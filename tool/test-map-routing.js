@@ -4,10 +4,30 @@ const path = require('node:path');
 const vm = require('node:vm');
 
 const root = path.resolve(__dirname, '..');
-const mapHtml = fs.readFileSync(path.join(root, 'open-map.html'), 'utf8');
-const indexHtml = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-const scriptMatch = mapHtml.match(/<script>([\s\S]*?)<\/script>/i);
-assert(scriptMatch, 'open-map.html must contain its routing script');
+let mapScript = '';
+let indexHtml = '';
+
+async function loadSources() {
+  const siteOrigin = String(process.env.MAP_SITE_ORIGIN || '').replace(/\/$/, '');
+  let mapHtml;
+  if (siteOrigin) {
+    const suffix = `?routing-test=${Date.now()}`;
+    const [mapResponse, indexResponse] = await Promise.all([
+      fetch(`${siteOrigin}/open-map.html${suffix}`, { cache: 'no-store' }),
+      fetch(`${siteOrigin}/${suffix}`, { cache: 'no-store' }),
+    ]);
+    assert.equal(mapResponse.ok, true, `Unable to load ${siteOrigin}/open-map.html`);
+    assert.equal(indexResponse.ok, true, `Unable to load ${siteOrigin}/`);
+    mapHtml = await mapResponse.text();
+    indexHtml = await indexResponse.text();
+  } else {
+    mapHtml = fs.readFileSync(path.join(root, 'open-map.html'), 'utf8');
+    indexHtml = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+  }
+  const scriptMatch = mapHtml.match(/<script>([\s\S]*?)<\/script>/i);
+  assert(scriptMatch, 'open-map.html must contain its routing script');
+  mapScript = scriptMatch[1];
+}
 
 async function runScenario({ search = '', userAgent = '', platform = '', maxTouchPoints = 0, contact }) {
   const elements = Object.fromEntries(
@@ -37,11 +57,12 @@ async function runScenario({ search = '', userAgent = '', platform = '', maxTouc
       json: async () => ({ ok: true, data: { contact: contact || {} } }),
     }),
   };
-  await vm.runInNewContext(scriptMatch[1], context);
+  await vm.runInNewContext(mapScript, context);
   return { elements, redirect };
 }
 
 (async () => {
+  await loadSources();
   const encoded = '1801%20wells%20rd%20Orange%20Park%20fl%2032073';
   const address = '1801 wells rd Orange Park fl 32073';
 
